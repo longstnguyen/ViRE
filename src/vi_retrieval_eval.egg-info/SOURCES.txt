@@ -24,6 +24,8 @@ src/vi_retrieval_eval.egg-info/requires.txt
 src/vi_retrieval_eval.egg-info/top_level.txt
 src/vi_retrieval_eval/embeddings/__init__.py
 src/vi_retrieval_eval/embeddings/base.py
+src/vi_retrieval_eval/embeddings/colbert_backend.py
 src/vi_retrieval_eval/embeddings/gemini_embed.py
+src/vi_retrieval_eval/embeddings/llm_embed.py
 src/vi_retrieval_eval/embeddings/openai_embed.py
 src/vi_retrieval_eval/embeddings/sbert_embed.py
