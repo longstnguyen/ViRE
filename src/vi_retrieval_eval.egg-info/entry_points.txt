@@ -1,2 +1,0 @@
-[console_scripts]
-vi-retrieval-eval = vi_retrieval_eval.cli:main

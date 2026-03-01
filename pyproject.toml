@@ -11,6 +11,7 @@ requires-python = ">=3.9"
 dependencies = [
   "numpy>=1.23",
   "pandas>=1.5",
+  "tiktoken"
   "scikit-learn>=1.2",
   "rank-bm25>=0.2.2",
   "faiss-cpu>=1.7.4",
