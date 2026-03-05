@@ -320,7 +320,7 @@ done
 
 ## Reporting
 
-After running experiments, use `summarize_report.py` to aggregate metrics from multiple output directories into a single Markdown table. It automatically groups runs by dense model, bolds the best value per column, and underlines the second-best.
+After running experiments, use [`scripts/summarize_report.py`](scripts/summarize_report.py) to aggregate metrics from multiple output directories into a single Markdown table. It automatically groups runs by dense model, bolds the best value per column, and underlines the second-best.
 
 ```bash
 python scripts/summarize_report.py \
@@ -538,7 +538,7 @@ src/vi_retrieval_eval/
 
 ## Reproducibility
 
-All results reported in the paper can be reproduced exactly using the configurations in `scripts/eval_full.sh`. The toolkit is designed to minimise sources of non-determinism at every stage of the pipeline.
+All results reported in the paper can be reproduced exactly using [`scripts/eval_full.sh`](scripts/eval_full.sh). The toolkit is designed to minimise sources of non-determinism at every stage of the pipeline.
 
 - Fixed random seeds for sampling and tie-breaking
 - Stable mergesort for consistent ranking

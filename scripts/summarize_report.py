@@ -5,6 +5,18 @@
 Scan ViRE outputs/ and summarize datasets/models/methods (canonicalized),
 optionally generate a Markdown report.
 
+Run experiments first with::
+
+    bash scripts/eval_full.sh
+
+Then aggregate results::
+
+    python scripts/summarize_report.py \\
+        --outputs-root outputs \\
+        --datasets CSConDa EduCoQA ALQAC \\
+        --metrics P@1,R@10,MRR@10,nDCG@10 \\
+        --percent --save VIRE_Report.md
+
 Expected layout:
 outputs_root/
   MODEL_NAME/
