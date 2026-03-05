@@ -11,3 +11,4 @@ outputs/
 *.egg-info/
 dist/
 build/
+data/raw/
