@@ -2,8 +2,8 @@
 
 A lightweight, extensible toolkit for benchmarking lexical, dense, sparse, late-interaction, and hybrid retrieval on Vietnamese datasets.
 
-> This repository accompanies the paper:
-> **Which Works Best for Vietnamese? A Practical Study of Information Retrieval Methods across Domains**
+> This repository accompanies the paper:  
+> **Which Works Best for Vietnamese? A Practical Study of Information Retrieval Methods across Domains**  
 > Long S. T. Nguyen, Tho T. Quan. Accepted at _EACL 2026_.
 
 ---
@@ -447,19 +447,19 @@ The table below shows benchmark results on the **CSConDa** dataset (customer sup
 
 VIRE covers six Vietnamese domains, spanning both formal and informal language, technical and general content. Two datasets — EduCoQA and CSConDa — are newly proposed in this work; the rest are established public benchmarks.
 
-**Education** — EduCoQA (proposed), ViRHE4QA
+**Education** — EduCoQA (proposed), ViRHE4QA [1]
 
 **Customer Support** — CSConDa (proposed)
 
 **Legal** — [ALQAC](https://alqac.github.io), [Zalo Legal Text Retrieval](https://challenge.zalo.ai/portal/legal-text-retrieval)
 
-**Healthcare** — ViNewsQA, ViMedAQA
+**Healthcare** — ViNewsQA [2], ViMedAQA [3]
 
-**Lifestyle & Reviews** — VlogQA, ViRe4MRC
+**Lifestyle & Reviews** — VlogQA [4], ViRe4MRC [5]
 
-**Cross-domain Open Knowledge** — UIT-ViQuAD 2.0
+**Cross-domain Open Knowledge** — UIT-ViQuAD 2.0 [6]
 
-> 1,000-sample standardized subsets (deduped, gold remapped) are in `data/`.
+> 1,000-sample standardized subsets are in `data/`.
 
 ---
 
