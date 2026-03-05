@@ -62,18 +62,25 @@ SKIP_PREFIXES = (".",)  # .DS_Store, .ipynb_checkpoints, ...
 # -----------------------------
 _re_at = re.compile(r"^([a-z\-]+)@(\d+)$", re.IGNORECASE)
 
+
 def canonicalize_metric_key(name: str) -> str:
     s = name.strip()
     low = s.lower()
     m = _re_at.match(low)
     if m:
         head, k = m.group(1), m.group(2)
-        if head in ("p", "precision"): return f"Precision@{k}"
-        if head in ("r", "recall"):    return f"Recall@{k}"
-        if head == "mrr":              return f"MRR@{k}"
-        if head == "ndcg":             return f"nDCG@{k}"
-        if head == "map":              return f"MAP@{k}"
-        if head in ("hitrate", "hit", "hit-rate"): return f"HitRate@{k}"
+        if head in ("p", "precision"):
+            return f"Precision@{k}"
+        if head in ("r", "recall"):
+            return f"Recall@{k}"
+        if head == "mrr":
+            return f"MRR@{k}"
+        if head == "ndcg":
+            return f"nDCG@{k}"
+        if head == "map":
+            return f"MAP@{k}"
+        if head in ("hitrate", "hit", "hit-rate"):
+            return f"HitRate@{k}"
     if low in ("r-precision", "rprecision"):
         return "R-Precision"
     return s
@@ -87,6 +94,7 @@ def is_number(x) -> bool:
         return x is not None and not isinstance(x, bool) and math.isfinite(float(x))
     except Exception:
         return False
+
 
 def load_metrics_json(run_dir: str) -> Optional[Dict[str, float]]:
     path = os.path.join(run_dir, "metrics.json")
@@ -103,6 +111,7 @@ def load_metrics_json(run_dir: str) -> Optional[Dict[str, float]]:
     except Exception:
         return None
 
+
 def fmt_val(v: Optional[float], ndigits: int, as_pct: bool) -> str:
     if v is None or (isinstance(v, float) and not math.isfinite(v)):
         return "NA"
@@ -114,9 +123,10 @@ def fmt_val(v: Optional[float], ndigits: int, as_pct: bool) -> str:
 # -----------------------------
 # Robust regex for "alpha0.70" / "alpha-0.70" / "alpha_0.70" / end-string
 _dense_tfidf_alpha = re.compile(r"dense\+tfidf\-alpha(?=[0-9\.\-_]|$)", re.IGNORECASE)
-_dense_tfidf_rrf   = re.compile(r"dense\+tfidf\-rrf(?=[0-9\.\-_]|$)",   re.IGNORECASE)
-_dense_bm25_alpha  = re.compile(r"dense\+bm25\-alpha(?=[0-9\.\-_]|$)",  re.IGNORECASE)
-_dense_bm25_rrf    = re.compile(r"dense\+bm25\-rrf(?=[0-9\.\-_]|$)",    re.IGNORECASE)
+_dense_tfidf_rrf = re.compile(r"dense\+tfidf\-rrf(?=[0-9\.\-_]|$)", re.IGNORECASE)
+_dense_bm25_alpha = re.compile(r"dense\+bm25\-alpha(?=[0-9\.\-_]|$)", re.IGNORECASE)
+_dense_bm25_rrf = re.compile(r"dense\+bm25\-rrf(?=[0-9\.\-_]|$)", re.IGNORECASE)
+
 
 def canonicalize_method(run_folder: str) -> str:
     """
@@ -173,25 +183,49 @@ CANON_METHOD_ORDER = [
     "unknown",
 ]
 
+METHOD_DISPLAY = {
+    "tfidf": "tfidf",
+    "bm25": "bm25",
+    "splade": "splade",
+    "colbert": "colbert",
+    "dense": "dense",
+    "dense+tfidf-alpha": "dense + tfidf (alpha)",
+    "dense+tfidf-rrf": "dense + tfidf (rrf)",
+    "dense+bm25-alpha": "dense + bm25 (alpha)",
+    "dense+bm25-rrf": "dense + bm25 (rrf)",
+    "unknown": "unknown",
+}
+
+LEXICAL_METHODS = ["tfidf", "bm25", "splade", "colbert"]
+DENSE_METHODS_ORDER = [
+    "dense",
+    "dense+tfidf-alpha",
+    "dense+tfidf-rrf",
+    "dense+bm25-alpha",
+    "dense+bm25-rrf",
+]
+
 
 # -----------------------------
 # Scan outputs
 # -----------------------------
-def scan_outputs(outputs_root: str,
-                 allowed_datasets: Optional[Set[str]] = None
-                 ) -> Tuple[
-                     Set[str],                                  # models
-                     Set[str],                                  # datasets
-                     Set[str],                                  # methods
-                     Dict[str, Dict[str, Set[str]]],            # ds -> model -> methods (present)
-                     Dict[Tuple[str, str, str], List[str]],     # (ds, model, method) -> run_dirs
-                     List[Tuple[str, str, str, str]],           # unknown items: (model, ds, run_folder, run_dir)
-                 ]:
+def scan_outputs(
+    outputs_root: str, allowed_datasets: Optional[Set[str]] = None
+) -> Tuple[
+    Set[str],  # models
+    Set[str],  # datasets
+    Set[str],  # methods
+    Dict[str, Dict[str, Set[str]]],  # ds -> model -> methods (present)
+    Dict[Tuple[str, str, str], List[str]],  # (ds, model, method) -> run_dirs
+    List[Tuple[str, str, str, str]],  # unknown items: (model, ds, run_folder, run_dir)
+]:
     models: Set[str] = set()
     datasets: Set[str] = set()
     methods: Set[str] = set()
 
-    ds_model_methods: Dict[str, Dict[str, Set[str]]] = defaultdict(lambda: defaultdict(set))
+    ds_model_methods: Dict[str, Dict[str, Set[str]]] = defaultdict(
+        lambda: defaultdict(set)
+    )
     triple_runs: Dict[Tuple[str, str, str], List[str]] = defaultdict(list)
     unknown_items: List[Tuple[str, str, str, str]] = []
 
@@ -220,7 +254,9 @@ def scan_outputs(outputs_root: str,
 
             for run_folder in sorted(os.listdir(ds_dir)):
                 # skip non-run folders
-                if run_folder in SKIP_RUN_FOLDERS or run_folder.startswith(SKIP_PREFIXES):
+                if run_folder in SKIP_RUN_FOLDERS or run_folder.startswith(
+                    SKIP_PREFIXES
+                ):
                     continue
 
                 run_dir = os.path.join(ds_dir, run_folder)
@@ -237,7 +273,9 @@ def scan_outputs(outputs_root: str,
                 triple_runs[(dataset_name, model_name, m)].append(run_dir)
 
                 if m == "unknown":
-                    unknown_items.append((model_name, dataset_name, run_folder, run_dir))
+                    unknown_items.append(
+                        (model_name, dataset_name, run_folder, run_dir)
+                    )
 
     return models, datasets, methods, ds_model_methods, triple_runs, unknown_items
 
@@ -245,10 +283,11 @@ def scan_outputs(outputs_root: str,
 # -----------------------------
 # Pick best run per (dataset, model, method)
 # -----------------------------
-def pick_best_run(triple_runs: Dict[Tuple[str, str, str], List[str]],
-                  metrics_keys: List[str],
-                  primary_metric: str
-                  ) -> Dict[Tuple[str, str, str], Dict[str, float]]:
+def pick_best_run(
+    triple_runs: Dict[Tuple[str, str, str], List[str]],
+    metrics_keys: List[str],
+    primary_metric: str,
+) -> Dict[Tuple[str, str, str], Dict[str, float]]:
     """
     For each (ds, model, method), there may be many run_dirs.
     We select the run that maximizes primary_metric (if available).
@@ -288,7 +327,9 @@ def pick_best_run(triple_runs: Dict[Tuple[str, str, str], List[str]],
 # -----------------------------
 # DUP / UNKNOWN reporting
 # -----------------------------
-def collect_duplicates(triple_runs: Dict[Tuple[str, str, str], List[str]]) -> List[Tuple[str, str, str, List[str]]]:
+def collect_duplicates(
+    triple_runs: Dict[Tuple[str, str, str], List[str]],
+) -> List[Tuple[str, str, str, List[str]]]:
     dups = []
     for (ds, model, method), run_dirs in triple_runs.items():
         if method == "unknown":
@@ -297,6 +338,7 @@ def collect_duplicates(triple_runs: Dict[Tuple[str, str, str], List[str]]) -> Li
             dups.append((ds, model, method, sorted(run_dirs)))
     dups.sort(key=lambda x: (x[2], x[0], x[1]))
     return dups
+
 
 def dump_duplicate_details(dups, primary_metric: str, limit_runs_per_dup: int = 200):
     """
@@ -314,6 +356,7 @@ def dump_duplicate_details(dups, primary_metric: str, limit_runs_per_dup: int = 
         # sort by score desc, NA last
         def _key(x):
             return (-float(x[0]) if x[0] != "NA" else float("inf"), x[1])
+
         rows.sort(key=_key)
 
         for sc_str, folder in rows:
@@ -326,16 +369,20 @@ def dump_duplicate_details(dups, primary_metric: str, limit_runs_per_dup: int = 
 # -----------------------------
 # Markdown report
 # -----------------------------
-def build_markdown_report(datasets: List[str],
-                          metrics_labels: List[str],
-                          metrics_keys: List[str],
-                          ds_model_methods: Dict[str, Dict[str, Set[str]]],
-                          best_rows: Dict[Tuple[str, str, str], Dict[str, float]],
-                          ndigits: int,
-                          as_pct: bool) -> str:
+def build_markdown_report(
+    datasets: List[str],
+    metrics_labels: List[str],
+    metrics_keys: List[str],
+    ds_model_methods: Dict[str, Dict[str, Set[str]]],
+    best_rows: Dict[Tuple[str, str, str], Dict[str, float]],
+    ndigits: int,
+    as_pct: bool,
+) -> str:
     parts: List[str] = []
-    parts.append("# ViRE Retrieval Report (Canonicalized)\n")
-    parts.append(f"Metrics: `{', '.join(metrics_labels)}`{' (shown as %)' if as_pct else ''}\n")
+    parts.append("# ViRE Retrieval Report\n")
+    parts.append(
+        f"Metrics: `{', '.join(metrics_labels)}`{' (shown as %)' if as_pct else ''}\n"
+    )
     parts.append("## Datasets\n")
     for d in datasets:
         parts.append(f"- [{d}](#{d.lower()})")
@@ -343,25 +390,98 @@ def build_markdown_report(datasets: List[str],
 
     for ds in datasets:
         parts.append(f"## {ds}\n")
-        models = sorted(ds_model_methods.get(ds, {}).keys(), key=lambda s: s.lower())
-        if not models:
-            parts.append(f"*(No results found in outputs/**/{ds})*\n")
+        sorted_models = sorted(
+            ds_model_methods.get(ds, {}).keys(), key=lambda s: s.lower()
+        )
+        if not sorted_models:
+            parts.append(f"*(No results found for {ds})*\n")
             continue
 
-        header = ["Method", "Model"] + metrics_labels
-        lines = [" | ".join(header), " | ".join(["---"] * len(header))]
+        # ------------------------------------------------------------------
+        # Build rows: (display_str, values_dict | None)
+        #   values_dict = None  →  group-header row, no metric cells
+        # ------------------------------------------------------------------
+        rows: List[Tuple[str, Optional[Dict[str, float]]]] = []
 
-        for method in CANON_METHOD_ORDER:
-            for model in models:
-                if method not in ds_model_methods[ds][model]:
-                    continue
-                row = best_rows.get((ds, model, method), {})
-                cells = [method, model]
+        # 1. Lexical (tfidf, bm25, splade, colbert) – first model that has them
+        for method in LEXICAL_METHODS:
+            for model in sorted_models:
+                if method in ds_model_methods[ds].get(model, set()):
+                    vdict = best_rows.get((ds, model, method), {})
+                    rows.append((METHOD_DISPLAY.get(method, method), vdict))
+                    break
+
+        # 2. Dense methods grouped by model
+        dense_models = [
+            m
+            for m in sorted_models
+            if any(
+                dm in ds_model_methods[ds].get(m, set()) for dm in DENSE_METHODS_ORDER
+            )
+        ]
+        for model in dense_models:
+            rows.append((f"**Dense model: {model}**", None))
+            for method in DENSE_METHODS_ORDER:
+                if method in ds_model_methods[ds].get(model, set()):
+                    vdict = best_rows.get((ds, model, method), {})
+                    rows.append((f"  {METHOD_DISPLAY.get(method, method)}", vdict))
+
+        # 3. Unknown
+        for model in sorted_models:
+            if "unknown" in ds_model_methods[ds].get(model, set()):
+                vdict = best_rows.get((ds, model, "unknown"), {})
+                rows.append(("unknown", vdict))
+                break
+
+        # ------------------------------------------------------------------
+        # Best / 2nd-best per metric column (skip group-header rows)
+        # ------------------------------------------------------------------
+        col_pairs: Dict[str, List[Tuple[float, int]]] = defaultdict(list)
+        for i, (_, vdict) in enumerate(rows):
+            if vdict is None:
+                continue
+            for mk in metrics_keys:
+                v = vdict.get(mk)
+                if is_number(v):
+                    col_pairs[mk].append((float(v), i))
+
+        best_mark: Dict[Tuple[str, int], str] = {}
+        for mk, pairs in col_pairs.items():
+            pairs.sort(reverse=True)
+            if pairs:
+                best_mark[(mk, pairs[0][1])] = "best"
+            if len(pairs) > 1:
+                best_mark[(mk, pairs[1][1])] = "second"
+
+        # ------------------------------------------------------------------
+        # Render table
+        # ------------------------------------------------------------------
+        header = ["Method"] + metrics_labels
+        table_lines = [
+            " | ".join(header),
+            " | ".join(["---"] * len(header)),
+        ]
+
+        for i, (display, vdict) in enumerate(rows):
+            if vdict is None:
+                cells = [display] + [""] * len(metrics_keys)
+            else:
+                cells = [display]
                 for mk in metrics_keys:
-                    cells.append(fmt_val(row.get(mk, None), ndigits, as_pct))
-                lines.append(" | ".join(cells))
+                    v = vdict.get(mk)
+                    if not is_number(v):
+                        cells.append("—")
+                        continue
+                    raw = fmt_val(float(v), ndigits, as_pct)
+                    mark = best_mark.get((mk, i))
+                    if mark == "best":
+                        raw = f"**{raw}**"
+                    elif mark == "second":
+                        raw = f"<u>{raw}</u>"
+                    cells.append(raw)
+            table_lines.append(" | ".join(cells))
 
-        parts.append("\n".join(lines))
+        parts.append("\n".join(table_lines))
         parts.append("")
 
     return "\n".join(parts).rstrip() + "\n"
@@ -375,21 +495,48 @@ def parse_args():
         description="Summarize ViRE outputs and optionally generate Markdown tables (canonicalized methods)."
     )
     ap.add_argument("--outputs-root", default="outputs")
-    ap.add_argument("--datasets", required=True, help="Comma-separated dataset names (allowlist)")
-    ap.add_argument("--metrics", default="P@1,R@10,MRR@10,nDCG@10,R@20",
-                    help="Comma-separated metric names; aliases OK (P@k, R@k, MRR@k, nDCG@k).")
-    ap.add_argument("--primary-metric", default="nDCG@10",
-                    help="Primary metric to choose best run among configs within same (dataset, model, method).")
+    ap.add_argument(
+        "--datasets", required=True, help="Comma-separated dataset names (allowlist)"
+    )
+    ap.add_argument(
+        "--metrics",
+        default="P@1,R@10,MRR@10,nDCG@10,R@20",
+        help="Comma-separated metric names; aliases OK (P@k, R@k, MRR@k, nDCG@k).",
+    )
+    ap.add_argument(
+        "--primary-metric",
+        default="nDCG@10",
+        help="Primary metric to choose best run among configs within same (dataset, model, method).",
+    )
     ap.add_argument("--ndigits", type=int, default=4)
     ap.add_argument("--percent", action="store_true")
-    ap.add_argument("--save", default=None, help="If set, write Markdown report to this path.")
-    ap.add_argument("--summary-only", action="store_true", help="Only print summary, do not write report.")
+    ap.add_argument(
+        "--save", default=None, help="If set, write Markdown report to this path."
+    )
+    ap.add_argument(
+        "--summary-only",
+        action="store_true",
+        help="Only print summary, do not write report.",
+    )
 
     # flags
-    ap.add_argument("--show-duplicates", action="store_true", help="Print where duplicates exist.")
-    ap.add_argument("--dump-dup-configs", action="store_true", help="For each duplicate, dump all config folders + primary-metric for tracing.")
-    ap.add_argument("--show-unknown", action="store_true", help="Print unknown run folders.")
-    ap.add_argument("--unknown-limit", type=int, default=300, help="Max number of unknown folders to print.")
+    ap.add_argument(
+        "--show-duplicates", action="store_true", help="Print where duplicates exist."
+    )
+    ap.add_argument(
+        "--dump-dup-configs",
+        action="store_true",
+        help="For each duplicate, dump all config folders + primary-metric for tracing.",
+    )
+    ap.add_argument(
+        "--show-unknown", action="store_true", help="Print unknown run folders."
+    )
+    ap.add_argument(
+        "--unknown-limit",
+        type=int,
+        default=300,
+        help="Max number of unknown folders to print.",
+    )
     return ap.parse_args()
 
 
@@ -411,9 +558,14 @@ def main():
 
     primary_metric = canonicalize_metric_key(args.primary_metric)
 
-    models, datasets_found, methods_found, ds_model_methods, triple_runs, unknown_items = scan_outputs(
-        args.outputs_root, allowed_datasets=allowed
-    )
+    (
+        models,
+        datasets_found,
+        methods_found,
+        ds_model_methods,
+        triple_runs,
+        unknown_items,
+    ) = scan_outputs(args.outputs_root, allowed_datasets=allowed)
 
     # -------- SUMMARY --------
     print("=== SUMMARY ===")
@@ -467,7 +619,7 @@ def main():
         if not unknown_items:
             print("(none)")
         else:
-            for (model, ds, run_folder, _) in unknown_items[:args.unknown_limit]:
+            for model, ds, run_folder, _ in unknown_items[: args.unknown_limit]:
                 print(f"[UNKNOWN] {model} / {ds} / {run_folder}")
             if len(unknown_items) > args.unknown_limit:
                 print(f"... ({len(unknown_items)-args.unknown_limit} more)")

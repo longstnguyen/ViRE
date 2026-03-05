@@ -5,26 +5,33 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "vi-retrieval-eval"
 version = "0.2.0"
-description = "Evaluate TF-IDF, BM25, Dense (OpenAI/Gemini/SBERT + FAISS), and Hybrid fusion on Vietnamese QA datasets"
+description = "Vietnamese Information Retrieval Evaluation: benchmarking BM25, TF-IDF, Dense (SBERT/LLM/OpenAI/Gemini + FAISS), SPLADE, ColBERT, and hybrid fusion methods across Vietnamese QA datasets"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
-  "numpy>=1.23",
-  "pandas>=1.5",
-  "tiktoken"
-  "scikit-learn>=1.2",
+  "numpy>=2.0",
+  "pandas>=2.0",
+  "tiktoken>=0.12",
+  "scikit-learn>=1.7",
   "rank-bm25>=0.2.2",
-  "faiss-cpu>=1.7.4",
-  "tqdm>=4.66",
+  "faiss-cpu>=1.13",
+  "tqdm>=4.67",
+  "scipy>=1.16",
 ]
 
 [project.optional-dependencies]
 all = [
   "underthesea>=6.8.0",
-  "openai>=1.0.0",
+  "openai>=2.0.0",
   "google-generativeai>=0.8.0",
-  "sentence-transformers>=3.0.0",
-  "torch>=2.2.0",
+  "sentence-transformers>=5.0.0",
+  "torch>=2.9.0",
+  "transformers>=4.57.0",
+  "accelerate>=1.0.0",
+  "huggingface-hub>=0.36.0",
+  "safetensors>=0.7.0",
+  "einops>=0.8.0",
+  "tokenizers>=0.22.0",
 ]
 
 [project.scripts]
