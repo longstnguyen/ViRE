@@ -189,10 +189,10 @@ METHOD_DISPLAY = {
     "splade": "splade",
     "colbert": "colbert",
     "dense": "dense",
-    "dense+tfidf-alpha": "dense + tfidf (alpha)",
-    "dense+tfidf-rrf": "dense + tfidf (rrf)",
-    "dense+bm25-alpha": "dense + bm25 (alpha)",
-    "dense+bm25-rrf": "dense + bm25 (rrf)",
+    "dense+tfidf-alpha": "dense + tfidf ($\\alpha$)",
+    "dense+tfidf-rrf": "dense + tfidf (RRF)",
+    "dense+bm25-alpha": "dense + bm25 ($\\alpha$)",
+    "dense+bm25-rrf": "dense + bm25 (RRF)",
     "unknown": "unknown",
 }
 

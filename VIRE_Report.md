@@ -1,4 +1,4 @@
-# ViRE Retrieval Report (Merged)
+# ViRE Retrieval Report
 
 Metrics: `P@1, R@10, MRR@10, nDCG@10, R@20` (shown as %)
 
@@ -17,810 +17,930 @@ Metrics: `P@1, R@10, MRR@10, nDCG@10, R@20` (shown as %)
 
 ## ALQAC
 
-| Method            | Model                                       | P@1    | R@10    | MRR@10 | nDCG@10 | R@20    |
-| ----------------- | ------------------------------------------- | ------ | ------- | ------ | ------- | ------- |
-| bm25              |                                             | 89.25% | 97.92%  | 92.20% | 93.59%  | 99.25%  |
-| colbert           | colbert-ir_colbertv2_0                      | 69.43% | 89.62%  | 76.42% | 79.63%  | 93.40%  |
-| dense             | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 65.47% | 89.62%  | 73.38% | 77.29%  | 94.34%  |
-| dense             | Alibaba-NLP_gte-multilingual-base           | 88.30% | 98.30%  | 92.04% | 93.59%  | 99.62%  |
-| dense             | BAAI_bge-multilingual-gemma2                | 85.28% | 99.06%  | 90.37% | 92.51%  | 99.43%  |
-| dense             | Qwen_Qwen3-Embedding-0_6B                   | 85.66% | 99.06%  | 90.44% | 92.54%  | 99.43%  |
-| dense             | Snowflake_snowflake-arctic-embed-l-v2_0     | 88.30% | 99.43%  | 92.68% | 94.36%  | 99.81%  |
-| dense             | google_embeddinggemma-300m                  | 87.74% | 99.06%  | 92.07% | 93.80%  | 99.43%  |
-| dense             | intfloat_multilingual-e5-large              | 89.06% | 99.25%  | 92.91% | 94.48%  | 99.81%  |
-| dense             | jinaai_jina-embeddings-v3                   | 84.34% | 98.49%  | 89.64% | 91.83%  | 99.62%  |
-| dense             | openai-text-embedding-3-large               | 84.53% | 98.68%  | 90.13% | 92.26%  | 99.81%  |
-| dense             | sbert-Vietnamese_Embedding_V2               | 90.38% | 99.06%  | 93.96% | 95.24%  | 99.81%  |
-| dense             | sbert-bge-m3                                | 90.38% | 99.43%  | 94.14% | 95.47%  | 100.00% |
-| dense             | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 65.85% | 92.45%  | 74.37% | 78.73%  | 95.09%  |
-| dense             | sbert-vietnamese-bi-encoder                 | 80.75% | 95.66%  | 86.21% | 88.52%  | 98.11%  |
-| dense             | sbert-vietnamese-document-embedding         | 85.85% | 98.49%  | 90.51% | 92.48%  | 99.25%  |
-| dense+bm25-alpha  | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 87.92% | 97.55%  | 91.67% | 93.13%  | 98.11%  |
-| dense+bm25-alpha  | Alibaba-NLP_gte-multilingual-base           | 91.89% | 99.06%  | 94.90% | 95.94%  | 99.81%  |
-| dense+bm25-alpha  | BAAI_bge-multilingual-gemma2                | 92.26% | 99.62%  | 95.22% | 96.32%  | 99.81%  |
-| dense+bm25-alpha  | Qwen_Qwen3-Embedding-0_6B                   | 91.51% | 99.81%  | 94.60% | 95.88%  | 99.81%  |
-| dense+bm25-alpha  | Snowflake_snowflake-arctic-embed-l-v2_0     | 92.83% | 99.62%  | 95.62% | 96.62%  | 99.81%  |
-| dense+bm25-alpha  | google_embeddinggemma-300m                  | 91.32% | 100.00% | 94.61% | 95.93%  | 100.00% |
-| dense+bm25-alpha  | intfloat_multilingual-e5-large              | 92.64% | 99.43%  | 95.47% | 96.47%  | 100.00% |
-| dense+bm25-alpha  | jinaai_jina-embeddings-v3                   | 90.38% | 99.62%  | 94.12% | 95.49%  | 99.81%  |
-| dense+bm25-alpha  | openai-text-embedding-3-large               | 93.02% | 99.43%  | 95.79% | 96.72%  | 100.00% |
-| dense+bm25-alpha  | sbert-Vietnamese_Embedding_V2               | 93.77% | 99.25%  | 95.95% | 96.78%  | 100.00% |
-| dense+bm25-alpha  | sbert-bge-m3                                | 94.72% | 99.62%  | 96.66% | 97.40%  | 99.81%  |
-| dense+bm25-alpha  | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 88.30% | 97.36%  | 91.80% | 93.18%  | 99.25%  |
-| dense+bm25-alpha  | sbert-vietnamese-bi-encoder                 | 89.62% | 98.68%  | 93.33% | 94.67%  | 99.62%  |
-| dense+bm25-alpha  | sbert-vietnamese-document-embedding         | 92.64% | 99.25%  | 95.21% | 96.21%  | 99.62%  |
-| dense+bm25-rrf    | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 79.06% | 96.60%  | 85.19% | 87.97%  | 98.49%  |
-| dense+bm25-rrf    | Alibaba-NLP_gte-multilingual-base           | 90.38% | 99.25%  | 93.84% | 95.18%  | 99.81%  |
-| dense+bm25-rrf    | BAAI_bge-multilingual-gemma2                | 92.64% | 98.87%  | 95.01% | 95.97%  | 99.43%  |
-| dense+bm25-rrf    | Qwen_Qwen3-Embedding-0_6B                   | 89.81% | 99.43%  | 93.71% | 95.14%  | 99.62%  |
-| dense+bm25-rrf    | Snowflake_snowflake-arctic-embed-l-v2_0     | 91.70% | 99.25%  | 94.89% | 95.99%  | 99.62%  |
-| dense+bm25-rrf    | google_embeddinggemma-300m                  | 90.38% | 99.62%  | 94.00% | 95.40%  | 99.81%  |
-| dense+bm25-rrf    | intfloat_multilingual-e5-large              | 91.32% | 99.25%  | 94.73% | 95.87%  | 99.81%  |
-| dense+bm25-rrf    | jinaai_jina-embeddings-v3                   | 89.62% | 99.25%  | 93.95% | 95.29%  | 99.81%  |
-| dense+bm25-rrf    | openai-text-embedding-3-large               | 90.57% | 98.87%  | 94.06% | 95.28%  | 99.81%  |
-| dense+bm25-rrf    | sbert-Vietnamese_Embedding_V2               | 92.08% | 98.68%  | 94.78% | 95.75%  | 99.81%  |
-| dense+bm25-rrf    | sbert-bge-m3                                | 91.13% | 99.06%  | 94.40% | 95.56%  | 99.62%  |
-| dense+bm25-rrf    | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 80.19% | 97.55%  | 86.93% | 89.55%  | 98.68%  |
-| dense+bm25-rrf    | sbert-vietnamese-bi-encoder                 | 88.30% | 98.30%  | 92.13% | 93.65%  | 99.62%  |
-| dense+bm25-rrf    | sbert-vietnamese-document-embedding         | 89.43% | 98.68%  | 93.28% | 94.63%  | 99.43%  |
-| dense+tfidf-alpha | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 82.26% | 96.79%  | 88.03% | 90.21%  | 98.11%  |
-| dense+tfidf-alpha | Alibaba-NLP_gte-multilingual-base           | 90.00% | 98.87%  | 93.46% | 94.81%  | 99.81%  |
-| dense+tfidf-alpha | BAAI_bge-multilingual-gemma2                | 88.87% | 99.06%  | 93.20% | 94.67%  | 99.43%  |
-| dense+tfidf-alpha | Qwen_Qwen3-Embedding-0_6B                   | 89.62% | 98.68%  | 93.05% | 94.44%  | 99.81%  |
-| dense+tfidf-alpha | Snowflake_snowflake-arctic-embed-l-v2_0     | 89.81% | 99.25%  | 93.51% | 94.94%  | 99.62%  |
-| dense+tfidf-alpha | google_embeddinggemma-300m                  | 89.25% | 99.43%  | 93.20% | 94.74%  | 99.81%  |
-| dense+tfidf-alpha | intfloat_multilingual-e5-large              | 89.81% | 98.87%  | 93.70% | 95.01%  | 99.81%  |
-| dense+tfidf-alpha | jinaai_jina-embeddings-v3                   | 87.92% | 99.06%  | 92.65% | 94.27%  | 100.00% |
-| dense+tfidf-alpha | openai-text-embedding-3-large               | 88.87% | 99.25%  | 93.22% | 94.74%  | 99.81%  |
-| dense+tfidf-alpha | sbert-Vietnamese_Embedding_V2               | 92.64% | 99.62%  | 95.26% | 96.33%  | 99.81%  |
-| dense+tfidf-alpha | sbert-bge-m3                                | 92.08% | 99.43%  | 95.02% | 96.12%  | 99.81%  |
-| dense+tfidf-alpha | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 83.96% | 97.36%  | 89.27% | 91.29%  | 99.06%  |
-| dense+tfidf-alpha | sbert-vietnamese-bi-encoder                 | 88.68% | 98.49%  | 92.60% | 94.07%  | 99.25%  |
-| dense+tfidf-alpha | sbert-vietnamese-document-embedding         | 89.06% | 98.87%  | 92.96% | 94.44%  | 99.62%  |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 76.23% | 95.66%  | 83.16% | 86.22%  | 98.11%  |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-multilingual-base           | 88.11% | 98.68%  | 92.06% | 93.70%  | 100.00% |
-| dense+tfidf-rrf   | BAAI_bge-multilingual-gemma2                | 88.11% | 98.11%  | 92.31% | 93.76%  | 99.06%  |
-| dense+tfidf-rrf   | Qwen_Qwen3-Embedding-0_6B                   | 86.42% | 98.68%  | 91.25% | 93.09%  | 99.62%  |
-| dense+tfidf-rrf   | Snowflake_snowflake-arctic-embed-l-v2_0     | 87.17% | 99.06%  | 91.76% | 93.57%  | 99.62%  |
-| dense+tfidf-rrf   | google_embeddinggemma-300m                  | 87.17% | 99.06%  | 91.70% | 93.52%  | 99.81%  |
-| dense+tfidf-rrf   | intfloat_multilingual-e5-large              | 86.98% | 98.87%  | 91.84% | 93.60%  | 99.81%  |
-| dense+tfidf-rrf   | jinaai_jina-embeddings-v3                   | 85.28% | 99.06%  | 90.99% | 93.01%  | 100.00% |
-| dense+tfidf-rrf   | openai-text-embedding-3-large               | 87.36% | 98.30%  | 91.83% | 93.45%  | 99.06%  |
-| dense+tfidf-rrf   | sbert-Vietnamese_Embedding_V2               | 90.19% | 98.49%  | 93.15% | 94.44%  | 99.81%  |
-| dense+tfidf-rrf   | sbert-bge-m3                                | 88.49% | 98.49%  | 92.37% | 93.88%  | 99.62%  |
-| dense+tfidf-rrf   | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 77.55% | 96.79%  | 84.64% | 87.62%  | 98.68%  |
-| dense+tfidf-rrf   | sbert-vietnamese-bi-encoder                 | 84.53% | 97.74%  | 89.43% | 91.48%  | 99.25%  |
-| dense+tfidf-rrf   | sbert-vietnamese-document-embedding         | 87.92% | 97.92%  | 91.80% | 93.32%  | 99.43%  |
-| splade            | naver_splade-v3                             | 68.68% | 91.32%  | 76.33% | 79.97%  | 95.66%  |
-| tfidf             |                                             | 82.83% | 96.23%  | 88.34% | 90.31%  | 98.11%  |
+Method | P@1 | R@10 | MRR@10 | nDCG@10 | R@20
+--- | --- | --- | --- | --- | ---
+tfidf | 82.83% | 96.23% | 88.34% | 90.31% | 98.11%
+bm25 | 89.25% | 97.92% | 92.20% | 93.59% | 99.25%
+splade | 68.68% | 91.32% | 76.33% | 79.97% | 95.66%
+colbert | 69.43% | 89.62% | 76.42% | 79.63% | 93.40%
+**Dense model: Alibaba-NLP_gte-multilingual-base** |  |  |  |  | 
+  dense | 88.30% | 98.30% | 92.04% | 93.59% | 99.62%
+  dense + tfidf ($\alpha$) | 90.00% | 98.87% | 93.46% | 94.81% | 99.81%
+  dense + tfidf (RRF) | 88.11% | 98.68% | 92.06% | 93.70% | 100.00%
+  dense + bm25 ($\alpha$) | 91.89% | 99.06% | 94.90% | 95.94% | 99.81%
+  dense + bm25 (RRF) | 90.38% | 99.25% | 93.84% | 95.18% | 99.81%
+**Dense model: Alibaba-NLP_gte-Qwen2-1_5B-instruct** |  |  |  |  | 
+  dense | 65.47% | 89.62% | 73.38% | 77.29% | 94.34%
+  dense + tfidf ($\alpha$) | 82.26% | 96.79% | 88.03% | 90.21% | 98.11%
+  dense + tfidf (RRF) | 76.23% | 95.66% | 83.16% | 86.22% | 98.11%
+  dense + bm25 ($\alpha$) | 87.92% | 97.55% | 91.67% | 93.13% | 98.11%
+  dense + bm25 (RRF) | 79.06% | 96.60% | 85.19% | 87.97% | 98.49%
+**Dense model: BAAI_bge-multilingual-gemma2** |  |  |  |  | 
+  dense | 85.28% | 99.06% | 90.37% | 92.51% | 99.43%
+  dense + tfidf ($\alpha$) | 88.87% | 99.06% | 93.20% | 94.67% | 99.43%
+  dense + tfidf (RRF) | 88.11% | 98.11% | 92.31% | 93.76% | 99.06%
+  dense + bm25 ($\alpha$) | 92.26% | 99.62% | 95.22% | 96.32% | 99.81%
+  dense + bm25 (RRF) | 92.64% | 98.87% | 95.01% | 95.97% | 99.43%
+**Dense model: google_embeddinggemma-300m** |  |  |  |  | 
+  dense | 87.74% | 99.06% | 92.07% | 93.80% | 99.43%
+  dense + tfidf ($\alpha$) | 89.25% | 99.43% | 93.20% | 94.74% | 99.81%
+  dense + tfidf (RRF) | 87.17% | 99.06% | 91.70% | 93.52% | 99.81%
+  dense + bm25 ($\alpha$) | 91.32% | **100.00%** | 94.61% | 95.93% | 100.00%
+  dense + bm25 (RRF) | 90.38% | 99.62% | 94.00% | 95.40% | 99.81%
+**Dense model: intfloat_multilingual-e5-large** |  |  |  |  | 
+  dense | 89.06% | 99.25% | 92.91% | 94.48% | 99.81%
+  dense + tfidf ($\alpha$) | 89.81% | 98.87% | 93.70% | 95.01% | 99.81%
+  dense + tfidf (RRF) | 86.98% | 98.87% | 91.84% | 93.60% | 99.81%
+  dense + bm25 ($\alpha$) | 92.64% | 99.43% | 95.47% | 96.47% | 100.00%
+  dense + bm25 (RRF) | 91.32% | 99.25% | 94.73% | 95.87% | 99.81%
+**Dense model: jinaai_jina-embeddings-v3** |  |  |  |  | 
+  dense | 84.34% | 98.49% | 89.64% | 91.83% | 99.62%
+  dense + tfidf ($\alpha$) | 87.92% | 99.06% | 92.65% | 94.27% | 100.00%
+  dense + tfidf (RRF) | 85.28% | 99.06% | 90.99% | 93.01% | 100.00%
+  dense + bm25 ($\alpha$) | 90.38% | 99.62% | 94.12% | 95.49% | 99.81%
+  dense + bm25 (RRF) | 89.62% | 99.25% | 93.95% | 95.29% | 99.81%
+**Dense model: openai-text-embedding-3-large** |  |  |  |  | 
+  dense | 84.53% | 98.68% | 90.13% | 92.26% | 99.81%
+  dense + tfidf ($\alpha$) | 88.87% | 99.25% | 93.22% | 94.74% | 99.81%
+  dense + tfidf (RRF) | 87.36% | 98.30% | 91.83% | 93.45% | 99.06%
+  dense + bm25 ($\alpha$) | 93.02% | 99.43% | 95.79% | 96.72% | 100.00%
+  dense + bm25 (RRF) | 90.57% | 98.87% | 94.06% | 95.28% | 99.81%
+**Dense model: Qwen_Qwen3-Embedding-0_6B** |  |  |  |  | 
+  dense | 85.66% | 99.06% | 90.44% | 92.54% | 99.43%
+  dense + tfidf ($\alpha$) | 89.62% | 98.68% | 93.05% | 94.44% | 99.81%
+  dense + tfidf (RRF) | 86.42% | 98.68% | 91.25% | 93.09% | 99.62%
+  dense + bm25 ($\alpha$) | 91.51% | <u>99.81%</u> | 94.60% | 95.88% | 99.81%
+  dense + bm25 (RRF) | 89.81% | 99.43% | 93.71% | 95.14% | 99.62%
+**Dense model: sbert-bge-m3** |  |  |  |  | 
+  dense | 90.38% | 99.43% | 94.14% | 95.47% | <u>100.00%</u>
+  dense + tfidf ($\alpha$) | 92.08% | 99.43% | 95.02% | 96.12% | 99.81%
+  dense + tfidf (RRF) | 88.49% | 98.49% | 92.37% | 93.88% | 99.62%
+  dense + bm25 ($\alpha$) | **94.72%** | 99.62% | **96.66%** | **97.40%** | 99.81%
+  dense + bm25 (RRF) | 91.13% | 99.06% | 94.40% | 95.56% | 99.62%
+**Dense model: sbert-paraphrase-multilingual-MiniLM-L12-v2** |  |  |  |  | 
+  dense | 65.85% | 92.45% | 74.37% | 78.73% | 95.09%
+  dense + tfidf ($\alpha$) | 83.96% | 97.36% | 89.27% | 91.29% | 99.06%
+  dense + tfidf (RRF) | 77.55% | 96.79% | 84.64% | 87.62% | 98.68%
+  dense + bm25 ($\alpha$) | 88.30% | 97.36% | 91.80% | 93.18% | 99.25%
+  dense + bm25 (RRF) | 80.19% | 97.55% | 86.93% | 89.55% | 98.68%
+**Dense model: sbert-vietnamese-bi-encoder** |  |  |  |  | 
+  dense | 80.75% | 95.66% | 86.21% | 88.52% | 98.11%
+  dense + tfidf ($\alpha$) | 88.68% | 98.49% | 92.60% | 94.07% | 99.25%
+  dense + tfidf (RRF) | 84.53% | 97.74% | 89.43% | 91.48% | 99.25%
+  dense + bm25 ($\alpha$) | 89.62% | 98.68% | 93.33% | 94.67% | 99.62%
+  dense + bm25 (RRF) | 88.30% | 98.30% | 92.13% | 93.65% | 99.62%
+**Dense model: sbert-vietnamese-document-embedding** |  |  |  |  | 
+  dense | 85.85% | 98.49% | 90.51% | 92.48% | 99.25%
+  dense + tfidf ($\alpha$) | 89.06% | 98.87% | 92.96% | 94.44% | 99.62%
+  dense + tfidf (RRF) | 87.92% | 97.92% | 91.80% | 93.32% | 99.43%
+  dense + bm25 ($\alpha$) | 92.64% | 99.25% | 95.21% | 96.21% | 99.62%
+  dense + bm25 (RRF) | 89.43% | 98.68% | 93.28% | 94.63% | 99.43%
+**Dense model: sbert-Vietnamese_Embedding_V2** |  |  |  |  | 
+  dense | 90.38% | 99.06% | 93.96% | 95.24% | 99.81%
+  dense + tfidf ($\alpha$) | 92.64% | 99.62% | 95.26% | 96.33% | 99.81%
+  dense + tfidf (RRF) | 90.19% | 98.49% | 93.15% | 94.44% | 99.81%
+  dense + bm25 ($\alpha$) | <u>93.77%</u> | 99.25% | <u>95.95%</u> | <u>96.78%</u> | **100.00%**
+  dense + bm25 (RRF) | 92.08% | 98.68% | 94.78% | 95.75% | 99.81%
+**Dense model: Snowflake_snowflake-arctic-embed-l-v2_0** |  |  |  |  | 
+  dense | 88.30% | 99.43% | 92.68% | 94.36% | 99.81%
+  dense + tfidf ($\alpha$) | 89.81% | 99.25% | 93.51% | 94.94% | 99.62%
+  dense + tfidf (RRF) | 87.17% | 99.06% | 91.76% | 93.57% | 99.62%
+  dense + bm25 ($\alpha$) | 92.83% | 99.62% | 95.62% | 96.62% | 99.81%
+  dense + bm25 (RRF) | 91.70% | 99.25% | 94.89% | 95.99% | 99.62%
 
 ## CSConDa
 
-| Method            | Model                                       | P@1    | R@10   | MRR@10 | nDCG@10 | R@20   |
-| ----------------- | ------------------------------------------- | ------ | ------ | ------ | ------- | ------ |
-| bm25              |                                             | 17.40% | 36.80% | 22.99% | 26.27%  | 45.90% |
-| colbert           | colbert-ir_colbertv2_0                      | 11.20% | 28.30% | 15.79% | 18.72%  | 35.00% |
-| dense             | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 6.70%  | 16.50% | 9.33%  | 11.01%  | 21.20% |
-| dense             | Alibaba-NLP_gte-multilingual-base           | 28.10% | 51.60% | 35.23% | 39.13%  | 57.70% |
-| dense             | BAAI_bge-multilingual-gemma2                | 14.30% | 30.50% | 18.65% | 21.43%  | 37.00% |
-| dense             | Qwen_Qwen3-Embedding-0_6B                   | 24.80% | 49.40% | 32.27% | 36.34%  | 56.60% |
-| dense             | Snowflake_snowflake-arctic-embed-l-v2_0     | 32.80% | 56.70% | 40.69% | 44.56%  | 63.20% |
-| dense             | google_embeddinggemma-300m                  | 29.90% | 54.70% | 37.34% | 41.49%  | 60.80% |
-| dense             | intfloat_multilingual-e5-large              | 27.20% | 48.10% | 33.78% | 37.21%  | 55.90% |
-| dense             | jinaai_jina-embeddings-v3                   | 32.10% | 57.40% | 40.03% | 44.19%  | 64.30% |
-| dense             | openai-text-embedding-3-large               | 33.70% | 56.80% | 41.06% | 44.84%  | 63.80% |
-| dense             | sbert-Vietnamese_Embedding_V2               | 31.40% | 54.00% | 38.40% | 42.14%  | 61.40% |
-| dense             | sbert-Vietnamese_Embedding_v2               | 31.40% | 54.00% | 38.40% | 42.14%  | 61.40% |
-| dense             | sbert-bge-m3                                | 30.80% | 53.90% | 37.98% | 41.80%  | 61.00% |
-| dense             | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 11.80% | 30.00% | 16.71% | 19.82%  | 39.10% |
-| dense             | sbert-vietnamese-bi-encoder                 | 15.70% | 34.90% | 21.09% | 24.34%  | 41.70% |
-| dense             | sbert-vietnamese-document-embedding         | 28.40% | 53.00% | 36.12% | 40.18%  | 59.90% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 16.40% | 34.70% | 21.68% | 24.76%  | 41.00% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-multilingual-base           | 30.80% | 56.80% | 38.82% | 43.12%  | 63.20% |
-| dense+bm25-alpha  | BAAI_bge-multilingual-gemma2                | 23.30% | 43.30% | 29.50% | 32.81%  | 49.90% |
-| dense+bm25-alpha  | Qwen_Qwen3-Embedding-0_6B                   | 30.10% | 55.70% | 38.11% | 42.33%  | 62.40% |
-| dense+bm25-alpha  | Snowflake_snowflake-arctic-embed-l-v2_0     | 35.60% | 59.80% | 43.56% | 47.46%  | 66.30% |
-| dense+bm25-alpha  | google_embeddinggemma-300m                  | 33.60% | 58.80% | 41.28% | 45.45%  | 64.90% |
-| dense+bm25-alpha  | intfloat_multilingual-e5-large              | 32.60% | 54.90% | 39.46% | 43.16%  | 60.70% |
-| dense+bm25-alpha  | jinaai_jina-embeddings-v3                   | 35.40% | 61.20% | 43.42% | 47.68%  | 67.60% |
-| dense+bm25-alpha  | openai-text-embedding-3-large               | 36.40% | 60.20% | 43.60% | 47.55%  | 66.20% |
-| dense+bm25-alpha  | sbert-Vietnamese_Embedding_V2               | 33.70% | 57.90% | 41.22% | 45.20%  | 64.30% |
-| dense+bm25-alpha  | sbert-Vietnamese_Embedding_v2               | 33.70% | 57.90% | 41.22% | 45.20%  | 64.30% |
-| dense+bm25-alpha  | sbert-bge-m3                                | 33.90% | 56.90% | 40.97% | 44.78%  | 63.90% |
-| dense+bm25-alpha  | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 18.90% | 45.40% | 26.18% | 30.71%  | 51.60% |
-| dense+bm25-alpha  | sbert-vietnamese-bi-encoder                 | 22.70% | 45.70% | 28.93% | 32.87%  | 52.80% |
-| dense+bm25-alpha  | sbert-vietnamese-document-embedding         | 32.40% | 57.80% | 40.05% | 44.28%  | 64.60% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 12.00% | 32.00% | 17.29% | 20.72%  | 43.80% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-multilingual-base           | 27.20% | 52.00% | 34.88% | 38.98%  | 62.20% |
-| dense+bm25-rrf    | BAAI_bge-multilingual-gemma2                | 20.30% | 43.10% | 27.02% | 30.84%  | 51.80% |
-| dense+bm25-rrf    | Qwen_Qwen3-Embedding-0_6B                   | 26.70% | 53.10% | 34.41% | 38.85%  | 62.30% |
-| dense+bm25-rrf    | Snowflake_snowflake-arctic-embed-l-v2_0     | 29.80% | 56.40% | 38.16% | 42.54%  | 65.20% |
-| dense+bm25-rrf    | google_embeddinggemma-300m                  | 28.70% | 54.50% | 36.35% | 40.67%  | 63.30% |
-| dense+bm25-rrf    | intfloat_multilingual-e5-large              | 29.00% | 53.50% | 36.30% | 40.39%  | 61.30% |
-| dense+bm25-rrf    | jinaai_jina-embeddings-v3                   | 31.40% | 56.60% | 39.01% | 43.20%  | 65.90% |
-| dense+bm25-rrf    | openai-text-embedding-3-large               | 29.60% | 54.40% | 37.05% | 41.18%  | 64.00% |
-| dense+bm25-rrf    | sbert-Vietnamese_Embedding_V2               | 28.80% | 54.70% | 36.70% | 40.99%  | 62.40% |
-| dense+bm25-rrf    | sbert-Vietnamese_Embedding_v2               | 28.80% | 54.70% | 36.70% | 40.99%  | 62.40% |
-| dense+bm25-rrf    | sbert-bge-m3                                | 28.60% | 53.70% | 36.24% | 40.40%  | 62.80% |
-| dense+bm25-rrf    | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 17.50% | 43.80% | 24.63% | 29.15%  | 53.30% |
-| dense+bm25-rrf    | sbert-vietnamese-bi-encoder                 | 20.00% | 44.90% | 26.98% | 31.19%  | 54.30% |
-| dense+bm25-rrf    | sbert-vietnamese-document-embedding         | 26.70% | 52.60% | 34.65% | 38.92%  | 63.70% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 17.40% | 35.80% | 22.82% | 25.90%  | 42.20% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-multilingual-base           | 29.30% | 55.50% | 37.45% | 41.78%  | 63.50% |
-| dense+tfidf-alpha | BAAI_bge-multilingual-gemma2                | 23.50% | 43.00% | 29.72% | 32.91%  | 49.60% |
-| dense+tfidf-alpha | Qwen_Qwen3-Embedding-0_6B                   | 29.10% | 56.40% | 37.31% | 41.85%  | 63.10% |
-| dense+tfidf-alpha | Snowflake_snowflake-arctic-embed-l-v2_0     | 34.30% | 58.80% | 42.15% | 46.15%  | 66.20% |
-| dense+tfidf-alpha | google_embeddinggemma-300m                  | 32.50% | 57.80% | 40.50% | 44.65%  | 65.10% |
-| dense+tfidf-alpha | intfloat_multilingual-e5-large              | 31.90% | 53.60% | 38.76% | 42.32%  | 61.70% |
-| dense+tfidf-alpha | jinaai_jina-embeddings-v3                   | 34.90% | 61.20% | 42.70% | 47.12%  | 66.90% |
-| dense+tfidf-alpha | openai-text-embedding-3-large               | 34.90% | 60.40% | 42.45% | 46.73%  | 66.50% |
-| dense+tfidf-alpha | sbert-Vietnamese_Embedding_V2               | 32.70% | 57.50% | 40.51% | 44.59%  | 65.30% |
-| dense+tfidf-alpha | sbert-Vietnamese_Embedding_v2               | 32.70% | 57.50% | 40.51% | 44.59%  | 65.30% |
-| dense+tfidf-alpha | sbert-bge-m3                                | 33.10% | 57.00% | 40.67% | 44.59%  | 63.80% |
-| dense+tfidf-alpha | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 19.60% | 45.30% | 27.05% | 31.38%  | 51.40% |
-| dense+tfidf-alpha | sbert-vietnamese-bi-encoder                 | 22.20% | 46.00% | 28.95% | 32.96%  | 52.40% |
-| dense+tfidf-alpha | sbert-vietnamese-document-embedding         | 31.10% | 57.90% | 39.46% | 43.87%  | 65.50% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 11.90% | 32.10% | 17.29% | 20.76%  | 44.50% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-multilingual-base           | 26.70% | 52.10% | 34.42% | 38.64%  | 62.10% |
-| dense+tfidf-rrf   | BAAI_bge-multilingual-gemma2                | 19.10% | 43.30% | 25.92% | 30.01%  | 52.20% |
-| dense+tfidf-rrf   | Qwen_Qwen3-Embedding-0_6B                   | 24.60% | 53.20% | 33.14% | 37.91%  | 62.20% |
-| dense+tfidf-rrf   | Snowflake_snowflake-arctic-embed-l-v2_0     | 30.10% | 55.30% | 37.85% | 42.03%  | 65.00% |
-| dense+tfidf-rrf   | google_embeddinggemma-300m                  | 28.30% | 54.60% | 36.23% | 40.61%  | 63.20% |
-| dense+tfidf-rrf   | intfloat_multilingual-e5-large              | 28.70% | 53.40% | 36.11% | 40.22%  | 61.40% |
-| dense+tfidf-rrf   | jinaai_jina-embeddings-v3                   | 29.30% | 57.30% | 37.96% | 42.58%  | 66.10% |
-| dense+tfidf-rrf   | openai-text-embedding-3-large               | 28.80% | 55.00% | 36.45% | 40.85%  | 63.80% |
-| dense+tfidf-rrf   | sbert-Vietnamese_Embedding_V2               | 28.10% | 54.60% | 35.84% | 40.29%  | 63.90% |
-| dense+tfidf-rrf   | sbert-Vietnamese_Embedding_v2               | 28.10% | 54.60% | 35.84% | 40.29%  | 63.90% |
-| dense+tfidf-rrf   | sbert-bge-m3                                | 28.40% | 54.20% | 35.82% | 40.17%  | 63.90% |
-| dense+tfidf-rrf   | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 17.70% | 43.80% | 25.03% | 29.47%  | 54.30% |
-| dense+tfidf-rrf   | sbert-vietnamese-bi-encoder                 | 19.10% | 44.20% | 26.34% | 30.56%  | 55.00% |
-| dense+tfidf-rrf   | sbert-vietnamese-document-embedding         | 26.00% | 51.80% | 33.88% | 38.16%  | 64.00% |
-| splade            | naver_splade-v3                             | 9.10%  | 22.20% | 12.65% | 14.89%  | 27.70% |
-| tfidf             |                                             | 15.70% | 38.50% | 22.49% | 26.30%  | 47.20% |
+Method | P@1 | R@10 | MRR@10 | nDCG@10 | R@20
+--- | --- | --- | --- | --- | ---
+tfidf | 15.70% | 38.50% | 22.49% | 26.30% | 47.20%
+bm25 | 17.40% | 36.80% | 22.99% | 26.27% | 45.90%
+splade | 9.10% | 22.20% | 12.65% | 14.89% | 27.70%
+colbert | 11.20% | 28.30% | 15.79% | 18.72% | 35.00%
+**Dense model: Alibaba-NLP_gte-multilingual-base** |  |  |  |  | 
+  dense | 28.10% | 51.60% | 35.23% | 39.13% | 57.70%
+  dense + tfidf ($\alpha$) | 29.30% | 55.50% | 37.45% | 41.78% | 63.50%
+  dense + tfidf (RRF) | 26.70% | 52.10% | 34.42% | 38.64% | 62.10%
+  dense + bm25 ($\alpha$) | 30.80% | 56.80% | 38.82% | 43.12% | 63.20%
+  dense + bm25 (RRF) | 27.20% | 52.00% | 34.88% | 38.98% | 62.20%
+**Dense model: Alibaba-NLP_gte-Qwen2-1_5B-instruct** |  |  |  |  | 
+  dense | 6.70% | 16.50% | 9.33% | 11.01% | 21.20%
+  dense + tfidf ($\alpha$) | 17.40% | 35.80% | 22.82% | 25.90% | 42.20%
+  dense + tfidf (RRF) | 11.90% | 32.10% | 17.29% | 20.76% | 44.50%
+  dense + bm25 ($\alpha$) | 16.40% | 34.70% | 21.68% | 24.76% | 41.00%
+  dense + bm25 (RRF) | 12.00% | 32.00% | 17.29% | 20.72% | 43.80%
+**Dense model: BAAI_bge-multilingual-gemma2** |  |  |  |  | 
+  dense | 14.30% | 30.50% | 18.65% | 21.43% | 37.00%
+  dense + tfidf ($\alpha$) | 23.50% | 43.00% | 29.72% | 32.91% | 49.60%
+  dense + tfidf (RRF) | 19.10% | 43.30% | 25.92% | 30.01% | 52.20%
+  dense + bm25 ($\alpha$) | 23.30% | 43.30% | 29.50% | 32.81% | 49.90%
+  dense + bm25 (RRF) | 20.30% | 43.10% | 27.02% | 30.84% | 51.80%
+**Dense model: google_embeddinggemma-300m** |  |  |  |  | 
+  dense | 29.90% | 54.70% | 37.34% | 41.49% | 60.80%
+  dense + tfidf ($\alpha$) | 32.50% | 57.80% | 40.50% | 44.65% | 65.10%
+  dense + tfidf (RRF) | 28.30% | 54.60% | 36.23% | 40.61% | 63.20%
+  dense + bm25 ($\alpha$) | 33.60% | 58.80% | 41.28% | 45.45% | 64.90%
+  dense + bm25 (RRF) | 28.70% | 54.50% | 36.35% | 40.67% | 63.30%
+**Dense model: intfloat_multilingual-e5-large** |  |  |  |  | 
+  dense | 27.20% | 48.10% | 33.78% | 37.21% | 55.90%
+  dense + tfidf ($\alpha$) | 31.90% | 53.60% | 38.76% | 42.32% | 61.70%
+  dense + tfidf (RRF) | 28.70% | 53.40% | 36.11% | 40.22% | 61.40%
+  dense + bm25 ($\alpha$) | 32.60% | 54.90% | 39.46% | 43.16% | 60.70%
+  dense + bm25 (RRF) | 29.00% | 53.50% | 36.30% | 40.39% | 61.30%
+**Dense model: jinaai_jina-embeddings-v3** |  |  |  |  | 
+  dense | 32.10% | 57.40% | 40.03% | 44.19% | 64.30%
+  dense + tfidf ($\alpha$) | 34.90% | <u>61.20%</u> | 42.70% | 47.12% | <u>66.90%</u>
+  dense + tfidf (RRF) | 29.30% | 57.30% | 37.96% | 42.58% | 66.10%
+  dense + bm25 ($\alpha$) | 35.40% | **61.20%** | 43.42% | **47.68%** | **67.60%**
+  dense + bm25 (RRF) | 31.40% | 56.60% | 39.01% | 43.20% | 65.90%
+**Dense model: openai-text-embedding-3-large** |  |  |  |  | 
+  dense | 33.70% | 56.80% | 41.06% | 44.84% | 63.80%
+  dense + tfidf ($\alpha$) | 34.90% | 60.40% | 42.45% | 46.73% | 66.50%
+  dense + tfidf (RRF) | 28.80% | 55.00% | 36.45% | 40.85% | 63.80%
+  dense + bm25 ($\alpha$) | **36.40%** | 60.20% | **43.60%** | <u>47.55%</u> | 66.20%
+  dense + bm25 (RRF) | 29.60% | 54.40% | 37.05% | 41.18% | 64.00%
+**Dense model: Qwen_Qwen3-Embedding-0_6B** |  |  |  |  | 
+  dense | 24.80% | 49.40% | 32.27% | 36.34% | 56.60%
+  dense + tfidf ($\alpha$) | 29.10% | 56.40% | 37.31% | 41.85% | 63.10%
+  dense + tfidf (RRF) | 24.60% | 53.20% | 33.14% | 37.91% | 62.20%
+  dense + bm25 ($\alpha$) | 30.10% | 55.70% | 38.11% | 42.33% | 62.40%
+  dense + bm25 (RRF) | 26.70% | 53.10% | 34.41% | 38.85% | 62.30%
+**Dense model: sbert-bge-m3** |  |  |  |  | 
+  dense | 30.80% | 53.90% | 37.98% | 41.80% | 61.00%
+  dense + tfidf ($\alpha$) | 33.10% | 57.00% | 40.67% | 44.59% | 63.80%
+  dense + tfidf (RRF) | 28.40% | 54.20% | 35.82% | 40.17% | 63.90%
+  dense + bm25 ($\alpha$) | 33.90% | 56.90% | 40.97% | 44.78% | 63.90%
+  dense + bm25 (RRF) | 28.60% | 53.70% | 36.24% | 40.40% | 62.80%
+**Dense model: sbert-paraphrase-multilingual-MiniLM-L12-v2** |  |  |  |  | 
+  dense | 11.80% | 30.00% | 16.71% | 19.82% | 39.10%
+  dense + tfidf ($\alpha$) | 19.60% | 45.30% | 27.05% | 31.38% | 51.40%
+  dense + tfidf (RRF) | 17.70% | 43.80% | 25.03% | 29.47% | 54.30%
+  dense + bm25 ($\alpha$) | 18.90% | 45.40% | 26.18% | 30.71% | 51.60%
+  dense + bm25 (RRF) | 17.50% | 43.80% | 24.63% | 29.15% | 53.30%
+**Dense model: sbert-vietnamese-bi-encoder** |  |  |  |  | 
+  dense | 15.70% | 34.90% | 21.09% | 24.34% | 41.70%
+  dense + tfidf ($\alpha$) | 22.20% | 46.00% | 28.95% | 32.96% | 52.40%
+  dense + tfidf (RRF) | 19.10% | 44.20% | 26.34% | 30.56% | 55.00%
+  dense + bm25 ($\alpha$) | 22.70% | 45.70% | 28.93% | 32.87% | 52.80%
+  dense + bm25 (RRF) | 20.00% | 44.90% | 26.98% | 31.19% | 54.30%
+**Dense model: sbert-vietnamese-document-embedding** |  |  |  |  | 
+  dense | 28.40% | 53.00% | 36.12% | 40.18% | 59.90%
+  dense + tfidf ($\alpha$) | 31.10% | 57.90% | 39.46% | 43.87% | 65.50%
+  dense + tfidf (RRF) | 26.00% | 51.80% | 33.88% | 38.16% | 64.00%
+  dense + bm25 ($\alpha$) | 32.40% | 57.80% | 40.05% | 44.28% | 64.60%
+  dense + bm25 (RRF) | 26.70% | 52.60% | 34.65% | 38.92% | 63.70%
+**Dense model: sbert-Vietnamese_Embedding_V2** |  |  |  |  | 
+  dense | 31.40% | 54.00% | 38.40% | 42.14% | 61.40%
+  dense + tfidf ($\alpha$) | 32.70% | 57.50% | 40.51% | 44.59% | 65.30%
+  dense + tfidf (RRF) | 28.10% | 54.60% | 35.84% | 40.29% | 63.90%
+  dense + bm25 ($\alpha$) | 33.70% | 57.90% | 41.22% | 45.20% | 64.30%
+  dense + bm25 (RRF) | 28.80% | 54.70% | 36.70% | 40.99% | 62.40%
+**Dense model: Snowflake_snowflake-arctic-embed-l-v2_0** |  |  |  |  | 
+  dense | 32.80% | 56.70% | 40.69% | 44.56% | 63.20%
+  dense + tfidf ($\alpha$) | 34.30% | 58.80% | 42.15% | 46.15% | 66.20%
+  dense + tfidf (RRF) | 30.10% | 55.30% | 37.85% | 42.03% | 65.00%
+  dense + bm25 ($\alpha$) | <u>35.60%</u> | 59.80% | <u>43.56%</u> | 47.46% | 66.30%
+  dense + bm25 (RRF) | 29.80% | 56.40% | 38.16% | 42.54% | 65.20%
 
 ## EduCoQA
 
-| Method            | Model                                       | P@1    | R@10   | MRR@10 | nDCG@10 | R@20   |
-| ----------------- | ------------------------------------------- | ------ | ------ | ------ | ------- | ------ |
-| bm25              |                                             | 14.68% | 43.44% | 23.09% | 27.93%  | 53.42% |
-| colbert           | colbert-ir_colbertv2_0                      | 14.48% | 39.33% | 21.54% | 25.75%  | 48.73% |
-| dense             | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 6.26%  | 21.92% | 9.98%  | 12.75%  | 29.55% |
-| dense             | Alibaba-NLP_gte-multilingual-base           | 18.00% | 52.45% | 28.72% | 34.42%  | 62.82% |
-| dense             | BAAI_bge-multilingual-gemma2                | 12.13% | 40.90% | 20.03% | 24.95%  | 51.08% |
-| dense             | Qwen_Qwen3-Embedding-0_6B                   | 21.53% | 54.99% | 31.50% | 37.10%  | 65.95% |
-| dense             | Snowflake_snowflake-arctic-embed-l-v2_0     | 20.74% | 54.79% | 31.05% | 36.73%  | 64.58% |
-| dense             | google_embeddinggemma-300m                  | 21.14% | 53.82% | 30.70% | 36.19%  | 62.23% |
-| dense             | intfloat_multilingual-e5-large              | 23.87% | 53.82% | 32.70% | 37.72%  | 65.56% |
-| dense             | jinaai_jina-embeddings-v3                   | 21.72% | 52.05% | 31.01% | 36.02%  | 62.43% |
-| dense             | openai-text-embedding-3-large               | 20.16% | 51.86% | 30.30% | 35.47%  | 63.01% |
-| dense             | sbert-Vietnamese_Embedding_V2               | 19.77% | 50.29% | 28.99% | 34.08%  | 59.88% |
-| dense             | sbert-Vietnamese_Embedding_v2               | 19.96% | 50.29% | 29.11% | 34.17%  | 59.88% |
-| dense             | sbert-bge-m3                                | 24.66% | 55.77% | 34.22% | 39.37%  | 64.77% |
-| dense             | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 14.48% | 40.70% | 20.90% | 25.49%  | 52.05% |
-| dense             | sbert-vietnamese-bi-encoder                 | 18.79% | 48.53% | 27.01% | 32.07%  | 58.51% |
-| dense             | sbert-vietnamese-document-embedding         | 20.55% | 53.42% | 30.76% | 36.19%  | 63.21% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 13.50% | 38.16% | 20.55% | 24.71%  | 47.55% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-multilingual-base           | 21.53% | 59.69% | 32.41% | 38.88%  | 69.28% |
-| dense+bm25-alpha  | BAAI_bge-multilingual-gemma2                | 19.18% | 47.16% | 27.13% | 31.88%  | 57.93% |
-| dense+bm25-alpha  | Qwen_Qwen3-Embedding-0_6B                   | 22.70% | 60.08% | 33.58% | 39.88%  | 69.28% |
-| dense+bm25-alpha  | Snowflake_snowflake-arctic-embed-l-v2_0     | 23.48% | 58.51% | 33.33% | 39.28%  | 68.49% |
-| dense+bm25-alpha  | google_embeddinggemma-300m                  | 22.50% | 57.73% | 32.81% | 38.73%  | 65.75% |
-| dense+bm25-alpha  | intfloat_multilingual-e5-large              | 25.24% | 60.47% | 35.24% | 41.19%  | 70.06% |
-| dense+bm25-alpha  | jinaai_jina-embeddings-v3                   | 23.48% | 59.30% | 34.13% | 40.12%  | 67.91% |
-| dense+bm25-alpha  | openai-text-embedding-3-large               | 22.11% | 57.34% | 32.54% | 38.43%  | 65.95% |
-| dense+bm25-alpha  | sbert-Vietnamese_Embedding_V2               | 19.57% | 56.16% | 29.93% | 36.14%  | 65.17% |
-| dense+bm25-alpha  | sbert-Vietnamese_Embedding_v2               | 19.57% | 56.36% | 29.95% | 36.20%  | 65.17% |
-| dense+bm25-alpha  | sbert-bge-m3                                | 22.90% | 58.71% | 33.68% | 39.63%  | 67.51% |
-| dense+bm25-alpha  | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 18.59% | 52.84% | 27.68% | 33.57%  | 61.45% |
-| dense+bm25-alpha  | sbert-vietnamese-bi-encoder                 | 20.74% | 52.84% | 29.95% | 35.38%  | 64.19% |
-| dense+bm25-alpha  | sbert-vietnamese-document-embedding         | 21.92% | 56.36% | 31.91% | 37.74%  | 65.56% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 10.18% | 28.96% | 15.67% | 18.80%  | 42.07% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-multilingual-base           | 19.37% | 57.34% | 29.98% | 36.43%  | 68.69% |
-| dense+bm25-rrf    | BAAI_bge-multilingual-gemma2                | 18.40% | 46.38% | 26.21% | 30.97%  | 59.10% |
-| dense+bm25-rrf    | Qwen_Qwen3-Embedding-0_6B                   | 20.55% | 59.30% | 31.33% | 37.92%  | 67.71% |
-| dense+bm25-rrf    | Snowflake_snowflake-arctic-embed-l-v2_0     | 20.35% | 55.77% | 30.49% | 36.48%  | 66.54% |
-| dense+bm25-rrf    | google_embeddinggemma-300m                  | 20.16% | 57.53% | 30.89% | 37.20%  | 65.95% |
-| dense+bm25-rrf    | intfloat_multilingual-e5-large              | 21.92% | 57.73% | 32.41% | 38.42%  | 69.08% |
-| dense+bm25-rrf    | jinaai_jina-embeddings-v3                   | 20.74% | 56.75% | 30.81% | 36.93%  | 69.28% |
-| dense+bm25-rrf    | openai-text-embedding-3-large               | 22.90% | 54.99% | 31.36% | 36.89%  | 66.14% |
-| dense+bm25-rrf    | sbert-Vietnamese_Embedding_V2               | 21.14% | 53.23% | 29.90% | 35.39%  | 64.58% |
-| dense+bm25-rrf    | sbert-Vietnamese_Embedding_v2               | 21.14% | 53.42% | 29.94% | 35.47%  | 64.58% |
-| dense+bm25-rrf    | sbert-bge-m3                                | 21.92% | 55.38% | 31.13% | 36.83%  | 67.12% |
-| dense+bm25-rrf    | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 18.59% | 52.84% | 27.06% | 33.03%  | 61.64% |
-| dense+bm25-rrf    | sbert-vietnamese-bi-encoder                 | 20.94% | 52.64% | 29.52% | 34.97%  | 64.97% |
-| dense+bm25-rrf    | sbert-vietnamese-document-embedding         | 19.96% | 54.79% | 29.33% | 35.31%  | 64.77% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 11.94% | 38.75% | 19.55% | 24.08%  | 46.77% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-multilingual-base           | 21.53% | 59.10% | 31.79% | 38.23%  | 68.49% |
-| dense+tfidf-alpha | BAAI_bge-multilingual-gemma2                | 19.18% | 46.18% | 26.40% | 31.06%  | 57.53% |
-| dense+tfidf-alpha | Qwen_Qwen3-Embedding-0_6B                   | 21.72% | 59.69% | 32.47% | 38.92%  | 69.67% |
-| dense+tfidf-alpha | Snowflake_snowflake-arctic-embed-l-v2_0     | 22.50% | 58.90% | 32.47% | 38.69%  | 68.10% |
-| dense+tfidf-alpha | google_embeddinggemma-300m                  | 22.31% | 58.12% | 32.23% | 38.35%  | 66.14% |
-| dense+tfidf-alpha | intfloat_multilingual-e5-large              | 23.29% | 61.06% | 33.62% | 40.08%  | 68.88% |
-| dense+tfidf-alpha | jinaai_jina-embeddings-v3                   | 22.11% | 58.32% | 32.34% | 38.49%  | 68.30% |
-| dense+tfidf-alpha | openai-text-embedding-3-large               | 22.70% | 57.34% | 32.40% | 38.30%  | 66.54% |
-| dense+tfidf-alpha | sbert-Vietnamese_Embedding_V2               | 18.98% | 56.36% | 29.33% | 35.70%  | 65.36% |
-| dense+tfidf-alpha | sbert-Vietnamese_Embedding_v2               | 19.18% | 56.36% | 29.42% | 35.77%  | 65.36% |
-| dense+tfidf-alpha | sbert-bge-m3                                | 23.68% | 57.93% | 33.78% | 39.52%  | 67.51% |
-| dense+tfidf-alpha | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 18.79% | 50.68% | 27.07% | 32.59%  | 61.25% |
-| dense+tfidf-alpha | sbert-vietnamese-bi-encoder                 | 19.18% | 52.25% | 28.58% | 34.19%  | 64.97% |
-| dense+tfidf-alpha | sbert-vietnamese-document-embedding         | 20.94% | 56.75% | 31.15% | 37.21%  | 66.14% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 9.39%  | 30.72% | 15.07% | 18.72%  | 44.03% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-multilingual-base           | 18.98% | 54.99% | 29.02% | 35.17%  | 69.47% |
-| dense+tfidf-rrf   | BAAI_bge-multilingual-gemma2                | 17.81% | 46.58% | 25.81% | 30.71%  | 56.75% |
-| dense+tfidf-rrf   | Qwen_Qwen3-Embedding-0_6B                   | 19.77% | 58.32% | 30.32% | 36.92%  | 68.30% |
-| dense+tfidf-rrf   | Snowflake_snowflake-arctic-embed-l-v2_0     | 19.96% | 54.99% | 29.70% | 35.66%  | 67.91% |
-| dense+tfidf-rrf   | google_embeddinggemma-300m                  | 20.94% | 56.75% | 31.12% | 37.17%  | 66.93% |
-| dense+tfidf-rrf   | intfloat_multilingual-e5-large              | 23.48% | 59.10% | 32.62% | 38.81%  | 68.69% |
-| dense+tfidf-rrf   | jinaai_jina-embeddings-v3                   | 21.33% | 56.36% | 30.61% | 36.66%  | 69.28% |
-| dense+tfidf-rrf   | openai-text-embedding-3-large               | 20.55% | 55.19% | 29.80% | 35.75%  | 67.12% |
-| dense+tfidf-rrf   | sbert-Vietnamese_Embedding_V2               | 19.37% | 53.82% | 28.80% | 34.70%  | 65.36% |
-| dense+tfidf-rrf   | sbert-Vietnamese_Embedding_v2               | 19.37% | 53.82% | 28.84% | 34.73%  | 65.36% |
-| dense+tfidf-rrf   | sbert-bge-m3                                | 20.55% | 53.82% | 29.72% | 35.40%  | 67.32% |
-| dense+tfidf-rrf   | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 17.81% | 51.47% | 25.98% | 31.88%  | 61.84% |
-| dense+tfidf-rrf   | sbert-vietnamese-bi-encoder                 | 20.16% | 52.05% | 28.53% | 34.05%  | 64.77% |
-| dense+tfidf-rrf   | sbert-vietnamese-document-embedding         | 20.16% | 54.99% | 28.89% | 34.97%  | 64.97% |
-| splade            | naver_splade-v3                             | 11.35% | 30.53% | 16.62% | 19.91%  | 39.92% |
-| tfidf             |                                             | 14.68% | 42.47% | 22.23% | 26.99%  | 53.82% |
+Method | P@1 | R@10 | MRR@10 | nDCG@10 | R@20
+--- | --- | --- | --- | --- | ---
+tfidf | 14.68% | 42.47% | 22.23% | 26.99% | 53.82%
+bm25 | 14.68% | 43.44% | 23.09% | 27.93% | 53.42%
+splade | 11.35% | 30.53% | 16.62% | 19.91% | 39.92%
+colbert | 14.48% | 39.33% | 21.54% | 25.75% | 48.73%
+**Dense model: Alibaba-NLP_gte-multilingual-base** |  |  |  |  | 
+  dense | 18.00% | 52.45% | 28.72% | 34.42% | 62.82%
+  dense + tfidf ($\alpha$) | 21.53% | 59.10% | 31.79% | 38.23% | 68.49%
+  dense + tfidf (RRF) | 18.98% | 54.99% | 29.02% | 35.17% | 69.47%
+  dense + bm25 ($\alpha$) | 21.53% | 59.69% | 32.41% | 38.88% | 69.28%
+  dense + bm25 (RRF) | 19.37% | 57.34% | 29.98% | 36.43% | 68.69%
+**Dense model: Alibaba-NLP_gte-Qwen2-1_5B-instruct** |  |  |  |  | 
+  dense | 6.26% | 21.92% | 9.98% | 12.75% | 29.55%
+  dense + tfidf ($\alpha$) | 11.94% | 38.75% | 19.55% | 24.08% | 46.77%
+  dense + tfidf (RRF) | 9.39% | 30.72% | 15.07% | 18.72% | 44.03%
+  dense + bm25 ($\alpha$) | 13.50% | 38.16% | 20.55% | 24.71% | 47.55%
+  dense + bm25 (RRF) | 10.18% | 28.96% | 15.67% | 18.80% | 42.07%
+**Dense model: BAAI_bge-multilingual-gemma2** |  |  |  |  | 
+  dense | 12.13% | 40.90% | 20.03% | 24.95% | 51.08%
+  dense + tfidf ($\alpha$) | 19.18% | 46.18% | 26.40% | 31.06% | 57.53%
+  dense + tfidf (RRF) | 17.81% | 46.58% | 25.81% | 30.71% | 56.75%
+  dense + bm25 ($\alpha$) | 19.18% | 47.16% | 27.13% | 31.88% | 57.93%
+  dense + bm25 (RRF) | 18.40% | 46.38% | 26.21% | 30.97% | 59.10%
+**Dense model: google_embeddinggemma-300m** |  |  |  |  | 
+  dense | 21.14% | 53.82% | 30.70% | 36.19% | 62.23%
+  dense + tfidf ($\alpha$) | 22.31% | 58.12% | 32.23% | 38.35% | 66.14%
+  dense + tfidf (RRF) | 20.94% | 56.75% | 31.12% | 37.17% | 66.93%
+  dense + bm25 ($\alpha$) | 22.50% | 57.73% | 32.81% | 38.73% | 65.75%
+  dense + bm25 (RRF) | 20.16% | 57.53% | 30.89% | 37.20% | 65.95%
+**Dense model: intfloat_multilingual-e5-large** |  |  |  |  | 
+  dense | 23.87% | 53.82% | 32.70% | 37.72% | 65.56%
+  dense + tfidf ($\alpha$) | 23.29% | **61.06%** | 33.62% | 40.08% | 68.88%
+  dense + tfidf (RRF) | 23.48% | 59.10% | 32.62% | 38.81% | 68.69%
+  dense + bm25 ($\alpha$) | **25.24%** | <u>60.47%</u> | **35.24%** | **41.19%** | **70.06%**
+  dense + bm25 (RRF) | 21.92% | 57.73% | 32.41% | 38.42% | 69.08%
+**Dense model: jinaai_jina-embeddings-v3** |  |  |  |  | 
+  dense | 21.72% | 52.05% | 31.01% | 36.02% | 62.43%
+  dense + tfidf ($\alpha$) | 22.11% | 58.32% | 32.34% | 38.49% | 68.30%
+  dense + tfidf (RRF) | 21.33% | 56.36% | 30.61% | 36.66% | 69.28%
+  dense + bm25 ($\alpha$) | 23.48% | 59.30% | 34.13% | <u>40.12%</u> | 67.91%
+  dense + bm25 (RRF) | 20.74% | 56.75% | 30.81% | 36.93% | 69.28%
+**Dense model: openai-text-embedding-3-large** |  |  |  |  | 
+  dense | 20.16% | 51.86% | 30.30% | 35.47% | 63.01%
+  dense + tfidf ($\alpha$) | 22.70% | 57.34% | 32.40% | 38.30% | 66.54%
+  dense + tfidf (RRF) | 20.55% | 55.19% | 29.80% | 35.75% | 67.12%
+  dense + bm25 ($\alpha$) | 22.11% | 57.34% | 32.54% | 38.43% | 65.95%
+  dense + bm25 (RRF) | 22.90% | 54.99% | 31.36% | 36.89% | 66.14%
+**Dense model: Qwen_Qwen3-Embedding-0_6B** |  |  |  |  | 
+  dense | 21.53% | 54.99% | 31.50% | 37.10% | 65.95%
+  dense + tfidf ($\alpha$) | 21.72% | 59.69% | 32.47% | 38.92% | <u>69.67%</u>
+  dense + tfidf (RRF) | 19.77% | 58.32% | 30.32% | 36.92% | 68.30%
+  dense + bm25 ($\alpha$) | 22.70% | 60.08% | 33.58% | 39.88% | 69.28%
+  dense + bm25 (RRF) | 20.55% | 59.30% | 31.33% | 37.92% | 67.71%
+**Dense model: sbert-bge-m3** |  |  |  |  | 
+  dense | <u>24.66%</u> | 55.77% | <u>34.22%</u> | 39.37% | 64.77%
+  dense + tfidf ($\alpha$) | 23.68% | 57.93% | 33.78% | 39.52% | 67.51%
+  dense + tfidf (RRF) | 20.55% | 53.82% | 29.72% | 35.40% | 67.32%
+  dense + bm25 ($\alpha$) | 22.90% | 58.71% | 33.68% | 39.63% | 67.51%
+  dense + bm25 (RRF) | 21.92% | 55.38% | 31.13% | 36.83% | 67.12%
+**Dense model: sbert-paraphrase-multilingual-MiniLM-L12-v2** |  |  |  |  | 
+  dense | 14.48% | 40.70% | 20.90% | 25.49% | 52.05%
+  dense + tfidf ($\alpha$) | 18.79% | 50.68% | 27.07% | 32.59% | 61.25%
+  dense + tfidf (RRF) | 17.81% | 51.47% | 25.98% | 31.88% | 61.84%
+  dense + bm25 ($\alpha$) | 18.59% | 52.84% | 27.68% | 33.57% | 61.45%
+  dense + bm25 (RRF) | 18.59% | 52.84% | 27.06% | 33.03% | 61.64%
+**Dense model: sbert-vietnamese-bi-encoder** |  |  |  |  | 
+  dense | 18.79% | 48.53% | 27.01% | 32.07% | 58.51%
+  dense + tfidf ($\alpha$) | 19.18% | 52.25% | 28.58% | 34.19% | 64.97%
+  dense + tfidf (RRF) | 20.16% | 52.05% | 28.53% | 34.05% | 64.77%
+  dense + bm25 ($\alpha$) | 20.74% | 52.84% | 29.95% | 35.38% | 64.19%
+  dense + bm25 (RRF) | 20.94% | 52.64% | 29.52% | 34.97% | 64.97%
+**Dense model: sbert-vietnamese-document-embedding** |  |  |  |  | 
+  dense | 20.55% | 53.42% | 30.76% | 36.19% | 63.21%
+  dense + tfidf ($\alpha$) | 20.94% | 56.75% | 31.15% | 37.21% | 66.14%
+  dense + tfidf (RRF) | 20.16% | 54.99% | 28.89% | 34.97% | 64.97%
+  dense + bm25 ($\alpha$) | 21.92% | 56.36% | 31.91% | 37.74% | 65.56%
+  dense + bm25 (RRF) | 19.96% | 54.79% | 29.33% | 35.31% | 64.77%
+**Dense model: sbert-Vietnamese_Embedding_V2** |  |  |  |  | 
+  dense | 19.77% | 50.29% | 28.99% | 34.08% | 59.88%
+  dense + tfidf ($\alpha$) | 18.98% | 56.36% | 29.33% | 35.70% | 65.36%
+  dense + tfidf (RRF) | 19.37% | 53.82% | 28.80% | 34.70% | 65.36%
+  dense + bm25 ($\alpha$) | 19.57% | 56.16% | 29.93% | 36.14% | 65.17%
+  dense + bm25 (RRF) | 21.14% | 53.23% | 29.90% | 35.39% | 64.58%
+**Dense model: Snowflake_snowflake-arctic-embed-l-v2_0** |  |  |  |  | 
+  dense | 20.74% | 54.79% | 31.05% | 36.73% | 64.58%
+  dense + tfidf ($\alpha$) | 22.50% | 58.90% | 32.47% | 38.69% | 68.10%
+  dense + tfidf (RRF) | 19.96% | 54.99% | 29.70% | 35.66% | 67.91%
+  dense + bm25 ($\alpha$) | 23.48% | 58.51% | 33.33% | 39.28% | 68.49%
+  dense + bm25 (RRF) | 20.35% | 55.77% | 30.49% | 36.48% | 66.54%
 
 ## UIT-ViQuAD2
 
-| Method            | Model                                       | P@1    | R@10   | MRR@10 | nDCG@10 | R@20   |
-| ----------------- | ------------------------------------------- | ------ | ------ | ------ | ------- | ------ |
-| bm25              |                                             | 70.80% | 91.60% | 78.09% | 81.38%  | 93.90% |
-| colbert           | colbert-ir_colbertv2_0                      | 50.90% | 75.10% | 58.26% | 62.29%  | 81.30% |
-| dense             | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 56.70% | 84.10% | 65.64% | 70.09%  | 88.50% |
-| dense             | Alibaba-NLP_gte-multilingual-base           | 75.00% | 95.20% | 82.34% | 85.49%  | 97.00% |
-| dense             | BAAI_bge-multilingual-gemma2                | 70.90% | 93.00% | 78.74% | 82.23%  | 96.00% |
-| dense             | Qwen_Qwen3-Embedding-0_6B                   | 73.70% | 94.10% | 80.76% | 84.01%  | 97.20% |
-| dense             | Snowflake_snowflake-arctic-embed-l-v2_0     | 75.40% | 94.70% | 82.31% | 85.33%  | 96.70% |
-| dense             | google_embeddinggemma-300m                  | 76.90% | 94.90% | 83.45% | 86.26%  | 97.40% |
-| dense             | intfloat_multilingual-e5-large              | 83.60% | 97.90% | 89.29% | 91.43%  | 98.90% |
-| dense             | jinaai_jina-embeddings-v3                   | 72.20% | 93.20% | 79.54% | 82.87%  | 95.60% |
-| dense             | openai-text-embedding-3-large               | 71.20% | 92.40% | 78.75% | 82.09%  | 96.00% |
-| dense             | sbert-Vietnamese_Embedding_V2               | 82.20% | 98.10% | 88.24% | 90.67%  | 99.00% |
-| dense             | sbert-bge-m3                                | 80.60% | 96.40% | 86.62% | 89.04%  | 98.40% |
-| dense             | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 55.90% | 81.30% | 64.15% | 68.28%  | 87.70% |
-| dense             | sbert-vietnamese-bi-encoder                 | 68.00% | 88.40% | 74.62% | 77.94%  | 92.10% |
-| dense             | sbert-vietnamese-document-embedding         | 75.70% | 95.60% | 83.00% | 86.10%  | 97.40% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 79.20% | 95.50% | 85.30% | 87.82%  | 96.90% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-multilingual-base           | 85.00% | 98.50% | 90.26% | 92.31%  | 99.20% |
-| dense+bm25-alpha  | BAAI_bge-multilingual-gemma2                | 83.10% | 97.50% | 88.42% | 90.66%  | 98.50% |
-| dense+bm25-alpha  | Qwen_Qwen3-Embedding-0_6B                   | 85.30% | 98.30% | 90.41% | 92.38%  | 99.30% |
-| dense+bm25-alpha  | Snowflake_snowflake-arctic-embed-l-v2_0     | 84.50% | 97.70% | 89.71% | 91.70%  | 98.60% |
-| dense+bm25-alpha  | google_embeddinggemma-300m                  | 86.20% | 98.50% | 91.24% | 93.06%  | 99.10% |
-| dense+bm25-alpha  | intfloat_multilingual-e5-large              | 89.70% | 98.90% | 93.62% | 94.96%  | 99.50% |
-| dense+bm25-alpha  | jinaai_jina-embeddings-v3                   | 84.60% | 98.00% | 89.77% | 91.81%  | 98.60% |
-| dense+bm25-alpha  | openai-text-embedding-3-large               | 82.90% | 97.00% | 88.46% | 90.58%  | 98.70% |
-| dense+bm25-alpha  | sbert-Vietnamese_Embedding_V2               | 89.10% | 99.20% | 93.00% | 94.53%  | 99.30% |
-| dense+bm25-alpha  | sbert-bge-m3                                | 88.30% | 99.00% | 92.41% | 94.04%  | 99.30% |
-| dense+bm25-alpha  | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 75.80% | 95.10% | 82.76% | 85.78%  | 97.50% |
-| dense+bm25-alpha  | sbert-vietnamese-bi-encoder                 | 81.20% | 96.10% | 86.71% | 89.02%  | 97.80% |
-| dense+bm25-alpha  | sbert-vietnamese-document-embedding         | 85.50% | 98.70% | 90.34% | 92.40%  | 99.30% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 69.30% | 93.10% | 77.90% | 81.61%  | 96.20% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-multilingual-base           | 82.30% | 98.10% | 88.43% | 90.83%  | 99.10% |
-| dense+bm25-rrf    | BAAI_bge-multilingual-gemma2                | 77.90% | 96.30% | 84.82% | 87.65%  | 98.60% |
-| dense+bm25-rrf    | Qwen_Qwen3-Embedding-0_6B                   | 81.60% | 98.00% | 88.06% | 90.53%  | 99.30% |
-| dense+bm25-rrf    | Snowflake_snowflake-arctic-embed-l-v2_0     | 80.70% | 97.00% | 87.10% | 89.57%  | 98.60% |
-| dense+bm25-rrf    | google_embeddinggemma-300m                  | 83.50% | 98.20% | 89.30% | 91.52%  | 99.00% |
-| dense+bm25-rrf    | intfloat_multilingual-e5-large              | 86.50% | 98.70% | 91.27% | 93.12%  | 99.40% |
-| dense+bm25-rrf    | jinaai_jina-embeddings-v3                   | 80.40% | 97.60% | 87.26% | 89.84%  | 98.90% |
-| dense+bm25-rrf    | openai-text-embedding-3-large               | 77.80% | 95.80% | 84.59% | 87.37%  | 98.70% |
-| dense+bm25-rrf    | sbert-Vietnamese_Embedding_V2               | 82.10% | 97.50% | 87.95% | 90.32%  | 99.10% |
-| dense+bm25-rrf    | sbert-bge-m3                                | 80.80% | 97.30% | 87.15% | 89.67%  | 99.00% |
-| dense+bm25-rrf    | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 69.00% | 93.60% | 77.59% | 81.49%  | 97.30% |
-| dense+bm25-rrf    | sbert-vietnamese-bi-encoder                 | 75.70% | 94.90% | 82.50% | 85.54%  | 97.80% |
-| dense+bm25-rrf    | sbert-vietnamese-document-embedding         | 79.60% | 97.10% | 86.07% | 88.79%  | 99.10% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 72.30% | 94.90% | 80.73% | 84.22%  | 97.10% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-multilingual-base           | 80.40% | 98.20% | 86.92% | 89.69%  | 98.90% |
-| dense+tfidf-alpha | BAAI_bge-multilingual-gemma2                | 78.70% | 96.80% | 85.60% | 88.37%  | 98.20% |
-| dense+tfidf-alpha | Qwen_Qwen3-Embedding-0_6B                   | 78.20% | 97.80% | 85.81% | 88.79%  | 99.10% |
-| dense+tfidf-alpha | Snowflake_snowflake-arctic-embed-l-v2_0     | 79.80% | 97.20% | 86.41% | 89.08%  | 98.10% |
-| dense+tfidf-alpha | google_embeddinggemma-300m                  | 81.80% | 98.50% | 88.43% | 90.94%  | 98.80% |
-| dense+tfidf-alpha | intfloat_multilingual-e5-large              | 85.70% | 99.00% | 90.83% | 92.86%  | 99.30% |
-| dense+tfidf-alpha | jinaai_jina-embeddings-v3                   | 79.70% | 97.80% | 86.36% | 89.18%  | 98.40% |
-| dense+tfidf-alpha | openai-text-embedding-3-large               | 79.30% | 97.20% | 86.24% | 88.96%  | 98.20% |
-| dense+tfidf-alpha | sbert-Vietnamese_Embedding_V2               | 84.40% | 99.30% | 90.18% | 92.45%  | 99.30% |
-| dense+tfidf-alpha | sbert-bge-m3                                | 83.20% | 98.70% | 89.48% | 91.78%  | 99.20% |
-| dense+tfidf-alpha | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 70.20% | 93.90% | 78.74% | 82.46%  | 96.60% |
-| dense+tfidf-alpha | sbert-vietnamese-bi-encoder                 | 77.40% | 95.00% | 83.93% | 86.66%  | 97.20% |
-| dense+tfidf-alpha | sbert-vietnamese-document-embedding         | 81.40% | 97.50% | 87.45% | 89.95%  | 99.00% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 67.10% | 92.20% | 75.85% | 79.83%  | 96.00% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-multilingual-base           | 76.30% | 97.50% | 84.12% | 87.42%  | 98.80% |
-| dense+tfidf-rrf   | BAAI_bge-multilingual-gemma2                | 75.50% | 95.60% | 82.95% | 86.07%  | 98.30% |
-| dense+tfidf-rrf   | Qwen_Qwen3-Embedding-0_6B                   | 74.10% | 97.60% | 82.96% | 86.58%  | 98.70% |
-| dense+tfidf-rrf   | Snowflake_snowflake-arctic-embed-l-v2_0     | 75.30% | 97.10% | 83.51% | 86.87%  | 98.30% |
-| dense+tfidf-rrf   | google_embeddinggemma-300m                  | 77.40% | 97.80% | 85.00% | 88.17%  | 98.60% |
-| dense+tfidf-rrf   | intfloat_multilingual-e5-large              | 78.60% | 98.40% | 86.52% | 89.49%  | 99.20% |
-| dense+tfidf-rrf   | jinaai_jina-embeddings-v3                   | 74.50% | 97.10% | 83.04% | 86.53%  | 98.30% |
-| dense+tfidf-rrf   | openai-text-embedding-3-large               | 74.10% | 96.10% | 82.18% | 85.60%  | 98.30% |
-| dense+tfidf-rrf   | sbert-Vietnamese_Embedding_V2               | 79.00% | 97.60% | 86.02% | 88.87%  | 99.30% |
-| dense+tfidf-rrf   | sbert-bge-m3                                | 77.20% | 97.60% | 84.95% | 88.07%  | 99.00% |
-| dense+tfidf-rrf   | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 66.30% | 93.20% | 75.45% | 79.76%  | 96.50% |
-| dense+tfidf-rrf   | sbert-vietnamese-bi-encoder                 | 72.20% | 94.70% | 80.16% | 83.71%  | 97.80% |
-| dense+tfidf-rrf   | sbert-vietnamese-document-embedding         | 76.40% | 97.10% | 83.82% | 87.07%  | 98.90% |
-| splade            | naver_splade-v3                             | 44.30% | 73.10% | 53.57% | 58.27%  | 79.00% |
-| tfidf             |                                             | 50.00% | 91.00% | 64.57% | 71.05%  | 94.00% |
+Method | P@1 | R@10 | MRR@10 | nDCG@10 | R@20
+--- | --- | --- | --- | --- | ---
+tfidf | 50.00% | 91.00% | 64.57% | 71.05% | 94.00%
+bm25 | 70.80% | 91.60% | 78.09% | 81.38% | 93.90%
+splade | 44.30% | 73.10% | 53.57% | 58.27% | 79.00%
+colbert | 50.90% | 75.10% | 58.26% | 62.29% | 81.30%
+**Dense model: Alibaba-NLP_gte-multilingual-base** |  |  |  |  | 
+  dense | 75.00% | 95.20% | 82.34% | 85.49% | 97.00%
+  dense + tfidf ($\alpha$) | 80.40% | 98.20% | 86.92% | 89.69% | 98.90%
+  dense + tfidf (RRF) | 76.30% | 97.50% | 84.12% | 87.42% | 98.80%
+  dense + bm25 ($\alpha$) | 85.00% | 98.50% | 90.26% | 92.31% | 99.20%
+  dense + bm25 (RRF) | 82.30% | 98.10% | 88.43% | 90.83% | 99.10%
+**Dense model: Alibaba-NLP_gte-Qwen2-1_5B-instruct** |  |  |  |  | 
+  dense | 56.70% | 84.10% | 65.64% | 70.09% | 88.50%
+  dense + tfidf ($\alpha$) | 72.30% | 94.90% | 80.73% | 84.22% | 97.10%
+  dense + tfidf (RRF) | 67.10% | 92.20% | 75.85% | 79.83% | 96.00%
+  dense + bm25 ($\alpha$) | 79.20% | 95.50% | 85.30% | 87.82% | 96.90%
+  dense + bm25 (RRF) | 69.30% | 93.10% | 77.90% | 81.61% | 96.20%
+**Dense model: BAAI_bge-multilingual-gemma2** |  |  |  |  | 
+  dense | 70.90% | 93.00% | 78.74% | 82.23% | 96.00%
+  dense + tfidf ($\alpha$) | 78.70% | 96.80% | 85.60% | 88.37% | 98.20%
+  dense + tfidf (RRF) | 75.50% | 95.60% | 82.95% | 86.07% | 98.30%
+  dense + bm25 ($\alpha$) | 83.10% | 97.50% | 88.42% | 90.66% | 98.50%
+  dense + bm25 (RRF) | 77.90% | 96.30% | 84.82% | 87.65% | 98.60%
+**Dense model: google_embeddinggemma-300m** |  |  |  |  | 
+  dense | 76.90% | 94.90% | 83.45% | 86.26% | 97.40%
+  dense + tfidf ($\alpha$) | 81.80% | 98.50% | 88.43% | 90.94% | 98.80%
+  dense + tfidf (RRF) | 77.40% | 97.80% | 85.00% | 88.17% | 98.60%
+  dense + bm25 ($\alpha$) | 86.20% | 98.50% | 91.24% | 93.06% | 99.10%
+  dense + bm25 (RRF) | 83.50% | 98.20% | 89.30% | 91.52% | 99.00%
+**Dense model: intfloat_multilingual-e5-large** |  |  |  |  | 
+  dense | 83.60% | 97.90% | 89.29% | 91.43% | 98.90%
+  dense + tfidf ($\alpha$) | 85.70% | 99.00% | 90.83% | 92.86% | 99.30%
+  dense + tfidf (RRF) | 78.60% | 98.40% | 86.52% | 89.49% | 99.20%
+  dense + bm25 ($\alpha$) | **89.70%** | 98.90% | **93.62%** | **94.96%** | **99.50%**
+  dense + bm25 (RRF) | 86.50% | 98.70% | 91.27% | 93.12% | <u>99.40%</u>
+**Dense model: jinaai_jina-embeddings-v3** |  |  |  |  | 
+  dense | 72.20% | 93.20% | 79.54% | 82.87% | 95.60%
+  dense + tfidf ($\alpha$) | 79.70% | 97.80% | 86.36% | 89.18% | 98.40%
+  dense + tfidf (RRF) | 74.50% | 97.10% | 83.04% | 86.53% | 98.30%
+  dense + bm25 ($\alpha$) | 84.60% | 98.00% | 89.77% | 91.81% | 98.60%
+  dense + bm25 (RRF) | 80.40% | 97.60% | 87.26% | 89.84% | 98.90%
+**Dense model: openai-text-embedding-3-large** |  |  |  |  | 
+  dense | 71.20% | 92.40% | 78.75% | 82.09% | 96.00%
+  dense + tfidf ($\alpha$) | 79.30% | 97.20% | 86.24% | 88.96% | 98.20%
+  dense + tfidf (RRF) | 74.10% | 96.10% | 82.18% | 85.60% | 98.30%
+  dense + bm25 ($\alpha$) | 82.90% | 97.00% | 88.46% | 90.58% | 98.70%
+  dense + bm25 (RRF) | 77.80% | 95.80% | 84.59% | 87.37% | 98.70%
+**Dense model: Qwen_Qwen3-Embedding-0_6B** |  |  |  |  | 
+  dense | 73.70% | 94.10% | 80.76% | 84.01% | 97.20%
+  dense + tfidf ($\alpha$) | 78.20% | 97.80% | 85.81% | 88.79% | 99.10%
+  dense + tfidf (RRF) | 74.10% | 97.60% | 82.96% | 86.58% | 98.70%
+  dense + bm25 ($\alpha$) | 85.30% | 98.30% | 90.41% | 92.38% | 99.30%
+  dense + bm25 (RRF) | 81.60% | 98.00% | 88.06% | 90.53% | 99.30%
+**Dense model: sbert-bge-m3** |  |  |  |  | 
+  dense | 80.60% | 96.40% | 86.62% | 89.04% | 98.40%
+  dense + tfidf ($\alpha$) | 83.20% | 98.70% | 89.48% | 91.78% | 99.20%
+  dense + tfidf (RRF) | 77.20% | 97.60% | 84.95% | 88.07% | 99.00%
+  dense + bm25 ($\alpha$) | 88.30% | 99.00% | 92.41% | 94.04% | 99.30%
+  dense + bm25 (RRF) | 80.80% | 97.30% | 87.15% | 89.67% | 99.00%
+**Dense model: sbert-paraphrase-multilingual-MiniLM-L12-v2** |  |  |  |  | 
+  dense | 55.90% | 81.30% | 64.15% | 68.28% | 87.70%
+  dense + tfidf ($\alpha$) | 70.20% | 93.90% | 78.74% | 82.46% | 96.60%
+  dense + tfidf (RRF) | 66.30% | 93.20% | 75.45% | 79.76% | 96.50%
+  dense + bm25 ($\alpha$) | 75.80% | 95.10% | 82.76% | 85.78% | 97.50%
+  dense + bm25 (RRF) | 69.00% | 93.60% | 77.59% | 81.49% | 97.30%
+**Dense model: sbert-vietnamese-bi-encoder** |  |  |  |  | 
+  dense | 68.00% | 88.40% | 74.62% | 77.94% | 92.10%
+  dense + tfidf ($\alpha$) | 77.40% | 95.00% | 83.93% | 86.66% | 97.20%
+  dense + tfidf (RRF) | 72.20% | 94.70% | 80.16% | 83.71% | 97.80%
+  dense + bm25 ($\alpha$) | 81.20% | 96.10% | 86.71% | 89.02% | 97.80%
+  dense + bm25 (RRF) | 75.70% | 94.90% | 82.50% | 85.54% | 97.80%
+**Dense model: sbert-vietnamese-document-embedding** |  |  |  |  | 
+  dense | 75.70% | 95.60% | 83.00% | 86.10% | 97.40%
+  dense + tfidf ($\alpha$) | 81.40% | 97.50% | 87.45% | 89.95% | 99.00%
+  dense + tfidf (RRF) | 76.40% | 97.10% | 83.82% | 87.07% | 98.90%
+  dense + bm25 ($\alpha$) | 85.50% | 98.70% | 90.34% | 92.40% | 99.30%
+  dense + bm25 (RRF) | 79.60% | 97.10% | 86.07% | 88.79% | 99.10%
+**Dense model: sbert-Vietnamese_Embedding_V2** |  |  |  |  | 
+  dense | 82.20% | 98.10% | 88.24% | 90.67% | 99.00%
+  dense + tfidf ($\alpha$) | 84.40% | **99.30%** | 90.18% | 92.45% | 99.30%
+  dense + tfidf (RRF) | 79.00% | 97.60% | 86.02% | 88.87% | 99.30%
+  dense + bm25 ($\alpha$) | <u>89.10%</u> | <u>99.20%</u> | <u>93.00%</u> | <u>94.53%</u> | 99.30%
+  dense + bm25 (RRF) | 82.10% | 97.50% | 87.95% | 90.32% | 99.10%
+**Dense model: Snowflake_snowflake-arctic-embed-l-v2_0** |  |  |  |  | 
+  dense | 75.40% | 94.70% | 82.31% | 85.33% | 96.70%
+  dense + tfidf ($\alpha$) | 79.80% | 97.20% | 86.41% | 89.08% | 98.10%
+  dense + tfidf (RRF) | 75.30% | 97.10% | 83.51% | 86.87% | 98.30%
+  dense + bm25 ($\alpha$) | 84.50% | 97.70% | 89.71% | 91.70% | 98.60%
+  dense + bm25 (RRF) | 80.70% | 97.00% | 87.10% | 89.57% | 98.60%
 
 ## ViMedAQA_v2
 
-| Method            | Model                                       | P@1    | R@10   | MRR@10 | nDCG@10 | R@20   |
-| ----------------- | ------------------------------------------- | ------ | ------ | ------ | ------- | ------ |
-| bm25              |                                             | 65.40% | 84.50% | 71.36% | 74.51%  | 87.30% |
-| colbert           | colbert-ir_colbertv2_0                      | 49.60% | 71.40% | 56.42% | 60.01%  | 75.50% |
-| dense             | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 59.90% | 81.20% | 66.93% | 70.37%  | 84.70% |
-| dense             | Alibaba-NLP_gte-multilingual-base           | 73.90% | 89.90% | 79.53% | 82.05%  | 92.80% |
-| dense             | BAAI_bge-multilingual-gemma2                | 58.40% | 80.20% | 65.39% | 68.94%  | 86.50% |
-| dense             | Qwen_Qwen3-Embedding-0_6B                   | 77.50% | 93.00% | 82.75% | 85.23%  | 95.40% |
-| dense             | Snowflake_snowflake-arctic-embed-l-v2_0     | 79.40% | 94.30% | 84.56% | 86.93%  | 96.00% |
-| dense             | google_embeddinggemma-300m                  | 77.80% | 95.30% | 83.62% | 86.45%  | 97.30% |
-| dense             | intfloat_multilingual-e5-large              | 83.30% | 96.40% | 87.94% | 90.01%  | 97.80% |
-| dense             | jinaai_jina-embeddings-v3                   | 79.90% | 95.40% | 85.29% | 87.75%  | 97.30% |
-| dense             | openai-text-embedding-3-large               | 80.40% | 95.40% | 85.44% | 87.84%  | 97.20% |
-| dense             | sbert-Vietnamese_Embedding_V2               | 76.90% | 93.50% | 82.40% | 85.06%  | 96.10% |
-| dense             | sbert-bge-m3                                | 81.20% | 94.10% | 85.60% | 87.67%  | 96.70% |
-| dense             | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 48.00% | 73.50% | 56.19% | 60.34%  | 80.70% |
-| dense             | sbert-vietnamese-bi-encoder                 | 70.10% | 87.20% | 75.68% | 78.46%  | 90.40% |
-| dense             | sbert-vietnamese-document-embedding         | 75.50% | 90.60% | 80.86% | 83.24%  | 93.00% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 71.50% | 88.50% | 76.95% | 79.73%  | 90.90% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-multilingual-base           | 80.30% | 93.20% | 84.95% | 86.96%  | 95.10% |
-| dense+bm25-alpha  | BAAI_bge-multilingual-gemma2                | 76.20% | 92.60% | 81.99% | 84.59%  | 94.80% |
-| dense+bm25-alpha  | Qwen_Qwen3-Embedding-0_6B                   | 82.80% | 94.80% | 87.12% | 89.00%  | 96.60% |
-| dense+bm25-alpha  | Snowflake_snowflake-arctic-embed-l-v2_0     | 83.80% | 95.10% | 87.75% | 89.53%  | 96.50% |
-| dense+bm25-alpha  | google_embeddinggemma-300m                  | 84.10% | 96.10% | 88.27% | 90.18%  | 98.20% |
-| dense+bm25-alpha  | intfloat_multilingual-e5-large              | 84.70% | 96.50% | 88.82% | 90.69%  | 97.70% |
-| dense+bm25-alpha  | jinaai_jina-embeddings-v3                   | 84.70% | 96.00% | 88.66% | 90.45%  | 97.70% |
-| dense+bm25-alpha  | openai-text-embedding-3-large               | 83.00% | 96.10% | 87.37% | 89.48%  | 97.90% |
-| dense+bm25-alpha  | sbert-Vietnamese_Embedding_V2               | 81.40% | 93.80% | 85.38% | 87.40%  | 95.70% |
-| dense+bm25-alpha  | sbert-bge-m3                                | 82.50% | 94.60% | 86.58% | 88.52%  | 96.70% |
-| dense+bm25-alpha  | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 69.70% | 87.00% | 75.24% | 78.06%  | 90.20% |
-| dense+bm25-alpha  | sbert-vietnamese-bi-encoder                 | 77.10% | 90.80% | 82.00% | 84.15%  | 92.80% |
-| dense+bm25-alpha  | sbert-vietnamese-document-embedding         | 79.80% | 92.60% | 84.37% | 86.39%  | 94.50% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 66.70% | 84.00% | 72.53% | 75.31%  | 89.10% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-multilingual-base           | 76.70% | 92.30% | 82.10% | 84.58%  | 94.70% |
-| dense+bm25-rrf    | BAAI_bge-multilingual-gemma2                | 71.30% | 91.10% | 78.11% | 81.26%  | 94.10% |
-| dense+bm25-rrf    | Qwen_Qwen3-Embedding-0_6B                   | 79.30% | 93.30% | 84.28% | 86.49%  | 95.40% |
-| dense+bm25-rrf    | Snowflake_snowflake-arctic-embed-l-v2_0     | 80.30% | 93.60% | 84.89% | 87.00%  | 95.60% |
-| dense+bm25-rrf    | google_embeddinggemma-300m                  | 80.50% | 93.60% | 85.35% | 87.38%  | 96.60% |
-| dense+bm25-rrf    | intfloat_multilingual-e5-large              | 81.20% | 94.60% | 85.92% | 88.03%  | 96.50% |
-| dense+bm25-rrf    | jinaai_jina-embeddings-v3                   | 79.60% | 94.30% | 85.04% | 87.30%  | 96.40% |
-| dense+bm25-rrf    | openai-text-embedding-3-large               | 77.70% | 92.10% | 82.16% | 84.53%  | 95.00% |
-| dense+bm25-rrf    | sbert-Vietnamese_Embedding_V2               | 76.60% | 90.80% | 81.43% | 83.71%  | 94.40% |
-| dense+bm25-rrf    | sbert-bge-m3                                | 76.80% | 91.30% | 81.59% | 83.93%  | 94.70% |
-| dense+bm25-rrf    | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 63.90% | 83.80% | 70.27% | 73.51%  | 89.90% |
-| dense+bm25-rrf    | sbert-vietnamese-bi-encoder                 | 72.80% | 89.30% | 78.34% | 80.99%  | 92.60% |
-| dense+bm25-rrf    | sbert-vietnamese-document-embedding         | 74.70% | 90.40% | 80.03% | 82.54%  | 93.50% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 66.70% | 89.00% | 74.62% | 78.14%  | 91.50% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-multilingual-base           | 79.70% | 93.30% | 84.58% | 86.71%  | 95.20% |
-| dense+tfidf-alpha | BAAI_bge-multilingual-gemma2                | 73.70% | 92.30% | 80.22% | 83.18%  | 94.00% |
-| dense+tfidf-alpha | Qwen_Qwen3-Embedding-0_6B                   | 82.10% | 94.40% | 86.56% | 88.48%  | 96.40% |
-| dense+tfidf-alpha | Snowflake_snowflake-arctic-embed-l-v2_0     | 81.20% | 94.70% | 86.03% | 88.15%  | 96.50% |
-| dense+tfidf-alpha | google_embeddinggemma-300m                  | 81.20% | 96.10% | 86.50% | 88.85%  | 98.20% |
-| dense+tfidf-alpha | intfloat_multilingual-e5-large              | 82.80% | 95.90% | 87.46% | 89.51%  | 97.50% |
-| dense+tfidf-alpha | jinaai_jina-embeddings-v3                   | 82.50% | 95.80% | 87.39% | 89.45%  | 97.80% |
-| dense+tfidf-alpha | openai-text-embedding-3-large               | 80.90% | 96.30% | 86.22% | 88.66%  | 97.80% |
-| dense+tfidf-alpha | sbert-Vietnamese_Embedding_V2               | 79.80% | 94.10% | 84.61% | 86.91%  | 96.20% |
-| dense+tfidf-alpha | sbert-bge-m3                                | 81.30% | 94.40% | 85.95% | 88.01%  | 96.60% |
-| dense+tfidf-alpha | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 67.00% | 87.10% | 74.05% | 77.22%  | 90.60% |
-| dense+tfidf-alpha | sbert-vietnamese-bi-encoder                 | 75.70% | 90.90% | 81.10% | 83.50%  | 93.10% |
-| dense+tfidf-alpha | sbert-vietnamese-document-embedding         | 78.30% | 93.10% | 83.73% | 86.03%  | 94.70% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 64.60% | 84.10% | 71.55% | 74.62%  | 89.80% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-multilingual-base           | 74.60% | 91.60% | 80.99% | 83.61%  | 94.50% |
-| dense+tfidf-rrf   | BAAI_bge-multilingual-gemma2                | 69.50% | 90.60% | 76.46% | 79.87%  | 93.90% |
-| dense+tfidf-rrf   | Qwen_Qwen3-Embedding-0_6B                   | 77.30% | 93.50% | 83.26% | 85.77%  | 95.50% |
-| dense+tfidf-rrf   | Snowflake_snowflake-arctic-embed-l-v2_0     | 76.60% | 93.50% | 82.97% | 85.56%  | 95.70% |
-| dense+tfidf-rrf   | google_embeddinggemma-300m                  | 77.80% | 93.90% | 83.90% | 86.38%  | 95.80% |
-| dense+tfidf-rrf   | intfloat_multilingual-e5-large              | 78.40% | 94.20% | 84.38% | 86.80%  | 96.30% |
-| dense+tfidf-rrf   | jinaai_jina-embeddings-v3                   | 77.10% | 94.10% | 83.83% | 86.38%  | 95.90% |
-| dense+tfidf-rrf   | openai-text-embedding-3-large               | 74.70% | 91.70% | 80.63% | 83.33%  | 95.20% |
-| dense+tfidf-rrf   | sbert-Vietnamese_Embedding_V2               | 75.00% | 91.80% | 80.92% | 83.57%  | 94.60% |
-| dense+tfidf-rrf   | sbert-bge-m3                                | 74.70% | 91.40% | 80.76% | 83.36%  | 94.80% |
-| dense+tfidf-rrf   | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 61.40% | 84.20% | 69.16% | 72.80%  | 90.40% |
-| dense+tfidf-rrf   | sbert-vietnamese-bi-encoder                 | 69.90% | 89.30% | 76.88% | 79.92%  | 92.60% |
-| dense+tfidf-rrf   | sbert-vietnamese-document-embedding         | 73.00% | 91.10% | 79.39% | 82.23%  | 94.10% |
-| splade            | naver_splade-v3                             | 47.40% | 68.80% | 54.08% | 57.60%  | 73.60% |
-| tfidf             |                                             | 61.50% | 84.80% | 69.46% | 73.18%  | 88.20% |
+Method | P@1 | R@10 | MRR@10 | nDCG@10 | R@20
+--- | --- | --- | --- | --- | ---
+tfidf | 61.50% | 84.80% | 69.46% | 73.18% | 88.20%
+bm25 | 65.40% | 84.50% | 71.36% | 74.51% | 87.30%
+splade | 47.40% | 68.80% | 54.08% | 57.60% | 73.60%
+colbert | 49.60% | 71.40% | 56.42% | 60.01% | 75.50%
+**Dense model: Alibaba-NLP_gte-multilingual-base** |  |  |  |  | 
+  dense | 73.90% | 89.90% | 79.53% | 82.05% | 92.80%
+  dense + tfidf ($\alpha$) | 79.70% | 93.30% | 84.58% | 86.71% | 95.20%
+  dense + tfidf (RRF) | 74.60% | 91.60% | 80.99% | 83.61% | 94.50%
+  dense + bm25 ($\alpha$) | 80.30% | 93.20% | 84.95% | 86.96% | 95.10%
+  dense + bm25 (RRF) | 76.70% | 92.30% | 82.10% | 84.58% | 94.70%
+**Dense model: Alibaba-NLP_gte-Qwen2-1_5B-instruct** |  |  |  |  | 
+  dense | 59.90% | 81.20% | 66.93% | 70.37% | 84.70%
+  dense + tfidf ($\alpha$) | 66.70% | 89.00% | 74.62% | 78.14% | 91.50%
+  dense + tfidf (RRF) | 64.60% | 84.10% | 71.55% | 74.62% | 89.80%
+  dense + bm25 ($\alpha$) | 71.50% | 88.50% | 76.95% | 79.73% | 90.90%
+  dense + bm25 (RRF) | 66.70% | 84.00% | 72.53% | 75.31% | 89.10%
+**Dense model: BAAI_bge-multilingual-gemma2** |  |  |  |  | 
+  dense | 58.40% | 80.20% | 65.39% | 68.94% | 86.50%
+  dense + tfidf ($\alpha$) | 73.70% | 92.30% | 80.22% | 83.18% | 94.00%
+  dense + tfidf (RRF) | 69.50% | 90.60% | 76.46% | 79.87% | 93.90%
+  dense + bm25 ($\alpha$) | 76.20% | 92.60% | 81.99% | 84.59% | 94.80%
+  dense + bm25 (RRF) | 71.30% | 91.10% | 78.11% | 81.26% | 94.10%
+**Dense model: google_embeddinggemma-300m** |  |  |  |  | 
+  dense | 77.80% | 95.30% | 83.62% | 86.45% | 97.30%
+  dense + tfidf ($\alpha$) | 81.20% | 96.10% | 86.50% | 88.85% | <u>98.20%</u>
+  dense + tfidf (RRF) | 77.80% | 93.90% | 83.90% | 86.38% | 95.80%
+  dense + bm25 ($\alpha$) | 84.10% | 96.10% | 88.27% | 90.18% | **98.20%**
+  dense + bm25 (RRF) | 80.50% | 93.60% | 85.35% | 87.38% | 96.60%
+**Dense model: intfloat_multilingual-e5-large** |  |  |  |  | 
+  dense | 83.30% | <u>96.40%</u> | 87.94% | 90.01% | 97.80%
+  dense + tfidf ($\alpha$) | 82.80% | 95.90% | 87.46% | 89.51% | 97.50%
+  dense + tfidf (RRF) | 78.40% | 94.20% | 84.38% | 86.80% | 96.30%
+  dense + bm25 ($\alpha$) | <u>84.70%</u> | **96.50%** | **88.82%** | **90.69%** | 97.70%
+  dense + bm25 (RRF) | 81.20% | 94.60% | 85.92% | 88.03% | 96.50%
+**Dense model: jinaai_jina-embeddings-v3** |  |  |  |  | 
+  dense | 79.90% | 95.40% | 85.29% | 87.75% | 97.30%
+  dense + tfidf ($\alpha$) | 82.50% | 95.80% | 87.39% | 89.45% | 97.80%
+  dense + tfidf (RRF) | 77.10% | 94.10% | 83.83% | 86.38% | 95.90%
+  dense + bm25 ($\alpha$) | **84.70%** | 96.00% | <u>88.66%</u> | <u>90.45%</u> | 97.70%
+  dense + bm25 (RRF) | 79.60% | 94.30% | 85.04% | 87.30% | 96.40%
+**Dense model: openai-text-embedding-3-large** |  |  |  |  | 
+  dense | 80.40% | 95.40% | 85.44% | 87.84% | 97.20%
+  dense + tfidf ($\alpha$) | 80.90% | 96.30% | 86.22% | 88.66% | 97.80%
+  dense + tfidf (RRF) | 74.70% | 91.70% | 80.63% | 83.33% | 95.20%
+  dense + bm25 ($\alpha$) | 83.00% | 96.10% | 87.37% | 89.48% | 97.90%
+  dense + bm25 (RRF) | 77.70% | 92.10% | 82.16% | 84.53% | 95.00%
+**Dense model: Qwen_Qwen3-Embedding-0_6B** |  |  |  |  | 
+  dense | 77.50% | 93.00% | 82.75% | 85.23% | 95.40%
+  dense + tfidf ($\alpha$) | 82.10% | 94.40% | 86.56% | 88.48% | 96.40%
+  dense + tfidf (RRF) | 77.30% | 93.50% | 83.26% | 85.77% | 95.50%
+  dense + bm25 ($\alpha$) | 82.80% | 94.80% | 87.12% | 89.00% | 96.60%
+  dense + bm25 (RRF) | 79.30% | 93.30% | 84.28% | 86.49% | 95.40%
+**Dense model: sbert-bge-m3** |  |  |  |  | 
+  dense | 81.20% | 94.10% | 85.60% | 87.67% | 96.70%
+  dense + tfidf ($\alpha$) | 81.30% | 94.40% | 85.95% | 88.01% | 96.60%
+  dense + tfidf (RRF) | 74.70% | 91.40% | 80.76% | 83.36% | 94.80%
+  dense + bm25 ($\alpha$) | 82.50% | 94.60% | 86.58% | 88.52% | 96.70%
+  dense + bm25 (RRF) | 76.80% | 91.30% | 81.59% | 83.93% | 94.70%
+**Dense model: sbert-paraphrase-multilingual-MiniLM-L12-v2** |  |  |  |  | 
+  dense | 48.00% | 73.50% | 56.19% | 60.34% | 80.70%
+  dense + tfidf ($\alpha$) | 67.00% | 87.10% | 74.05% | 77.22% | 90.60%
+  dense + tfidf (RRF) | 61.40% | 84.20% | 69.16% | 72.80% | 90.40%
+  dense + bm25 ($\alpha$) | 69.70% | 87.00% | 75.24% | 78.06% | 90.20%
+  dense + bm25 (RRF) | 63.90% | 83.80% | 70.27% | 73.51% | 89.90%
+**Dense model: sbert-vietnamese-bi-encoder** |  |  |  |  | 
+  dense | 70.10% | 87.20% | 75.68% | 78.46% | 90.40%
+  dense + tfidf ($\alpha$) | 75.70% | 90.90% | 81.10% | 83.50% | 93.10%
+  dense + tfidf (RRF) | 69.90% | 89.30% | 76.88% | 79.92% | 92.60%
+  dense + bm25 ($\alpha$) | 77.10% | 90.80% | 82.00% | 84.15% | 92.80%
+  dense + bm25 (RRF) | 72.80% | 89.30% | 78.34% | 80.99% | 92.60%
+**Dense model: sbert-vietnamese-document-embedding** |  |  |  |  | 
+  dense | 75.50% | 90.60% | 80.86% | 83.24% | 93.00%
+  dense + tfidf ($\alpha$) | 78.30% | 93.10% | 83.73% | 86.03% | 94.70%
+  dense + tfidf (RRF) | 73.00% | 91.10% | 79.39% | 82.23% | 94.10%
+  dense + bm25 ($\alpha$) | 79.80% | 92.60% | 84.37% | 86.39% | 94.50%
+  dense + bm25 (RRF) | 74.70% | 90.40% | 80.03% | 82.54% | 93.50%
+**Dense model: sbert-Vietnamese_Embedding_V2** |  |  |  |  | 
+  dense | 76.90% | 93.50% | 82.40% | 85.06% | 96.10%
+  dense + tfidf ($\alpha$) | 79.80% | 94.10% | 84.61% | 86.91% | 96.20%
+  dense + tfidf (RRF) | 75.00% | 91.80% | 80.92% | 83.57% | 94.60%
+  dense + bm25 ($\alpha$) | 81.40% | 93.80% | 85.38% | 87.40% | 95.70%
+  dense + bm25 (RRF) | 76.60% | 90.80% | 81.43% | 83.71% | 94.40%
+**Dense model: Snowflake_snowflake-arctic-embed-l-v2_0** |  |  |  |  | 
+  dense | 79.40% | 94.30% | 84.56% | 86.93% | 96.00%
+  dense + tfidf ($\alpha$) | 81.20% | 94.70% | 86.03% | 88.15% | 96.50%
+  dense + tfidf (RRF) | 76.60% | 93.50% | 82.97% | 85.56% | 95.70%
+  dense + bm25 ($\alpha$) | 83.80% | 95.10% | 87.75% | 89.53% | 96.50%
+  dense + bm25 (RRF) | 80.30% | 93.60% | 84.89% | 87.00% | 95.60%
 
 ## ViNewsQA
 
-| Method            | Model                                       | P@1    | R@10   | MRR@10 | nDCG@10 | R@20   |
-| ----------------- | ------------------------------------------- | ------ | ------ | ------ | ------- | ------ |
-| bm25              |                                             | 59.00% | 80.20% | 66.13% | 69.53%  | 84.30% |
-| colbert           | colbert-ir_colbertv2_0                      | 29.70% | 51.00% | 35.77% | 39.37%  | 57.50% |
-| dense             | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 54.00% | 75.30% | 61.21% | 64.63%  | 80.10% |
-| dense             | Alibaba-NLP_gte-multilingual-base           | 53.00% | 76.60% | 60.79% | 64.60%  | 80.40% |
-| dense             | BAAI_bge-multilingual-gemma2                | 44.00% | 70.40% | 52.36% | 56.68%  | 75.00% |
-| dense             | Qwen_Qwen3-Embedding-0_6B                   | 55.00% | 76.30% | 61.97% | 65.43%  | 81.40% |
-| dense             | Snowflake_snowflake-arctic-embed-l-v2_0     | 52.70% | 75.00% | 60.12% | 63.71%  | 79.70% |
-| dense             | google_embeddinggemma-300m                  | 54.30% | 77.90% | 62.21% | 65.99%  | 82.70% |
-| dense             | intfloat_multilingual-e5-large              | 57.40% | 79.70% | 64.91% | 68.48%  | 84.40% |
-| dense             | jinaai_jina-embeddings-v3                   | 55.00% | 76.40% | 61.95% | 65.44%  | 81.70% |
-| dense             | openai-text-embedding-3-large               | 49.20% | 76.40% | 58.59% | 62.90%  | 81.40% |
-| dense             | sbert-Vietnamese_Embedding_V2               | 55.40% | 78.20% | 63.01% | 66.69%  | 82.90% |
-| dense             | sbert-bge-m3                                | 57.60% | 79.00% | 64.72% | 68.17%  | 83.40% |
-| dense             | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 25.50% | 52.20% | 33.54% | 37.98%  | 60.00% |
-| dense             | sbert-vietnamese-bi-encoder                 | 45.50% | 67.50% | 52.39% | 56.01%  | 73.20% |
-| dense             | sbert-vietnamese-document-embedding         | 54.90% | 76.80% | 61.77% | 65.38%  | 80.50% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 65.60% | 84.30% | 71.77% | 74.80%  | 88.80% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-multilingual-base           | 63.30% | 85.30% | 70.70% | 74.23%  | 89.50% |
-| dense+bm25-alpha  | BAAI_bge-multilingual-gemma2                | 61.80% | 84.20% | 68.99% | 72.65%  | 88.70% |
-| dense+bm25-alpha  | Qwen_Qwen3-Embedding-0_6B                   | 64.60% | 85.20% | 71.44% | 74.77%  | 89.80% |
-| dense+bm25-alpha  | Snowflake_snowflake-arctic-embed-l-v2_0     | 63.20% | 84.50% | 70.37% | 73.78%  | 88.30% |
-| dense+bm25-alpha  | google_embeddinggemma-300m                  | 65.50% | 85.80% | 72.45% | 75.69%  | 89.50% |
-| dense+bm25-alpha  | intfloat_multilingual-e5-large              | 66.10% | 88.50% | 73.59% | 77.19%  | 91.60% |
-| dense+bm25-alpha  | jinaai_jina-embeddings-v3                   | 64.80% | 84.90% | 71.60% | 74.83%  | 90.00% |
-| dense+bm25-alpha  | openai-text-embedding-3-large               | 64.70% | 85.90% | 71.83% | 75.23%  | 90.80% |
-| dense+bm25-alpha  | sbert-Vietnamese_Embedding_V2               | 68.60% | 87.30% | 74.96% | 77.95%  | 90.00% |
-| dense+bm25-alpha  | sbert-bge-m3                                | 65.50% | 87.10% | 72.87% | 76.33%  | 90.10% |
-| dense+bm25-alpha  | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 49.70% | 77.30% | 58.61% | 63.10%  | 82.80% |
-| dense+bm25-alpha  | sbert-vietnamese-bi-encoder                 | 59.90% | 80.40% | 66.83% | 70.11%  | 85.60% |
-| dense+bm25-alpha  | sbert-vietnamese-document-embedding         | 64.70% | 85.20% | 71.51% | 74.82%  | 88.20% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 63.30% | 84.10% | 70.18% | 73.53%  | 89.90% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-multilingual-base           | 62.10% | 84.80% | 69.39% | 73.10%  | 89.70% |
-| dense+bm25-rrf    | BAAI_bge-multilingual-gemma2                | 58.70% | 83.40% | 66.65% | 70.68%  | 89.50% |
-| dense+bm25-rrf    | Qwen_Qwen3-Embedding-0_6B                   | 62.70% | 85.00% | 70.16% | 73.75%  | 90.10% |
-| dense+bm25-rrf    | Snowflake_snowflake-arctic-embed-l-v2_0     | 61.30% | 83.70% | 68.72% | 72.34%  | 89.20% |
-| dense+bm25-rrf    | google_embeddinggemma-300m                  | 62.70% | 85.80% | 70.33% | 74.06%  | 91.10% |
-| dense+bm25-rrf    | intfloat_multilingual-e5-large              | 65.00% | 87.00% | 72.10% | 75.68%  | 91.40% |
-| dense+bm25-rrf    | jinaai_jina-embeddings-v3                   | 63.80% | 85.00% | 70.66% | 74.11%  | 90.40% |
-| dense+bm25-rrf    | openai-text-embedding-3-large               | 61.00% | 85.30% | 68.74% | 72.72%  | 90.20% |
-| dense+bm25-rrf    | sbert-Vietnamese_Embedding_V2               | 65.10% | 86.30% | 72.00% | 75.44%  | 89.90% |
-| dense+bm25-rrf    | sbert-bge-m3                                | 63.70% | 85.20% | 70.63% | 74.12%  | 90.00% |
-| dense+bm25-rrf    | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 44.40% | 76.10% | 53.95% | 59.23%  | 85.60% |
-| dense+bm25-rrf    | sbert-vietnamese-bi-encoder                 | 56.90% | 79.60% | 64.12% | 67.83%  | 86.80% |
-| dense+bm25-rrf    | sbert-vietnamese-document-embedding         | 62.70% | 83.80% | 69.44% | 72.90%  | 89.80% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 61.60% | 82.80% | 68.73% | 72.13%  | 86.60% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-multilingual-base           | 61.20% | 83.00% | 68.51% | 72.03%  | 87.80% |
-| dense+tfidf-alpha | BAAI_bge-multilingual-gemma2                | 58.30% | 82.00% | 66.30% | 70.11%  | 86.30% |
-| dense+tfidf-alpha | Qwen_Qwen3-Embedding-0_6B                   | 60.60% | 83.70% | 68.34% | 72.04%  | 87.30% |
-| dense+tfidf-alpha | Snowflake_snowflake-arctic-embed-l-v2_0     | 60.20% | 82.30% | 67.62% | 71.18%  | 87.00% |
-| dense+tfidf-alpha | google_embeddinggemma-300m                  | 62.40% | 83.80% | 69.50% | 72.95%  | 88.10% |
-| dense+tfidf-alpha | intfloat_multilingual-e5-large              | 64.30% | 85.90% | 71.35% | 74.85%  | 89.70% |
-| dense+tfidf-alpha | jinaai_jina-embeddings-v3                   | 62.40% | 83.50% | 69.46% | 72.86%  | 88.20% |
-| dense+tfidf-alpha | openai-text-embedding-3-large               | 62.40% | 84.50% | 69.96% | 73.49%  | 89.60% |
-| dense+tfidf-alpha | sbert-Vietnamese_Embedding_V2               | 65.30% | 86.10% | 72.35% | 75.68%  | 90.00% |
-| dense+tfidf-alpha | sbert-bge-m3                                | 63.90% | 86.40% | 71.41% | 75.04%  | 89.50% |
-| dense+tfidf-alpha | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 50.70% | 76.80% | 58.94% | 63.23%  | 83.10% |
-| dense+tfidf-alpha | sbert-vietnamese-bi-encoder                 | 58.80% | 80.70% | 66.41% | 69.88%  | 85.40% |
-| dense+tfidf-alpha | sbert-vietnamese-document-embedding         | 61.70% | 84.30% | 69.22% | 72.86%  | 88.30% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 57.20% | 82.20% | 65.52% | 69.54%  | 87.00% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-multilingual-base           | 58.30% | 82.40% | 65.97% | 69.92%  | 88.20% |
-| dense+tfidf-rrf   | BAAI_bge-multilingual-gemma2                | 53.50% | 80.00% | 62.29% | 66.57%  | 87.20% |
-| dense+tfidf-rrf   | Qwen_Qwen3-Embedding-0_6B                   | 57.50% | 82.50% | 65.92% | 69.92%  | 88.40% |
-| dense+tfidf-rrf   | Snowflake_snowflake-arctic-embed-l-v2_0     | 56.10% | 81.80% | 64.69% | 68.83%  | 87.40% |
-| dense+tfidf-rrf   | google_embeddinggemma-300m                  | 58.30% | 83.10% | 66.66% | 70.64%  | 88.20% |
-| dense+tfidf-rrf   | intfloat_multilingual-e5-large              | 61.40% | 84.80% | 69.07% | 72.87%  | 90.10% |
-| dense+tfidf-rrf   | jinaai_jina-embeddings-v3                   | 58.30% | 83.10% | 66.57% | 70.57%  | 88.70% |
-| dense+tfidf-rrf   | openai-text-embedding-3-large               | 56.20% | 83.30% | 65.25% | 69.63%  | 89.40% |
-| dense+tfidf-rrf   | sbert-Vietnamese_Embedding_V2               | 62.10% | 85.40% | 69.71% | 73.48%  | 89.90% |
-| dense+tfidf-rrf   | sbert-bge-m3                                | 59.90% | 84.60% | 68.10% | 72.08%  | 89.50% |
-| dense+tfidf-rrf   | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 41.70% | 73.40% | 51.25% | 56.53%  | 84.70% |
-| dense+tfidf-rrf   | sbert-vietnamese-bi-encoder                 | 52.70% | 78.80% | 61.72% | 65.86%  | 86.40% |
-| dense+tfidf-rrf   | sbert-vietnamese-document-embedding         | 57.90% | 82.30% | 66.03% | 69.97%  | 88.20% |
-| splade            | naver_splade-v3                             | 26.70% | 50.20% | 33.44% | 37.40%  | 58.00% |
-| tfidf             |                                             | 52.20% | 79.10% | 60.93% | 65.31%  | 84.70% |
+Method | P@1 | R@10 | MRR@10 | nDCG@10 | R@20
+--- | --- | --- | --- | --- | ---
+tfidf | 52.20% | 79.10% | 60.93% | 65.31% | 84.70%
+bm25 | 59.00% | 80.20% | 66.13% | 69.53% | 84.30%
+splade | 26.70% | 50.20% | 33.44% | 37.40% | 58.00%
+colbert | 29.70% | 51.00% | 35.77% | 39.37% | 57.50%
+**Dense model: Alibaba-NLP_gte-multilingual-base** |  |  |  |  | 
+  dense | 53.00% | 76.60% | 60.79% | 64.60% | 80.40%
+  dense + tfidf ($\alpha$) | 61.20% | 83.00% | 68.51% | 72.03% | 87.80%
+  dense + tfidf (RRF) | 58.30% | 82.40% | 65.97% | 69.92% | 88.20%
+  dense + bm25 ($\alpha$) | 63.30% | 85.30% | 70.70% | 74.23% | 89.50%
+  dense + bm25 (RRF) | 62.10% | 84.80% | 69.39% | 73.10% | 89.70%
+**Dense model: Alibaba-NLP_gte-Qwen2-1_5B-instruct** |  |  |  |  | 
+  dense | 54.00% | 75.30% | 61.21% | 64.63% | 80.10%
+  dense + tfidf ($\alpha$) | 61.60% | 82.80% | 68.73% | 72.13% | 86.60%
+  dense + tfidf (RRF) | 57.20% | 82.20% | 65.52% | 69.54% | 87.00%
+  dense + bm25 ($\alpha$) | 65.60% | 84.30% | 71.77% | 74.80% | 88.80%
+  dense + bm25 (RRF) | 63.30% | 84.10% | 70.18% | 73.53% | 89.90%
+**Dense model: BAAI_bge-multilingual-gemma2** |  |  |  |  | 
+  dense | 44.00% | 70.40% | 52.36% | 56.68% | 75.00%
+  dense + tfidf ($\alpha$) | 58.30% | 82.00% | 66.30% | 70.11% | 86.30%
+  dense + tfidf (RRF) | 53.50% | 80.00% | 62.29% | 66.57% | 87.20%
+  dense + bm25 ($\alpha$) | 61.80% | 84.20% | 68.99% | 72.65% | 88.70%
+  dense + bm25 (RRF) | 58.70% | 83.40% | 66.65% | 70.68% | 89.50%
+**Dense model: google_embeddinggemma-300m** |  |  |  |  | 
+  dense | 54.30% | 77.90% | 62.21% | 65.99% | 82.70%
+  dense + tfidf ($\alpha$) | 62.40% | 83.80% | 69.50% | 72.95% | 88.10%
+  dense + tfidf (RRF) | 58.30% | 83.10% | 66.66% | 70.64% | 88.20%
+  dense + bm25 ($\alpha$) | 65.50% | 85.80% | 72.45% | 75.69% | 89.50%
+  dense + bm25 (RRF) | 62.70% | 85.80% | 70.33% | 74.06% | 91.10%
+**Dense model: intfloat_multilingual-e5-large** |  |  |  |  | 
+  dense | 57.40% | 79.70% | 64.91% | 68.48% | 84.40%
+  dense + tfidf ($\alpha$) | 64.30% | 85.90% | 71.35% | 74.85% | 89.70%
+  dense + tfidf (RRF) | 61.40% | 84.80% | 69.07% | 72.87% | 90.10%
+  dense + bm25 ($\alpha$) | <u>66.10%</u> | **88.50%** | <u>73.59%</u> | <u>77.19%</u> | **91.60%**
+  dense + bm25 (RRF) | 65.00% | 87.00% | 72.10% | 75.68% | <u>91.40%</u>
+**Dense model: jinaai_jina-embeddings-v3** |  |  |  |  | 
+  dense | 55.00% | 76.40% | 61.95% | 65.44% | 81.70%
+  dense + tfidf ($\alpha$) | 62.40% | 83.50% | 69.46% | 72.86% | 88.20%
+  dense + tfidf (RRF) | 58.30% | 83.10% | 66.57% | 70.57% | 88.70%
+  dense + bm25 ($\alpha$) | 64.80% | 84.90% | 71.60% | 74.83% | 90.00%
+  dense + bm25 (RRF) | 63.80% | 85.00% | 70.66% | 74.11% | 90.40%
+**Dense model: openai-text-embedding-3-large** |  |  |  |  | 
+  dense | 49.20% | 76.40% | 58.59% | 62.90% | 81.40%
+  dense + tfidf ($\alpha$) | 62.40% | 84.50% | 69.96% | 73.49% | 89.60%
+  dense + tfidf (RRF) | 56.20% | 83.30% | 65.25% | 69.63% | 89.40%
+  dense + bm25 ($\alpha$) | 64.70% | 85.90% | 71.83% | 75.23% | 90.80%
+  dense + bm25 (RRF) | 61.00% | 85.30% | 68.74% | 72.72% | 90.20%
+**Dense model: Qwen_Qwen3-Embedding-0_6B** |  |  |  |  | 
+  dense | 55.00% | 76.30% | 61.97% | 65.43% | 81.40%
+  dense + tfidf ($\alpha$) | 60.60% | 83.70% | 68.34% | 72.04% | 87.30%
+  dense + tfidf (RRF) | 57.50% | 82.50% | 65.92% | 69.92% | 88.40%
+  dense + bm25 ($\alpha$) | 64.60% | 85.20% | 71.44% | 74.77% | 89.80%
+  dense + bm25 (RRF) | 62.70% | 85.00% | 70.16% | 73.75% | 90.10%
+**Dense model: sbert-bge-m3** |  |  |  |  | 
+  dense | 57.60% | 79.00% | 64.72% | 68.17% | 83.40%
+  dense + tfidf ($\alpha$) | 63.90% | 86.40% | 71.41% | 75.04% | 89.50%
+  dense + tfidf (RRF) | 59.90% | 84.60% | 68.10% | 72.08% | 89.50%
+  dense + bm25 ($\alpha$) | 65.50% | 87.10% | 72.87% | 76.33% | 90.10%
+  dense + bm25 (RRF) | 63.70% | 85.20% | 70.63% | 74.12% | 90.00%
+**Dense model: sbert-paraphrase-multilingual-MiniLM-L12-v2** |  |  |  |  | 
+  dense | 25.50% | 52.20% | 33.54% | 37.98% | 60.00%
+  dense + tfidf ($\alpha$) | 50.70% | 76.80% | 58.94% | 63.23% | 83.10%
+  dense + tfidf (RRF) | 41.70% | 73.40% | 51.25% | 56.53% | 84.70%
+  dense + bm25 ($\alpha$) | 49.70% | 77.30% | 58.61% | 63.10% | 82.80%
+  dense + bm25 (RRF) | 44.40% | 76.10% | 53.95% | 59.23% | 85.60%
+**Dense model: sbert-vietnamese-bi-encoder** |  |  |  |  | 
+  dense | 45.50% | 67.50% | 52.39% | 56.01% | 73.20%
+  dense + tfidf ($\alpha$) | 58.80% | 80.70% | 66.41% | 69.88% | 85.40%
+  dense + tfidf (RRF) | 52.70% | 78.80% | 61.72% | 65.86% | 86.40%
+  dense + bm25 ($\alpha$) | 59.90% | 80.40% | 66.83% | 70.11% | 85.60%
+  dense + bm25 (RRF) | 56.90% | 79.60% | 64.12% | 67.83% | 86.80%
+**Dense model: sbert-vietnamese-document-embedding** |  |  |  |  | 
+  dense | 54.90% | 76.80% | 61.77% | 65.38% | 80.50%
+  dense + tfidf ($\alpha$) | 61.70% | 84.30% | 69.22% | 72.86% | 88.30%
+  dense + tfidf (RRF) | 57.90% | 82.30% | 66.03% | 69.97% | 88.20%
+  dense + bm25 ($\alpha$) | 64.70% | 85.20% | 71.51% | 74.82% | 88.20%
+  dense + bm25 (RRF) | 62.70% | 83.80% | 69.44% | 72.90% | 89.80%
+**Dense model: sbert-Vietnamese_Embedding_V2** |  |  |  |  | 
+  dense | 55.40% | 78.20% | 63.01% | 66.69% | 82.90%
+  dense + tfidf ($\alpha$) | 65.30% | 86.10% | 72.35% | 75.68% | 90.00%
+  dense + tfidf (RRF) | 62.10% | 85.40% | 69.71% | 73.48% | 89.90%
+  dense + bm25 ($\alpha$) | **68.60%** | <u>87.30%</u> | **74.96%** | **77.95%** | 90.00%
+  dense + bm25 (RRF) | 65.10% | 86.30% | 72.00% | 75.44% | 89.90%
+**Dense model: Snowflake_snowflake-arctic-embed-l-v2_0** |  |  |  |  | 
+  dense | 52.70% | 75.00% | 60.12% | 63.71% | 79.70%
+  dense + tfidf ($\alpha$) | 60.20% | 82.30% | 67.62% | 71.18% | 87.00%
+  dense + tfidf (RRF) | 56.10% | 81.80% | 64.69% | 68.83% | 87.40%
+  dense + bm25 ($\alpha$) | 63.20% | 84.50% | 70.37% | 73.78% | 88.30%
+  dense + bm25 (RRF) | 61.30% | 83.70% | 68.72% | 72.34% | 89.20%
 
 ## ViRe4MRC_v2
 
-| Method            | Model                                       | P@1    | R@10   | MRR@10 | nDCG@10 | R@20   |
-| ----------------- | ------------------------------------------- | ------ | ------ | ------ | ------- | ------ |
-| bm25              |                                             | 6.60%  | 20.40% | 10.25% | 12.62%  | 26.70% |
-| colbert           | colbert-ir_colbertv2_0                      | 4.80%  | 15.90% | 7.66%  | 9.59%   | 21.40% |
-| dense             | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 2.10%  | 9.80%  | 4.07%  | 5.40%   | 13.50% |
-| dense             | Alibaba-NLP_gte-multilingual-base           | 9.00%  | 27.00% | 13.74% | 16.83%  | 33.90% |
-| dense             | BAAI_bge-multilingual-gemma2                | 9.20%  | 22.10% | 12.64% | 14.86%  | 27.60% |
-| dense             | Qwen_Qwen3-Embedding-0_6B                   | 11.50% | 28.10% | 15.97% | 18.81%  | 35.00% |
-| dense             | Snowflake_snowflake-arctic-embed-l-v2_0     | 9.20%  | 24.80% | 13.66% | 16.29%  | 33.10% |
-| dense             | google_embeddinggemma-300m                  | 10.60% | 27.50% | 15.19% | 18.09%  | 34.50% |
-| dense             | intfloat_multilingual-e5-large              | 11.80% | 29.00% | 16.77% | 19.66%  | 37.00% |
-| dense             | jinaai_jina-embeddings-v3                   | 9.90%  | 27.50% | 14.73% | 17.74%  | 36.00% |
-| dense             | openai-text-embedding-3-large               | 9.70%  | 30.00% | 15.03% | 18.54%  | 38.60% |
-| dense             | sbert-Vietnamese_Embedding_V2               | 10.60% | 28.60% | 15.48% | 18.56%  | 38.70% |
-| dense             | sbert-Vietnamese_Embedding_v2               | 10.60% | 28.60% | 15.48% | 18.56%  | 38.70% |
-| dense             | sbert-bge-m3                                | 12.40% | 30.80% | 17.25% | 20.42%  | 40.00% |
-| dense             | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 4.70%  | 16.10% | 7.30%  | 9.33%   | 22.10% |
-| dense             | sbert-vietnamese-bi-encoder                 | 8.60%  | 21.10% | 11.97% | 14.11%  | 29.00% |
-| dense             | sbert-vietnamese-document-embedding         | 10.70% | 27.40% | 15.02% | 17.90%  | 35.70% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 5.50%  | 17.30% | 8.83%  | 10.84%  | 22.80% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-multilingual-base           | 11.50% | 29.90% | 16.64% | 19.76%  | 38.60% |
-| dense+bm25-alpha  | BAAI_bge-multilingual-gemma2                | 10.20% | 24.40% | 14.25% | 16.65%  | 32.80% |
-| dense+bm25-alpha  | Qwen_Qwen3-Embedding-0_6B                   | 12.90% | 30.70% | 17.84% | 20.87%  | 38.90% |
-| dense+bm25-alpha  | Snowflake_snowflake-arctic-embed-l-v2_0     | 11.50% | 28.30% | 16.37% | 19.21%  | 36.60% |
-| dense+bm25-alpha  | google_embeddinggemma-300m                  | 12.50% | 31.10% | 17.35% | 20.57%  | 39.10% |
-| dense+bm25-alpha  | intfloat_multilingual-e5-large              | 12.40% | 31.60% | 17.84% | 21.10%  | 39.40% |
-| dense+bm25-alpha  | jinaai_jina-embeddings-v3                   | 13.00% | 30.70% | 17.82% | 20.84%  | 40.10% |
-| dense+bm25-alpha  | openai-text-embedding-3-large               | 12.10% | 30.00% | 16.88% | 19.95%  | 39.00% |
-| dense+bm25-alpha  | sbert-Vietnamese_Embedding_V2               | 13.00% | 30.80% | 18.21% | 21.19%  | 39.30% |
-| dense+bm25-alpha  | sbert-Vietnamese_Embedding_v2               | 13.00% | 30.80% | 18.21% | 21.19%  | 39.30% |
-| dense+bm25-alpha  | sbert-bge-m3                                | 12.40% | 31.10% | 18.02% | 21.12%  | 40.80% |
-| dense+bm25-alpha  | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 8.50%  | 23.20% | 12.48% | 15.00%  | 31.10% |
-| dense+bm25-alpha  | sbert-vietnamese-bi-encoder                 | 10.10% | 27.30% | 15.16% | 18.04%  | 33.80% |
-| dense+bm25-alpha  | sbert-vietnamese-document-embedding         | 11.60% | 29.70% | 16.55% | 19.63%  | 38.20% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 5.60%  | 14.10% | 7.80%  | 9.27%   | 21.80% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-multilingual-base           | 10.30% | 29.20% | 15.46% | 18.69%  | 37.80% |
-| dense+bm25-rrf    | BAAI_bge-multilingual-gemma2                | 9.30%  | 23.70% | 13.23% | 15.70%  | 33.40% |
-| dense+bm25-rrf    | Qwen_Qwen3-Embedding-0_6B                   | 11.00% | 30.00% | 16.16% | 19.42%  | 36.90% |
-| dense+bm25-rrf    | Snowflake_snowflake-arctic-embed-l-v2_0     | 11.30% | 27.40% | 15.71% | 18.47%  | 36.40% |
-| dense+bm25-rrf    | google_embeddinggemma-300m                  | 11.20% | 30.50% | 16.26% | 19.60%  | 37.90% |
-| dense+bm25-rrf    | intfloat_multilingual-e5-large              | 11.90% | 30.20% | 16.94% | 20.07%  | 38.30% |
-| dense+bm25-rrf    | jinaai_jina-embeddings-v3                   | 12.70% | 30.50% | 17.10% | 20.20%  | 39.20% |
-| dense+bm25-rrf    | openai-text-embedding-3-large               | 10.90% | 28.50% | 15.69% | 18.70%  | 38.20% |
-| dense+bm25-rrf    | sbert-Vietnamese_Embedding_V2               | 13.00% | 29.40% | 17.56% | 20.36%  | 38.30% |
-| dense+bm25-rrf    | sbert-Vietnamese_Embedding_v2               | 13.00% | 29.40% | 17.56% | 20.36%  | 38.30% |
-| dense+bm25-rrf    | sbert-bge-m3                                | 11.50% | 29.30% | 16.88% | 19.82%  | 39.30% |
-| dense+bm25-rrf    | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 7.30%  | 21.90% | 11.26% | 13.75%  | 31.20% |
-| dense+bm25-rrf    | sbert-vietnamese-bi-encoder                 | 9.80%  | 26.30% | 14.47% | 17.26%  | 33.70% |
-| dense+bm25-rrf    | sbert-vietnamese-document-embedding         | 11.00% | 28.20% | 15.55% | 18.50%  | 36.90% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 4.00%  | 16.10% | 7.32%  | 9.39%   | 22.40% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-multilingual-base           | 10.80% | 29.40% | 16.11% | 19.24%  | 37.50% |
-| dense+tfidf-alpha | BAAI_bge-multilingual-gemma2                | 8.80%  | 24.00% | 13.06% | 15.64%  | 31.70% |
-| dense+tfidf-alpha | Qwen_Qwen3-Embedding-0_6B                   | 11.20% | 31.00% | 16.62% | 19.99%  | 39.00% |
-| dense+tfidf-alpha | Snowflake_snowflake-arctic-embed-l-v2_0     | 10.60% | 28.20% | 15.66% | 18.63%  | 35.50% |
-| dense+tfidf-alpha | google_embeddinggemma-300m                  | 11.70% | 29.80% | 16.72% | 19.79%  | 38.60% |
-| dense+tfidf-alpha | intfloat_multilingual-e5-large              | 12.00% | 30.40% | 17.02% | 20.17%  | 37.60% |
-| dense+tfidf-alpha | jinaai_jina-embeddings-v3                   | 12.10% | 29.70% | 16.90% | 19.90%  | 39.10% |
-| dense+tfidf-alpha | openai-text-embedding-3-large               | 10.80% | 29.60% | 16.20% | 19.37%  | 39.10% |
-| dense+tfidf-alpha | sbert-Vietnamese_Embedding_V2               | 12.20% | 30.60% | 17.40% | 20.51%  | 40.00% |
-| dense+tfidf-alpha | sbert-Vietnamese_Embedding_v2               | 12.20% | 30.60% | 17.40% | 20.51%  | 40.00% |
-| dense+tfidf-alpha | sbert-bge-m3                                | 12.00% | 30.90% | 17.64% | 20.79%  | 39.50% |
-| dense+tfidf-alpha | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 8.40%  | 22.20% | 11.89% | 14.30%  | 29.90% |
-| dense+tfidf-alpha | sbert-vietnamese-bi-encoder                 | 9.80%  | 25.80% | 14.48% | 17.16%  | 33.40% |
-| dense+tfidf-alpha | sbert-vietnamese-document-embedding         | 10.80% | 28.90% | 15.83% | 18.90%  | 37.80% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 4.90%  | 13.00% | 7.07%  | 8.47%   | 20.80% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-multilingual-base           | 9.70%  | 28.40% | 14.92% | 18.09%  | 36.90% |
-| dense+tfidf-rrf   | BAAI_bge-multilingual-gemma2                | 8.70%  | 23.30% | 12.51% | 15.04%  | 31.90% |
-| dense+tfidf-rrf   | Qwen_Qwen3-Embedding-0_6B                   | 10.10% | 29.00% | 15.22% | 18.46%  | 37.10% |
-| dense+tfidf-rrf   | Snowflake_snowflake-arctic-embed-l-v2_0     | 10.30% | 27.20% | 15.03% | 17.90%  | 34.60% |
-| dense+tfidf-rrf   | google_embeddinggemma-300m                  | 10.70% | 28.00% | 15.56% | 18.50%  | 37.30% |
-| dense+tfidf-rrf   | intfloat_multilingual-e5-large              | 11.20% | 29.20% | 16.19% | 19.26%  | 37.60% |
-| dense+tfidf-rrf   | jinaai_jina-embeddings-v3                   | 12.10% | 28.90% | 16.50% | 19.40%  | 37.40% |
-| dense+tfidf-rrf   | openai-text-embedding-3-large               | 10.70% | 26.90% | 15.32% | 18.05%  | 37.20% |
-| dense+tfidf-rrf   | sbert-Vietnamese_Embedding_V2               | 12.20% | 29.40% | 16.98% | 19.91%  | 37.10% |
-| dense+tfidf-rrf   | sbert-Vietnamese_Embedding_v2               | 12.20% | 29.40% | 16.98% | 19.91%  | 37.10% |
-| dense+tfidf-rrf   | sbert-bge-m3                                | 10.30% | 28.70% | 15.86% | 18.91%  | 38.00% |
-| dense+tfidf-rrf   | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 6.90%  | 21.00% | 10.60% | 13.03%  | 29.80% |
-| dense+tfidf-rrf   | sbert-vietnamese-bi-encoder                 | 9.40%  | 25.40% | 14.14% | 16.82%  | 32.50% |
-| dense+tfidf-rrf   | sbert-vietnamese-document-embedding         | 10.60% | 28.10% | 15.15% | 18.18%  | 35.70% |
-| splade            | naver_splade-v3                             | 5.20%  | 13.00% | 7.40%  | 8.72%   | 19.20% |
-| tfidf             |                                             | 3.70%  | 17.50% | 7.24%  | 9.63%   | 23.70% |
+Method | P@1 | R@10 | MRR@10 | nDCG@10 | R@20
+--- | --- | --- | --- | --- | ---
+tfidf | 3.70% | 17.50% | 7.24% | 9.63% | 23.70%
+bm25 | 6.60% | 20.40% | 10.25% | 12.62% | 26.70%
+splade | 5.20% | 13.00% | 7.40% | 8.72% | 19.20%
+colbert | 4.80% | 15.90% | 7.66% | 9.59% | 21.40%
+**Dense model: Alibaba-NLP_gte-multilingual-base** |  |  |  |  | 
+  dense | 9.00% | 27.00% | 13.74% | 16.83% | 33.90%
+  dense + tfidf ($\alpha$) | 10.80% | 29.40% | 16.11% | 19.24% | 37.50%
+  dense + tfidf (RRF) | 9.70% | 28.40% | 14.92% | 18.09% | 36.90%
+  dense + bm25 ($\alpha$) | 11.50% | 29.90% | 16.64% | 19.76% | 38.60%
+  dense + bm25 (RRF) | 10.30% | 29.20% | 15.46% | 18.69% | 37.80%
+**Dense model: Alibaba-NLP_gte-Qwen2-1_5B-instruct** |  |  |  |  | 
+  dense | 2.10% | 9.80% | 4.07% | 5.40% | 13.50%
+  dense + tfidf ($\alpha$) | 4.00% | 16.10% | 7.32% | 9.39% | 22.40%
+  dense + tfidf (RRF) | 4.90% | 13.00% | 7.07% | 8.47% | 20.80%
+  dense + bm25 ($\alpha$) | 5.50% | 17.30% | 8.83% | 10.84% | 22.80%
+  dense + bm25 (RRF) | 5.60% | 14.10% | 7.80% | 9.27% | 21.80%
+**Dense model: BAAI_bge-multilingual-gemma2** |  |  |  |  | 
+  dense | 9.20% | 22.10% | 12.64% | 14.86% | 27.60%
+  dense + tfidf ($\alpha$) | 8.80% | 24.00% | 13.06% | 15.64% | 31.70%
+  dense + tfidf (RRF) | 8.70% | 23.30% | 12.51% | 15.04% | 31.90%
+  dense + bm25 ($\alpha$) | 10.20% | 24.40% | 14.25% | 16.65% | 32.80%
+  dense + bm25 (RRF) | 9.30% | 23.70% | 13.23% | 15.70% | 33.40%
+**Dense model: google_embeddinggemma-300m** |  |  |  |  | 
+  dense | 10.60% | 27.50% | 15.19% | 18.09% | 34.50%
+  dense + tfidf ($\alpha$) | 11.70% | 29.80% | 16.72% | 19.79% | 38.60%
+  dense + tfidf (RRF) | 10.70% | 28.00% | 15.56% | 18.50% | 37.30%
+  dense + bm25 ($\alpha$) | 12.50% | 31.10% | 17.35% | 20.57% | 39.10%
+  dense + bm25 (RRF) | 11.20% | 30.50% | 16.26% | 19.60% | 37.90%
+**Dense model: intfloat_multilingual-e5-large** |  |  |  |  | 
+  dense | 11.80% | 29.00% | 16.77% | 19.66% | 37.00%
+  dense + tfidf ($\alpha$) | 12.00% | 30.40% | 17.02% | 20.17% | 37.60%
+  dense + tfidf (RRF) | 11.20% | 29.20% | 16.19% | 19.26% | 37.60%
+  dense + bm25 ($\alpha$) | 12.40% | **31.60%** | 17.84% | 21.10% | 39.40%
+  dense + bm25 (RRF) | 11.90% | 30.20% | 16.94% | 20.07% | 38.30%
+**Dense model: jinaai_jina-embeddings-v3** |  |  |  |  | 
+  dense | 9.90% | 27.50% | 14.73% | 17.74% | 36.00%
+  dense + tfidf ($\alpha$) | 12.10% | 29.70% | 16.90% | 19.90% | 39.10%
+  dense + tfidf (RRF) | 12.10% | 28.90% | 16.50% | 19.40% | 37.40%
+  dense + bm25 ($\alpha$) | 13.00% | 30.70% | 17.82% | 20.84% | <u>40.10%</u>
+  dense + bm25 (RRF) | 12.70% | 30.50% | 17.10% | 20.20% | 39.20%
+**Dense model: openai-text-embedding-3-large** |  |  |  |  | 
+  dense | 9.70% | 30.00% | 15.03% | 18.54% | 38.60%
+  dense + tfidf ($\alpha$) | 10.80% | 29.60% | 16.20% | 19.37% | 39.10%
+  dense + tfidf (RRF) | 10.70% | 26.90% | 15.32% | 18.05% | 37.20%
+  dense + bm25 ($\alpha$) | 12.10% | 30.00% | 16.88% | 19.95% | 39.00%
+  dense + bm25 (RRF) | 10.90% | 28.50% | 15.69% | 18.70% | 38.20%
+**Dense model: Qwen_Qwen3-Embedding-0_6B** |  |  |  |  | 
+  dense | 11.50% | 28.10% | 15.97% | 18.81% | 35.00%
+  dense + tfidf ($\alpha$) | 11.20% | 31.00% | 16.62% | 19.99% | 39.00%
+  dense + tfidf (RRF) | 10.10% | 29.00% | 15.22% | 18.46% | 37.10%
+  dense + bm25 ($\alpha$) | 12.90% | 30.70% | 17.84% | 20.87% | 38.90%
+  dense + bm25 (RRF) | 11.00% | 30.00% | 16.16% | 19.42% | 36.90%
+**Dense model: sbert-bge-m3** |  |  |  |  | 
+  dense | 12.40% | 30.80% | 17.25% | 20.42% | 40.00%
+  dense + tfidf ($\alpha$) | 12.00% | 30.90% | 17.64% | 20.79% | 39.50%
+  dense + tfidf (RRF) | 10.30% | 28.70% | 15.86% | 18.91% | 38.00%
+  dense + bm25 ($\alpha$) | 12.40% | <u>31.10%</u> | <u>18.02%</u> | <u>21.12%</u> | **40.80%**
+  dense + bm25 (RRF) | 11.50% | 29.30% | 16.88% | 19.82% | 39.30%
+**Dense model: sbert-paraphrase-multilingual-MiniLM-L12-v2** |  |  |  |  | 
+  dense | 4.70% | 16.10% | 7.30% | 9.33% | 22.10%
+  dense + tfidf ($\alpha$) | 8.40% | 22.20% | 11.89% | 14.30% | 29.90%
+  dense + tfidf (RRF) | 6.90% | 21.00% | 10.60% | 13.03% | 29.80%
+  dense + bm25 ($\alpha$) | 8.50% | 23.20% | 12.48% | 15.00% | 31.10%
+  dense + bm25 (RRF) | 7.30% | 21.90% | 11.26% | 13.75% | 31.20%
+**Dense model: sbert-vietnamese-bi-encoder** |  |  |  |  | 
+  dense | 8.60% | 21.10% | 11.97% | 14.11% | 29.00%
+  dense + tfidf ($\alpha$) | 9.80% | 25.80% | 14.48% | 17.16% | 33.40%
+  dense + tfidf (RRF) | 9.40% | 25.40% | 14.14% | 16.82% | 32.50%
+  dense + bm25 ($\alpha$) | 10.10% | 27.30% | 15.16% | 18.04% | 33.80%
+  dense + bm25 (RRF) | 9.80% | 26.30% | 14.47% | 17.26% | 33.70%
+**Dense model: sbert-vietnamese-document-embedding** |  |  |  |  | 
+  dense | 10.70% | 27.40% | 15.02% | 17.90% | 35.70%
+  dense + tfidf ($\alpha$) | 10.80% | 28.90% | 15.83% | 18.90% | 37.80%
+  dense + tfidf (RRF) | 10.60% | 28.10% | 15.15% | 18.18% | 35.70%
+  dense + bm25 ($\alpha$) | 11.60% | 29.70% | 16.55% | 19.63% | 38.20%
+  dense + bm25 (RRF) | 11.00% | 28.20% | 15.55% | 18.50% | 36.90%
+**Dense model: sbert-Vietnamese_Embedding_V2** |  |  |  |  | 
+  dense | 10.60% | 28.60% | 15.48% | 18.56% | 38.70%
+  dense + tfidf ($\alpha$) | 12.20% | 30.60% | 17.40% | 20.51% | 40.00%
+  dense + tfidf (RRF) | 12.20% | 29.40% | 16.98% | 19.91% | 37.10%
+  dense + bm25 ($\alpha$) | <u>13.00%</u> | 30.80% | **18.21%** | **21.19%** | 39.30%
+  dense + bm25 (RRF) | **13.00%** | 29.40% | 17.56% | 20.36% | 38.30%
+**Dense model: Snowflake_snowflake-arctic-embed-l-v2_0** |  |  |  |  | 
+  dense | 9.20% | 24.80% | 13.66% | 16.29% | 33.10%
+  dense + tfidf ($\alpha$) | 10.60% | 28.20% | 15.66% | 18.63% | 35.50%
+  dense + tfidf (RRF) | 10.30% | 27.20% | 15.03% | 17.90% | 34.60%
+  dense + bm25 ($\alpha$) | 11.50% | 28.30% | 16.37% | 19.21% | 36.60%
+  dense + bm25 (RRF) | 11.30% | 27.40% | 15.71% | 18.47% | 36.40%
 
 ## ViRHE4QA_v2
 
-| Method            | Model                                       | P@1    | R@10   | MRR@10 | nDCG@10 | R@20   |
-| ----------------- | ------------------------------------------- | ------ | ------ | ------ | ------- | ------ |
-| bm25              |                                             | 65.80% | 93.50% | 76.05% | 80.34%  | 96.90% |
-| colbert           | colbert-ir_colbertv2_0                      | 42.90% | 73.40% | 52.49% | 57.50%  | 81.80% |
-| dense             | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 31.90% | 68.60% | 42.71% | 48.87%  | 77.30% |
-| dense             | Alibaba-NLP_gte-multilingual-base           | 54.40% | 87.80% | 65.52% | 70.91%  | 93.10% |
-| dense             | BAAI_bge-multilingual-gemma2                | 50.80% | 82.70% | 61.73% | 66.84%  | 89.10% |
-| dense             | Qwen_Qwen3-Embedding-0_6B                   | 55.40% | 87.80% | 66.28% | 71.48%  | 93.20% |
-| dense             | Snowflake_snowflake-arctic-embed-l-v2_0     | 60.00% | 91.50% | 70.41% | 75.50%  | 95.30% |
-| dense             | google_embeddinggemma-300m                  | 55.20% | 88.50% | 66.37% | 71.73%  | 92.80% |
-| dense             | intfloat_multilingual-e5-large              | 58.50% | 91.90% | 69.85% | 75.21%  | 95.60% |
-| dense             | jinaai_jina-embeddings-v3                   | 49.50% | 86.10% | 61.08% | 67.09%  | 91.30% |
-| dense             | openai-text-embedding-3-large               | 52.60% | 88.80% | 64.94% | 70.74%  | 93.60% |
-| dense             | sbert-Vietnamese_Embedding_v2               | 61.40% | 92.20% | 72.04% | 76.96%  | 95.60% |
-| dense             | sbert-bge-m3                                | 59.20% | 91.10% | 70.40% | 75.45%  | 95.10% |
-| dense             | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 30.80% | 63.00% | 40.43% | 45.81%  | 71.90% |
-| dense             | sbert-vietnamese-bi-encoder                 | 46.80% | 77.80% | 56.58% | 61.67%  | 85.50% |
-| dense             | sbert-vietnamese-document-embedding         | 50.80% | 86.70% | 63.01% | 68.75%  | 92.20% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 64.40% | 92.20% | 74.30% | 78.69%  | 95.60% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-multilingual-base           | 65.50% | 94.50% | 75.77% | 80.33%  | 97.10% |
-| dense+bm25-alpha  | BAAI_bge-multilingual-gemma2                | 66.20% | 93.70% | 75.89% | 80.23%  | 97.60% |
-| dense+bm25-alpha  | Qwen_Qwen3-Embedding-0_6B                   | 65.90% | 93.90% | 75.93% | 80.33%  | 96.90% |
-| dense+bm25-alpha  | Snowflake_snowflake-arctic-embed-l-v2_0     | 68.20% | 95.70% | 78.02% | 82.35%  | 97.70% |
-| dense+bm25-alpha  | google_embeddinggemma-300m                  | 65.80% | 94.40% | 76.20% | 80.67%  | 96.90% |
-| dense+bm25-alpha  | intfloat_multilingual-e5-large              | 69.60% | 95.50% | 79.19% | 83.21%  | 97.70% |
-| dense+bm25-alpha  | jinaai_jina-embeddings-v3                   | 64.10% | 93.70% | 74.08% | 78.83%  | 97.00% |
-| dense+bm25-alpha  | openai-text-embedding-3-large               | 66.70% | 95.40% | 76.74% | 81.30%  | 97.90% |
-| dense+bm25-alpha  | sbert-Vietnamese_Embedding_v2               | 72.50% | 96.90% | 81.42% | 85.23%  | 98.80% |
-| dense+bm25-alpha  | sbert-bge-m3                                | 71.10% | 95.90% | 79.94% | 83.86%  | 98.20% |
-| dense+bm25-alpha  | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 55.10% | 85.70% | 65.18% | 70.13%  | 92.70% |
-| dense+bm25-alpha  | sbert-vietnamese-bi-encoder                 | 62.10% | 91.90% | 72.34% | 77.09%  | 96.00% |
-| dense+bm25-alpha  | sbert-vietnamese-document-embedding         | 66.70% | 94.90% | 76.34% | 80.85%  | 97.20% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 51.90% | 86.20% | 62.79% | 68.41%  | 92.40% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-multilingual-base           | 62.70% | 93.50% | 73.71% | 78.54%  | 97.00% |
-| dense+bm25-rrf    | BAAI_bge-multilingual-gemma2                | 62.90% | 93.60% | 73.27% | 78.20%  | 97.10% |
-| dense+bm25-rrf    | Qwen_Qwen3-Embedding-0_6B                   | 63.90% | 93.40% | 74.44% | 79.08%  | 97.20% |
-| dense+bm25-rrf    | Snowflake_snowflake-arctic-embed-l-v2_0     | 65.80% | 94.90% | 76.31% | 80.87%  | 97.50% |
-| dense+bm25-rrf    | google_embeddinggemma-300m                  | 63.30% | 94.20% | 74.34% | 79.20%  | 96.70% |
-| dense+bm25-rrf    | intfloat_multilingual-e5-large              | 66.70% | 94.90% | 77.06% | 81.45%  | 97.10% |
-| dense+bm25-rrf    | jinaai_jina-embeddings-v3                   | 60.40% | 93.40% | 71.73% | 77.00%  | 96.90% |
-| dense+bm25-rrf    | openai-text-embedding-3-large               | 66.40% | 94.40% | 76.09% | 80.56%  | 98.00% |
-| dense+bm25-rrf    | sbert-Vietnamese_Embedding_v2               | 68.60% | 96.20% | 78.72% | 83.03%  | 98.30% |
-| dense+bm25-rrf    | sbert-bge-m3                                | 67.60% | 95.60% | 77.43% | 81.86%  | 97.60% |
-| dense+bm25-rrf    | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 47.00% | 82.50% | 58.78% | 64.52%  | 92.50% |
-| dense+bm25-rrf    | sbert-vietnamese-bi-encoder                 | 59.50% | 90.70% | 70.00% | 75.01%  | 96.10% |
-| dense+bm25-rrf    | sbert-vietnamese-document-embedding         | 64.00% | 94.20% | 74.50% | 79.29%  | 97.50% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 55.90% | 90.80% | 67.73% | 73.34%  | 94.20% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-multilingual-base           | 61.10% | 93.80% | 72.66% | 77.81%  | 96.20% |
-| dense+tfidf-alpha | BAAI_bge-multilingual-gemma2                | 60.90% | 93.10% | 72.27% | 77.35%  | 96.70% |
-| dense+tfidf-alpha | Qwen_Qwen3-Embedding-0_6B                   | 60.80% | 93.00% | 72.12% | 77.22%  | 96.90% |
-| dense+tfidf-alpha | Snowflake_snowflake-arctic-embed-l-v2_0     | 63.40% | 93.90% | 74.50% | 79.26%  | 97.20% |
-| dense+tfidf-alpha | google_embeddinggemma-300m                  | 62.60% | 92.80% | 73.34% | 78.11%  | 96.70% |
-| dense+tfidf-alpha | intfloat_multilingual-e5-large              | 65.40% | 94.50% | 75.96% | 80.52%  | 97.60% |
-| dense+tfidf-alpha | jinaai_jina-embeddings-v3                   | 59.60% | 92.30% | 70.88% | 76.10%  | 96.50% |
-| dense+tfidf-alpha | openai-text-embedding-3-large               | 62.90% | 94.00% | 73.97% | 78.88%  | 97.40% |
-| dense+tfidf-alpha | sbert-Vietnamese_Embedding_v2               | 68.90% | 96.00% | 78.93% | 83.14%  | 97.70% |
-| dense+tfidf-alpha | sbert-bge-m3                                | 65.90% | 95.30% | 76.55% | 81.15%  | 97.40% |
-| dense+tfidf-alpha | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 52.10% | 84.80% | 62.76% | 68.07%  | 90.60% |
-| dense+tfidf-alpha | sbert-vietnamese-bi-encoder                 | 59.00% | 91.30% | 69.89% | 75.08%  | 95.20% |
-| dense+tfidf-alpha | sbert-vietnamese-document-embedding         | 62.50% | 93.40% | 73.35% | 78.24%  | 96.90% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 46.70% | 84.10% | 58.92% | 64.99%  | 91.70% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-multilingual-base           | 59.10% | 91.80% | 70.59% | 75.77%  | 95.70% |
-| dense+tfidf-rrf   | BAAI_bge-multilingual-gemma2                | 57.40% | 91.80% | 69.41% | 74.86%  | 96.90% |
-| dense+tfidf-rrf   | Qwen_Qwen3-Embedding-0_6B                   | 58.70% | 92.00% | 70.37% | 75.64%  | 96.70% |
-| dense+tfidf-rrf   | Snowflake_snowflake-arctic-embed-l-v2_0     | 60.80% | 92.90% | 72.12% | 77.20%  | 96.40% |
-| dense+tfidf-rrf   | google_embeddinggemma-300m                  | 59.40% | 91.80% | 70.81% | 75.93%  | 96.30% |
-| dense+tfidf-rrf   | intfloat_multilingual-e5-large              | 61.80% | 93.50% | 73.21% | 78.18%  | 96.90% |
-| dense+tfidf-rrf   | jinaai_jina-embeddings-v3                   | 57.00% | 90.50% | 68.39% | 73.76%  | 96.50% |
-| dense+tfidf-rrf   | openai-text-embedding-3-large               | 60.10% | 93.80% | 71.95% | 77.28%  | 97.50% |
-| dense+tfidf-rrf   | sbert-Vietnamese_Embedding_v2               | 63.80% | 95.80% | 75.41% | 80.43%  | 97.80% |
-| dense+tfidf-rrf   | sbert-bge-m3                                | 61.80% | 94.60% | 73.72% | 78.85%  | 97.70% |
-| dense+tfidf-rrf   | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 44.20% | 80.90% | 56.02% | 62.01%  | 90.60% |
-| dense+tfidf-rrf   | sbert-vietnamese-bi-encoder                 | 55.30% | 90.00% | 66.77% | 72.38%  | 95.90% |
-| dense+tfidf-rrf   | sbert-vietnamese-document-embedding         | 58.30% | 92.80% | 70.36% | 75.83%  | 96.90% |
-| splade            | naver_splade-v3                             | 35.40% | 72.90% | 46.57% | 52.83%  | 82.20% |
-| tfidf             |                                             | 55.60% | 92.00% | 67.70% | 73.60%  | 95.90% |
+Method | P@1 | R@10 | MRR@10 | nDCG@10 | R@20
+--- | --- | --- | --- | --- | ---
+tfidf | 55.60% | 92.00% | 67.70% | 73.60% | 95.90%
+bm25 | 65.80% | 93.50% | 76.05% | 80.34% | 96.90%
+splade | 35.40% | 72.90% | 46.57% | 52.83% | 82.20%
+colbert | 42.90% | 73.40% | 52.49% | 57.50% | 81.80%
+**Dense model: Alibaba-NLP_gte-multilingual-base** |  |  |  |  | 
+  dense | 54.40% | 87.80% | 65.52% | 70.91% | 93.10%
+  dense + tfidf ($\alpha$) | 61.10% | 93.80% | 72.66% | 77.81% | 96.20%
+  dense + tfidf (RRF) | 59.10% | 91.80% | 70.59% | 75.77% | 95.70%
+  dense + bm25 ($\alpha$) | 65.50% | 94.50% | 75.77% | 80.33% | 97.10%
+  dense + bm25 (RRF) | 62.70% | 93.50% | 73.71% | 78.54% | 97.00%
+**Dense model: Alibaba-NLP_gte-Qwen2-1_5B-instruct** |  |  |  |  | 
+  dense | 31.90% | 68.60% | 42.71% | 48.87% | 77.30%
+  dense + tfidf ($\alpha$) | 55.90% | 90.80% | 67.73% | 73.34% | 94.20%
+  dense + tfidf (RRF) | 46.70% | 84.10% | 58.92% | 64.99% | 91.70%
+  dense + bm25 ($\alpha$) | 64.40% | 92.20% | 74.30% | 78.69% | 95.60%
+  dense + bm25 (RRF) | 51.90% | 86.20% | 62.79% | 68.41% | 92.40%
+**Dense model: BAAI_bge-multilingual-gemma2** |  |  |  |  | 
+  dense | 50.80% | 82.70% | 61.73% | 66.84% | 89.10%
+  dense + tfidf ($\alpha$) | 60.90% | 93.10% | 72.27% | 77.35% | 96.70%
+  dense + tfidf (RRF) | 57.40% | 91.80% | 69.41% | 74.86% | 96.90%
+  dense + bm25 ($\alpha$) | 66.20% | 93.70% | 75.89% | 80.23% | 97.60%
+  dense + bm25 (RRF) | 62.90% | 93.60% | 73.27% | 78.20% | 97.10%
+**Dense model: google_embeddinggemma-300m** |  |  |  |  | 
+  dense | 55.20% | 88.50% | 66.37% | 71.73% | 92.80%
+  dense + tfidf ($\alpha$) | 62.60% | 92.80% | 73.34% | 78.11% | 96.70%
+  dense + tfidf (RRF) | 59.40% | 91.80% | 70.81% | 75.93% | 96.30%
+  dense + bm25 ($\alpha$) | 65.80% | 94.40% | 76.20% | 80.67% | 96.90%
+  dense + bm25 (RRF) | 63.30% | 94.20% | 74.34% | 79.20% | 96.70%
+**Dense model: intfloat_multilingual-e5-large** |  |  |  |  | 
+  dense | 58.50% | 91.90% | 69.85% | 75.21% | 95.60%
+  dense + tfidf ($\alpha$) | 65.40% | 94.50% | 75.96% | 80.52% | 97.60%
+  dense + tfidf (RRF) | 61.80% | 93.50% | 73.21% | 78.18% | 96.90%
+  dense + bm25 ($\alpha$) | 69.60% | 95.50% | 79.19% | 83.21% | 97.70%
+  dense + bm25 (RRF) | 66.70% | 94.90% | 77.06% | 81.45% | 97.10%
+**Dense model: jinaai_jina-embeddings-v3** |  |  |  |  | 
+  dense | 49.50% | 86.10% | 61.08% | 67.09% | 91.30%
+  dense + tfidf ($\alpha$) | 59.60% | 92.30% | 70.88% | 76.10% | 96.50%
+  dense + tfidf (RRF) | 57.00% | 90.50% | 68.39% | 73.76% | 96.50%
+  dense + bm25 ($\alpha$) | 64.10% | 93.70% | 74.08% | 78.83% | 97.00%
+  dense + bm25 (RRF) | 60.40% | 93.40% | 71.73% | 77.00% | 96.90%
+**Dense model: openai-text-embedding-3-large** |  |  |  |  | 
+  dense | 52.60% | 88.80% | 64.94% | 70.74% | 93.60%
+  dense + tfidf ($\alpha$) | 62.90% | 94.00% | 73.97% | 78.88% | 97.40%
+  dense + tfidf (RRF) | 60.10% | 93.80% | 71.95% | 77.28% | 97.50%
+  dense + bm25 ($\alpha$) | 66.70% | 95.40% | 76.74% | 81.30% | 97.90%
+  dense + bm25 (RRF) | 66.40% | 94.40% | 76.09% | 80.56% | 98.00%
+**Dense model: Qwen_Qwen3-Embedding-0_6B** |  |  |  |  | 
+  dense | 55.40% | 87.80% | 66.28% | 71.48% | 93.20%
+  dense + tfidf ($\alpha$) | 60.80% | 93.00% | 72.12% | 77.22% | 96.90%
+  dense + tfidf (RRF) | 58.70% | 92.00% | 70.37% | 75.64% | 96.70%
+  dense + bm25 ($\alpha$) | 65.90% | 93.90% | 75.93% | 80.33% | 96.90%
+  dense + bm25 (RRF) | 63.90% | 93.40% | 74.44% | 79.08% | 97.20%
+**Dense model: sbert-bge-m3** |  |  |  |  | 
+  dense | 59.20% | 91.10% | 70.40% | 75.45% | 95.10%
+  dense + tfidf ($\alpha$) | 65.90% | 95.30% | 76.55% | 81.15% | 97.40%
+  dense + tfidf (RRF) | 61.80% | 94.60% | 73.72% | 78.85% | 97.70%
+  dense + bm25 ($\alpha$) | <u>71.10%</u> | 95.90% | <u>79.94%</u> | <u>83.86%</u> | 98.20%
+  dense + bm25 (RRF) | 67.60% | 95.60% | 77.43% | 81.86% | 97.60%
+**Dense model: sbert-paraphrase-multilingual-MiniLM-L12-v2** |  |  |  |  | 
+  dense | 30.80% | 63.00% | 40.43% | 45.81% | 71.90%
+  dense + tfidf ($\alpha$) | 52.10% | 84.80% | 62.76% | 68.07% | 90.60%
+  dense + tfidf (RRF) | 44.20% | 80.90% | 56.02% | 62.01% | 90.60%
+  dense + bm25 ($\alpha$) | 55.10% | 85.70% | 65.18% | 70.13% | 92.70%
+  dense + bm25 (RRF) | 47.00% | 82.50% | 58.78% | 64.52% | 92.50%
+**Dense model: sbert-vietnamese-bi-encoder** |  |  |  |  | 
+  dense | 46.80% | 77.80% | 56.58% | 61.67% | 85.50%
+  dense + tfidf ($\alpha$) | 59.00% | 91.30% | 69.89% | 75.08% | 95.20%
+  dense + tfidf (RRF) | 55.30% | 90.00% | 66.77% | 72.38% | 95.90%
+  dense + bm25 ($\alpha$) | 62.10% | 91.90% | 72.34% | 77.09% | 96.00%
+  dense + bm25 (RRF) | 59.50% | 90.70% | 70.00% | 75.01% | 96.10%
+**Dense model: sbert-vietnamese-document-embedding** |  |  |  |  | 
+  dense | 50.80% | 86.70% | 63.01% | 68.75% | 92.20%
+  dense + tfidf ($\alpha$) | 62.50% | 93.40% | 73.35% | 78.24% | 96.90%
+  dense + tfidf (RRF) | 58.30% | 92.80% | 70.36% | 75.83% | 96.90%
+  dense + bm25 ($\alpha$) | 66.70% | 94.90% | 76.34% | 80.85% | 97.20%
+  dense + bm25 (RRF) | 64.00% | 94.20% | 74.50% | 79.29% | 97.50%
+**Dense model: sbert-Vietnamese_Embedding_V2** |  |  |  |  | 
+  dense | 61.40% | 92.20% | 72.04% | 76.96% | 95.60%
+  dense + tfidf ($\alpha$) | 68.90% | 96.00% | 78.93% | 83.14% | 97.70%
+  dense + tfidf (RRF) | 63.80% | 95.80% | 75.41% | 80.43% | 97.80%
+  dense + bm25 ($\alpha$) | **72.50%** | **96.90%** | **81.42%** | **85.23%** | **98.80%**
+  dense + bm25 (RRF) | 68.60% | <u>96.20%</u> | 78.72% | 83.03% | <u>98.30%</u>
+**Dense model: Snowflake_snowflake-arctic-embed-l-v2_0** |  |  |  |  | 
+  dense | 60.00% | 91.50% | 70.41% | 75.50% | 95.30%
+  dense + tfidf ($\alpha$) | 63.40% | 93.90% | 74.50% | 79.26% | 97.20%
+  dense + tfidf (RRF) | 60.80% | 92.90% | 72.12% | 77.20% | 96.40%
+  dense + bm25 ($\alpha$) | 68.20% | 95.70% | 78.02% | 82.35% | 97.70%
+  dense + bm25 (RRF) | 65.80% | 94.90% | 76.31% | 80.87% | 97.50%
 
 ## VlogQA_2
 
-| Method            | Model                                       | P@1    | R@10   | MRR@10 | nDCG@10 | R@20   |
-| ----------------- | ------------------------------------------- | ------ | ------ | ------ | ------- | ------ |
-| bm25              |                                             | 18.00% | 39.50% | 23.90% | 27.57%  | 45.50% |
-| colbert           | colbert-ir_colbertv2_0                      | 5.30%  | 15.40% | 8.01%  | 9.74%   | 19.40% |
-| dense             | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 3.60%  | 11.20% | 5.40%  | 6.75%   | 16.40% |
-| dense             | Alibaba-NLP_gte-multilingual-base           | 20.20% | 46.70% | 28.12% | 32.53%  | 55.00% |
-| dense             | BAAI_bge-multilingual-gemma2                | 18.80% | 41.20% | 25.26% | 29.03%  | 49.00% |
-| dense             | Qwen_Qwen3-Embedding-0_6B                   | 23.50% | 48.10% | 30.71% | 34.82%  | 55.80% |
-| dense             | Snowflake_snowflake-arctic-embed-l-v2_0     | 20.70% | 49.60% | 28.91% | 33.81%  | 59.30% |
-| dense             | google_embeddinggemma-300m                  | 21.10% | 47.40% | 28.72% | 33.14%  | 55.60% |
-| dense             | intfloat_multilingual-e5-large              | 23.90% | 49.20% | 31.09% | 35.38%  | 57.00% |
-| dense             | jinaai_jina-embeddings-v3                   | 24.00% | 51.90% | 32.03% | 36.74%  | 59.80% |
-| dense             | openai-text-embedding-3-large               | 13.50% | 37.00% | 20.45% | 24.37%  | 45.60% |
-| dense             | sbert-Vietnamese_Embedding_V2               | 22.30% | 49.00% | 29.92% | 34.44%  | 57.50% |
-| dense             | sbert-Vietnamese_Embedding_v2               | 22.20% | 49.00% | 29.86% | 34.39%  | 57.50% |
-| dense             | sbert-bge-m3                                | 24.20% | 51.90% | 32.49% | 37.10%  | 59.90% |
-| dense             | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 4.50%  | 14.80% | 7.16%  | 8.95%   | 20.50% |
-| dense             | sbert-vietnamese-bi-encoder                 | 13.90% | 34.30% | 19.46% | 22.95%  | 42.80% |
-| dense             | sbert-vietnamese-document-embedding         | 22.70% | 46.90% | 29.62% | 33.71%  | 56.20% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 15.20% | 31.70% | 19.83% | 22.64%  | 40.20% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-multilingual-base           | 28.40% | 57.20% | 36.82% | 41.65%  | 65.60% |
-| dense+bm25-alpha  | BAAI_bge-multilingual-gemma2                | 25.80% | 52.20% | 33.64% | 38.05%  | 62.80% |
-| dense+bm25-alpha  | Qwen_Qwen3-Embedding-0_6B                   | 28.10% | 57.40% | 37.07% | 41.91%  | 65.10% |
-| dense+bm25-alpha  | Snowflake_snowflake-arctic-embed-l-v2_0     | 29.40% | 61.80% | 38.91% | 44.34%  | 69.60% |
-| dense+bm25-alpha  | google_embeddinggemma-300m                  | 28.20% | 57.90% | 37.03% | 41.98%  | 67.30% |
-| dense+bm25-alpha  | intfloat_multilingual-e5-large              | 29.00% | 57.90% | 37.79% | 42.56%  | 66.80% |
-| dense+bm25-alpha  | jinaai_jina-embeddings-v3                   | 30.00% | 61.40% | 39.53% | 44.73%  | 68.30% |
-| dense+bm25-alpha  | openai-text-embedding-3-large               | 21.50% | 48.70% | 29.33% | 33.92%  | 59.20% |
-| dense+bm25-alpha  | sbert-Vietnamese_Embedding_V2               | 29.20% | 57.80% | 37.80% | 42.55%  | 65.60% |
-| dense+bm25-alpha  | sbert-Vietnamese_Embedding_v2               | 29.20% | 57.40% | 37.73% | 42.42%  | 65.90% |
-| dense+bm25-alpha  | sbert-bge-m3                                | 30.50% | 59.20% | 39.20% | 43.97%  | 66.10% |
-| dense+bm25-alpha  | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 12.00% | 32.30% | 17.65% | 21.11%  | 39.80% |
-| dense+bm25-alpha  | sbert-vietnamese-bi-encoder                 | 21.40% | 46.70% | 28.71% | 32.98%  | 54.60% |
-| dense+bm25-alpha  | sbert-vietnamese-document-embedding         | 28.80% | 57.50% | 36.96% | 41.81%  | 66.90% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 10.30% | 26.80% | 14.79% | 17.61%  | 38.60% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-multilingual-base           | 27.10% | 56.40% | 35.81% | 40.72%  | 67.20% |
-| dense+bm25-rrf    | BAAI_bge-multilingual-gemma2                | 24.30% | 52.10% | 32.66% | 37.28%  | 65.60% |
-| dense+bm25-rrf    | Qwen_Qwen3-Embedding-0_6B                   | 26.70% | 55.90% | 35.51% | 40.36%  | 66.20% |
-| dense+bm25-rrf    | Snowflake_snowflake-arctic-embed-l-v2_0     | 27.60% | 58.30% | 36.75% | 41.88%  | 68.80% |
-| dense+bm25-rrf    | google_embeddinggemma-300m                  | 28.40% | 59.00% | 36.74% | 41.98%  | 68.50% |
-| dense+bm25-rrf    | intfloat_multilingual-e5-large              | 28.40% | 56.90% | 36.69% | 41.48%  | 67.80% |
-| dense+bm25-rrf    | jinaai_jina-embeddings-v3                   | 30.70% | 60.60% | 39.41% | 44.43%  | 69.90% |
-| dense+bm25-rrf    | openai-text-embedding-3-large               | 22.10% | 50.10% | 30.59% | 35.25%  | 61.70% |
-| dense+bm25-rrf    | sbert-Vietnamese_Embedding_V2               | 27.10% | 56.40% | 35.80% | 40.69%  | 65.20% |
-| dense+bm25-rrf    | sbert-Vietnamese_Embedding_v2               | 27.30% | 56.30% | 35.88% | 40.72%  | 64.90% |
-| dense+bm25-rrf    | sbert-bge-m3                                | 27.50% | 57.00% | 36.31% | 41.24%  | 65.20% |
-| dense+bm25-rrf    | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 13.10% | 37.90% | 19.66% | 23.93%  | 49.10% |
-| dense+bm25-rrf    | sbert-vietnamese-bi-encoder                 | 21.10% | 49.40% | 29.60% | 34.32%  | 60.30% |
-| dense+bm25-rrf    | sbert-vietnamese-document-embedding         | 25.60% | 57.20% | 35.03% | 40.32%  | 66.00% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 13.80% | 34.50% | 19.62% | 23.12%  | 44.70% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-multilingual-base           | 27.50% | 56.70% | 36.01% | 40.91%  | 66.40% |
-| dense+tfidf-alpha | BAAI_bge-multilingual-gemma2                | 24.00% | 53.40% | 32.99% | 37.85%  | 62.90% |
-| dense+tfidf-alpha | Qwen_Qwen3-Embedding-0_6B                   | 27.20% | 56.60% | 36.11% | 40.99%  | 67.10% |
-| dense+tfidf-alpha | Snowflake_snowflake-arctic-embed-l-v2_0     | 26.70% | 59.00% | 36.63% | 41.96%  | 67.30% |
-| dense+tfidf-alpha | google_embeddinggemma-300m                  | 26.60% | 57.10% | 36.16% | 41.19%  | 67.20% |
-| dense+tfidf-alpha | intfloat_multilingual-e5-large              | 29.00% | 59.90% | 37.85% | 43.06%  | 67.90% |
-| dense+tfidf-alpha | jinaai_jina-embeddings-v3                   | 28.20% | 60.60% | 37.73% | 43.16%  | 68.40% |
-| dense+tfidf-alpha | openai-text-embedding-3-large               | 20.90% | 48.20% | 28.95% | 33.53%  | 56.70% |
-| dense+tfidf-alpha | sbert-Vietnamese_Embedding_V2               | 25.80% | 55.70% | 35.04% | 39.98%  | 63.40% |
-| dense+tfidf-alpha | sbert-Vietnamese_Embedding_v2               | 25.60% | 55.80% | 34.98% | 39.97%  | 63.40% |
-| dense+tfidf-alpha | sbert-bge-m3                                | 27.20% | 57.70% | 36.19% | 41.30%  | 64.90% |
-| dense+tfidf-alpha | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 14.40% | 33.20% | 19.67% | 22.86%  | 41.30% |
-| dense+tfidf-alpha | sbert-vietnamese-bi-encoder                 | 22.50% | 47.40% | 29.60% | 33.79%  | 54.90% |
-| dense+tfidf-alpha | sbert-vietnamese-document-embedding         | 25.50% | 54.90% | 34.33% | 39.24%  | 65.40% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 10.70% | 28.50% | 15.22% | 18.31%  | 38.00% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-multilingual-base           | 24.40% | 56.00% | 33.65% | 38.94%  | 67.80% |
-| dense+tfidf-rrf   | BAAI_bge-multilingual-gemma2                | 22.70% | 51.80% | 31.12% | 36.00%  | 63.50% |
-| dense+tfidf-rrf   | Qwen_Qwen3-Embedding-0_6B                   | 24.70% | 57.40% | 34.36% | 39.81%  | 67.40% |
-| dense+tfidf-rrf   | Snowflake_snowflake-arctic-embed-l-v2_0     | 25.20% | 58.90% | 35.24% | 40.86%  | 67.70% |
-| dense+tfidf-rrf   | google_embeddinggemma-300m                  | 25.10% | 56.70% | 34.22% | 39.55%  | 69.00% |
-| dense+tfidf-rrf   | intfloat_multilingual-e5-large              | 26.80% | 58.40% | 35.63% | 41.00%  | 69.00% |
-| dense+tfidf-rrf   | jinaai_jina-embeddings-v3                   | 27.20% | 60.50% | 36.62% | 42.24%  | 69.80% |
-| dense+tfidf-rrf   | openai-text-embedding-3-large               | 20.10% | 48.40% | 28.72% | 33.42%  | 58.70% |
-| dense+tfidf-rrf   | sbert-Vietnamese_Embedding_V2               | 24.10% | 55.20% | 33.67% | 38.82%  | 63.20% |
-| dense+tfidf-rrf   | sbert-Vietnamese_Embedding_v2               | 24.10% | 55.20% | 33.79% | 38.91%  | 63.10% |
-| dense+tfidf-rrf   | sbert-bge-m3                                | 25.10% | 56.90% | 34.62% | 39.92%  | 64.50% |
-| dense+tfidf-rrf   | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 12.30% | 34.00% | 18.02% | 21.76%  | 46.70% |
-| dense+tfidf-rrf   | sbert-vietnamese-bi-encoder                 | 19.90% | 48.90% | 28.26% | 33.15%  | 58.50% |
-| dense+tfidf-rrf   | sbert-vietnamese-document-embedding         | 22.80% | 55.80% | 32.32% | 37.88%  | 65.30% |
-| splade            | naver_splade-v3                             | 2.90%  | 10.00% | 4.66%  | 5.90%   | 15.90% |
-| tfidf             |                                             | 13.40% | 34.60% | 19.55% | 23.10%  | 47.00% |
+Method | P@1 | R@10 | MRR@10 | nDCG@10 | R@20
+--- | --- | --- | --- | --- | ---
+tfidf | 13.40% | 34.60% | 19.55% | 23.10% | 47.00%
+bm25 | 18.00% | 39.50% | 23.90% | 27.57% | 45.50%
+splade | 2.90% | 10.00% | 4.66% | 5.90% | 15.90%
+colbert | 5.30% | 15.40% | 8.01% | 9.74% | 19.40%
+**Dense model: Alibaba-NLP_gte-multilingual-base** |  |  |  |  | 
+  dense | 20.20% | 46.70% | 28.12% | 32.53% | 55.00%
+  dense + tfidf ($\alpha$) | 27.50% | 56.70% | 36.01% | 40.91% | 66.40%
+  dense + tfidf (RRF) | 24.40% | 56.00% | 33.65% | 38.94% | 67.80%
+  dense + bm25 ($\alpha$) | 28.40% | 57.20% | 36.82% | 41.65% | 65.60%
+  dense + bm25 (RRF) | 27.10% | 56.40% | 35.81% | 40.72% | 67.20%
+**Dense model: Alibaba-NLP_gte-Qwen2-1_5B-instruct** |  |  |  |  | 
+  dense | 3.60% | 11.20% | 5.40% | 6.75% | 16.40%
+  dense + tfidf ($\alpha$) | 13.80% | 34.50% | 19.62% | 23.12% | 44.70%
+  dense + tfidf (RRF) | 10.70% | 28.50% | 15.22% | 18.31% | 38.00%
+  dense + bm25 ($\alpha$) | 15.20% | 31.70% | 19.83% | 22.64% | 40.20%
+  dense + bm25 (RRF) | 10.30% | 26.80% | 14.79% | 17.61% | 38.60%
+**Dense model: BAAI_bge-multilingual-gemma2** |  |  |  |  | 
+  dense | 18.80% | 41.20% | 25.26% | 29.03% | 49.00%
+  dense + tfidf ($\alpha$) | 24.00% | 53.40% | 32.99% | 37.85% | 62.90%
+  dense + tfidf (RRF) | 22.70% | 51.80% | 31.12% | 36.00% | 63.50%
+  dense + bm25 ($\alpha$) | 25.80% | 52.20% | 33.64% | 38.05% | 62.80%
+  dense + bm25 (RRF) | 24.30% | 52.10% | 32.66% | 37.28% | 65.60%
+**Dense model: google_embeddinggemma-300m** |  |  |  |  | 
+  dense | 21.10% | 47.40% | 28.72% | 33.14% | 55.60%
+  dense + tfidf ($\alpha$) | 26.60% | 57.10% | 36.16% | 41.19% | 67.20%
+  dense + tfidf (RRF) | 25.10% | 56.70% | 34.22% | 39.55% | 69.00%
+  dense + bm25 ($\alpha$) | 28.20% | 57.90% | 37.03% | 41.98% | 67.30%
+  dense + bm25 (RRF) | 28.40% | 59.00% | 36.74% | 41.98% | 68.50%
+**Dense model: intfloat_multilingual-e5-large** |  |  |  |  | 
+  dense | 23.90% | 49.20% | 31.09% | 35.38% | 57.00%
+  dense + tfidf ($\alpha$) | 29.00% | 59.90% | 37.85% | 43.06% | 67.90%
+  dense + tfidf (RRF) | 26.80% | 58.40% | 35.63% | 41.00% | 69.00%
+  dense + bm25 ($\alpha$) | 29.00% | 57.90% | 37.79% | 42.56% | 66.80%
+  dense + bm25 (RRF) | 28.40% | 56.90% | 36.69% | 41.48% | 67.80%
+**Dense model: jinaai_jina-embeddings-v3** |  |  |  |  | 
+  dense | 24.00% | 51.90% | 32.03% | 36.74% | 59.80%
+  dense + tfidf ($\alpha$) | 28.20% | 60.60% | 37.73% | 43.16% | 68.40%
+  dense + tfidf (RRF) | 27.20% | 60.50% | 36.62% | 42.24% | <u>69.80%</u>
+  dense + bm25 ($\alpha$) | 30.00% | <u>61.40%</u> | **39.53%** | **44.73%** | 68.30%
+  dense + bm25 (RRF) | **30.70%** | 60.60% | <u>39.41%</u> | <u>44.43%</u> | **69.90%**
+**Dense model: openai-text-embedding-3-large** |  |  |  |  | 
+  dense | 13.50% | 37.00% | 20.45% | 24.37% | 45.60%
+  dense + tfidf ($\alpha$) | 20.90% | 48.20% | 28.95% | 33.53% | 56.70%
+  dense + tfidf (RRF) | 20.10% | 48.40% | 28.72% | 33.42% | 58.70%
+  dense + bm25 ($\alpha$) | 21.50% | 48.70% | 29.33% | 33.92% | 59.20%
+  dense + bm25 (RRF) | 22.10% | 50.10% | 30.59% | 35.25% | 61.70%
+**Dense model: Qwen_Qwen3-Embedding-0_6B** |  |  |  |  | 
+  dense | 23.50% | 48.10% | 30.71% | 34.82% | 55.80%
+  dense + tfidf ($\alpha$) | 27.20% | 56.60% | 36.11% | 40.99% | 67.10%
+  dense + tfidf (RRF) | 24.70% | 57.40% | 34.36% | 39.81% | 67.40%
+  dense + bm25 ($\alpha$) | 28.10% | 57.40% | 37.07% | 41.91% | 65.10%
+  dense + bm25 (RRF) | 26.70% | 55.90% | 35.51% | 40.36% | 66.20%
+**Dense model: sbert-bge-m3** |  |  |  |  | 
+  dense | 24.20% | 51.90% | 32.49% | 37.10% | 59.90%
+  dense + tfidf ($\alpha$) | 27.20% | 57.70% | 36.19% | 41.30% | 64.90%
+  dense + tfidf (RRF) | 25.10% | 56.90% | 34.62% | 39.92% | 64.50%
+  dense + bm25 ($\alpha$) | <u>30.50%</u> | 59.20% | 39.20% | 43.97% | 66.10%
+  dense + bm25 (RRF) | 27.50% | 57.00% | 36.31% | 41.24% | 65.20%
+**Dense model: sbert-paraphrase-multilingual-MiniLM-L12-v2** |  |  |  |  | 
+  dense | 4.50% | 14.80% | 7.16% | 8.95% | 20.50%
+  dense + tfidf ($\alpha$) | 14.40% | 33.20% | 19.67% | 22.86% | 41.30%
+  dense + tfidf (RRF) | 12.30% | 34.00% | 18.02% | 21.76% | 46.70%
+  dense + bm25 ($\alpha$) | 12.00% | 32.30% | 17.65% | 21.11% | 39.80%
+  dense + bm25 (RRF) | 13.10% | 37.90% | 19.66% | 23.93% | 49.10%
+**Dense model: sbert-vietnamese-bi-encoder** |  |  |  |  | 
+  dense | 13.90% | 34.30% | 19.46% | 22.95% | 42.80%
+  dense + tfidf ($\alpha$) | 22.50% | 47.40% | 29.60% | 33.79% | 54.90%
+  dense + tfidf (RRF) | 19.90% | 48.90% | 28.26% | 33.15% | 58.50%
+  dense + bm25 ($\alpha$) | 21.40% | 46.70% | 28.71% | 32.98% | 54.60%
+  dense + bm25 (RRF) | 21.10% | 49.40% | 29.60% | 34.32% | 60.30%
+**Dense model: sbert-vietnamese-document-embedding** |  |  |  |  | 
+  dense | 22.70% | 46.90% | 29.62% | 33.71% | 56.20%
+  dense + tfidf ($\alpha$) | 25.50% | 54.90% | 34.33% | 39.24% | 65.40%
+  dense + tfidf (RRF) | 22.80% | 55.80% | 32.32% | 37.88% | 65.30%
+  dense + bm25 ($\alpha$) | 28.80% | 57.50% | 36.96% | 41.81% | 66.90%
+  dense + bm25 (RRF) | 25.60% | 57.20% | 35.03% | 40.32% | 66.00%
+**Dense model: sbert-Vietnamese_Embedding_V2** |  |  |  |  | 
+  dense | 22.30% | 49.00% | 29.92% | 34.44% | 57.50%
+  dense + tfidf ($\alpha$) | 25.80% | 55.70% | 35.04% | 39.98% | 63.40%
+  dense + tfidf (RRF) | 24.10% | 55.20% | 33.67% | 38.82% | 63.20%
+  dense + bm25 ($\alpha$) | 29.20% | 57.80% | 37.80% | 42.55% | 65.60%
+  dense + bm25 (RRF) | 27.10% | 56.40% | 35.80% | 40.69% | 65.20%
+**Dense model: Snowflake_snowflake-arctic-embed-l-v2_0** |  |  |  |  | 
+  dense | 20.70% | 49.60% | 28.91% | 33.81% | 59.30%
+  dense + tfidf ($\alpha$) | 26.70% | 59.00% | 36.63% | 41.96% | 67.30%
+  dense + tfidf (RRF) | 25.20% | 58.90% | 35.24% | 40.86% | 67.70%
+  dense + bm25 ($\alpha$) | 29.40% | **61.80%** | 38.91% | 44.34% | 69.60%
+  dense + bm25 (RRF) | 27.60% | 58.30% | 36.75% | 41.88% | 68.80%
 
 ## ZaloLegalQA
 
-| Method            | Model                                       | P@1    | R@10   | MRR@10 | nDCG@10 | R@20   |
-| ----------------- | ------------------------------------------- | ------ | ------ | ------ | ------- | ------ |
-| bm25              |                                             | 71.40% | 92.18% | 79.39% | 82.49%  | 94.42% |
-| colbert           | colbert-ir_colbertv2_0                      | 54.40% | 75.98% | 61.78% | 65.07%  | 80.73% |
-| dense             | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 84.10% | 98.23% | 89.76% | 91.77%  | 99.05% |
-| dense             | Alibaba-NLP_gte-multilingual-base           | 79.00% | 96.22% | 85.56% | 88.13%  | 98.32% |
-| dense             | BAAI_bge-multilingual-gemma2                | 75.60% | 95.68% | 83.21% | 86.18%  | 97.15% |
-| dense             | Qwen_Qwen3-Embedding-0_6B                   | 80.80% | 97.68% | 87.48% | 89.88%  | 98.40% |
-| dense             | Snowflake_snowflake-arctic-embed-l-v2_0     | 83.20% | 98.03% | 89.30% | 91.42%  | 98.72% |
-| dense             | google_embeddinggemma-300m                  | 82.50% | 96.67% | 88.11% | 90.12%  | 97.87% |
-| dense             | intfloat_multilingual-e5-large              | 83.80% | 97.98% | 89.69% | 91.64%  | 98.88% |
-| dense             | jinaai_jina-embeddings-v3                   | 83.10% | 98.85% | 89.39% | 91.67%  | 99.40% |
-| dense             | openai-text-embedding-3-large               | 80.50% | 96.83% | 87.10% | 89.39%  | 98.53% |
-| dense             | sbert-Vietnamese_Embedding_V2               | 86.20% | 98.32% | 91.04% | 92.74%  | 98.97% |
-| dense             | sbert-bge-m3                                | 82.30% | 97.83% | 88.52% | 90.75%  | 98.77% |
-| dense             | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 51.10% | 80.23% | 60.75% | 65.30%  | 85.87% |
-| dense             | sbert-vietnamese-bi-encoder                 | 71.00% | 92.72% | 79.20% | 82.46%  | 94.72% |
-| dense             | sbert-vietnamese-document-embedding         | 77.70% | 96.27% | 85.08% | 87.81%  | 97.95% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 86.00% | 98.47% | 90.99% | 92.76%  | 98.95% |
-| dense+bm25-alpha  | Alibaba-NLP_gte-multilingual-base           | 80.90% | 97.17% | 87.09% | 89.52%  | 97.97% |
-| dense+bm25-alpha  | BAAI_bge-multilingual-gemma2                | 82.60% | 97.72% | 88.60% | 90.78%  | 98.60% |
-| dense+bm25-alpha  | Qwen_Qwen3-Embedding-0_6B                   | 83.20% | 97.63% | 88.90% | 90.96%  | 98.45% |
-| dense+bm25-alpha  | Snowflake_snowflake-arctic-embed-l-v2_0     | 84.90% | 98.13% | 90.07% | 91.99%  | 98.42% |
-| dense+bm25-alpha  | google_embeddinggemma-300m                  | 83.00% | 97.37% | 88.65% | 90.71%  | 98.22% |
-| dense+bm25-alpha  | intfloat_multilingual-e5-large              | 84.80% | 98.08% | 90.15% | 92.05%  | 98.53% |
-| dense+bm25-alpha  | jinaai_jina-embeddings-v3                   | 85.00% | 98.55% | 90.43% | 92.40%  | 99.15% |
-| dense+bm25-alpha  | openai-text-embedding-3-large               | 84.00% | 97.93% | 89.83% | 91.77%  | 98.92% |
-| dense+bm25-alpha  | sbert-Vietnamese_Embedding_V2               | 87.40% | 98.17% | 91.67% | 93.18%  | 98.67% |
-| dense+bm25-alpha  | sbert-bge-m3                                | 82.10% | 98.02% | 88.62% | 90.93%  | 98.62% |
-| dense+bm25-alpha  | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 70.60% | 94.32% | 79.43% | 82.98%  | 95.95% |
-| dense+bm25-alpha  | sbert-vietnamese-bi-encoder                 | 80.30% | 96.67% | 86.67% | 89.08%  | 97.97% |
-| dense+bm25-alpha  | sbert-vietnamese-document-embedding         | 82.40% | 97.42% | 88.33% | 90.54%  | 98.60% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 78.20% | 95.67% | 85.03% | 87.62%  | 97.90% |
-| dense+bm25-rrf    | Alibaba-NLP_gte-multilingual-base           | 76.60% | 95.27% | 83.68% | 86.48%  | 97.07% |
-| dense+bm25-rrf    | BAAI_bge-multilingual-gemma2                | 76.50% | 96.10% | 84.47% | 87.28%  | 97.85% |
-| dense+bm25-rrf    | Qwen_Qwen3-Embedding-0_6B                   | 77.60% | 95.27% | 84.47% | 87.09%  | 97.45% |
-| dense+bm25-rrf    | Snowflake_snowflake-arctic-embed-l-v2_0     | 77.70% | 95.33% | 84.63% | 87.23%  | 97.32% |
-| dense+bm25-rrf    | google_embeddinggemma-300m                  | 77.90% | 94.97% | 84.39% | 86.94%  | 96.97% |
-| dense+bm25-rrf    | intfloat_multilingual-e5-large              | 78.20% | 95.33% | 84.86% | 87.41%  | 97.57% |
-| dense+bm25-rrf    | jinaai_jina-embeddings-v3                   | 78.80% | 96.17% | 85.27% | 87.92%  | 97.65% |
-| dense+bm25-rrf    | openai-text-embedding-3-large               | 78.10% | 96.28% | 85.50% | 88.13%  | 98.12% |
-| dense+bm25-rrf    | sbert-Vietnamese_Embedding_V2               | 81.00% | 96.27% | 87.12% | 89.31%  | 97.75% |
-| dense+bm25-rrf    | sbert-bge-m3                                | 79.20% | 96.17% | 86.05% | 88.52%  | 97.67% |
-| dense+bm25-rrf    | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 64.60% | 91.62% | 74.46% | 78.56%  | 96.70% |
-| dense+bm25-rrf    | sbert-vietnamese-bi-encoder                 | 75.30% | 95.62% | 82.96% | 85.99%  | 97.20% |
-| dense+bm25-rrf    | sbert-vietnamese-document-embedding         | 77.60% | 96.30% | 84.92% | 87.68%  | 97.80% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 82.50% | 98.60% | 88.79% | 91.19%  | 99.05% |
-| dense+tfidf-alpha | Alibaba-NLP_gte-multilingual-base           | 79.10% | 97.82% | 86.12% | 88.94%  | 98.40% |
-| dense+tfidf-alpha | BAAI_bge-multilingual-gemma2                | 79.10% | 97.75% | 86.53% | 89.26%  | 98.90% |
-| dense+tfidf-alpha | Qwen_Qwen3-Embedding-0_6B                   | 80.10% | 98.20% | 87.15% | 89.82%  | 98.65% |
-| dense+tfidf-alpha | Snowflake_snowflake-arctic-embed-l-v2_0     | 82.00% | 98.12% | 88.28% | 90.68%  | 98.47% |
-| dense+tfidf-alpha | google_embeddinggemma-300m                  | 80.60% | 97.87% | 87.42% | 89.94%  | 98.57% |
-| dense+tfidf-alpha | intfloat_multilingual-e5-large              | 83.80% | 98.48% | 89.56% | 91.71%  | 98.77% |
-| dense+tfidf-alpha | jinaai_jina-embeddings-v3                   | 81.40% | 98.90% | 88.36% | 90.94%  | 99.25% |
-| dense+tfidf-alpha | openai-text-embedding-3-large               | 82.20% | 98.07% | 88.52% | 90.80%  | 99.27% |
-| dense+tfidf-alpha | sbert-Vietnamese_Embedding_V2               | 85.40% | 98.42% | 90.91% | 92.71%  | 99.10% |
-| dense+tfidf-alpha | sbert-bge-m3                                | 80.50% | 98.12% | 87.69% | 90.26%  | 99.05% |
-| dense+tfidf-alpha | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 69.70% | 93.92% | 78.50% | 82.18%  | 96.60% |
-| dense+tfidf-alpha | sbert-vietnamese-bi-encoder                 | 77.40% | 96.72% | 84.88% | 87.76%  | 98.20% |
-| dense+tfidf-alpha | sbert-vietnamese-document-embedding         | 79.80% | 98.35% | 86.80% | 89.60%  | 99.00% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-Qwen2-1_5B-instruct         | 75.90% | 97.25% | 84.42% | 87.58%  | 98.70% |
-| dense+tfidf-rrf   | Alibaba-NLP_gte-multilingual-base           | 74.20% | 97.05% | 82.97% | 86.40%  | 98.25% |
-| dense+tfidf-rrf   | BAAI_bge-multilingual-gemma2                | 75.60% | 96.50% | 83.77% | 86.87%  | 98.60% |
-| dense+tfidf-rrf   | Qwen_Qwen3-Embedding-0_6B                   | 77.10% | 97.25% | 84.84% | 87.86%  | 98.35% |
-| dense+tfidf-rrf   | Snowflake_snowflake-arctic-embed-l-v2_0     | 76.80% | 97.02% | 84.59% | 87.63%  | 98.42% |
-| dense+tfidf-rrf   | google_embeddinggemma-300m                  | 76.00% | 96.72% | 84.19% | 87.23%  | 98.27% |
-| dense+tfidf-rrf   | intfloat_multilingual-e5-large              | 76.40% | 97.58% | 84.82% | 87.92%  | 98.42% |
-| dense+tfidf-rrf   | jinaai_jina-embeddings-v3                   | 76.40% | 97.75% | 84.77% | 87.95%  | 98.90% |
-| dense+tfidf-rrf   | openai-text-embedding-3-large               | 77.10% | 97.72% | 85.08% | 88.15%  | 98.90% |
-| dense+tfidf-rrf   | sbert-Vietnamese_Embedding_V2               | 79.10% | 97.65% | 86.65% | 89.35%  | 98.60% |
-| dense+tfidf-rrf   | sbert-bge-m3                                | 76.00% | 97.22% | 84.43% | 87.58%  | 98.70% |
-| dense+tfidf-rrf   | sbert-paraphrase-multilingual-MiniLM-L12-v2 | 64.10% | 91.60% | 73.74% | 78.00%  | 96.25% |
-| dense+tfidf-rrf   | sbert-vietnamese-bi-encoder                 | 72.90% | 95.52% | 81.48% | 84.88%  | 97.85% |
-| dense+tfidf-rrf   | sbert-vietnamese-document-embedding         | 76.20% | 97.10% | 84.15% | 87.31%  | 98.50% |
-| splade            | naver_splade-v3                             | 40.30% | 65.53% | 48.42% | 52.35%  | 72.58% |
-| tfidf             |                                             | 64.70% | 92.47% | 75.07% | 79.28%  | 96.45% |
+Method | P@1 | R@10 | MRR@10 | nDCG@10 | R@20
+--- | --- | --- | --- | --- | ---
+tfidf | 64.70% | 92.47% | 75.07% | 79.28% | 96.45%
+bm25 | 71.40% | 92.18% | 79.39% | 82.49% | 94.42%
+splade | 40.30% | 65.53% | 48.42% | 52.35% | 72.58%
+colbert | 54.40% | 75.98% | 61.78% | 65.07% | 80.73%
+**Dense model: Alibaba-NLP_gte-multilingual-base** |  |  |  |  | 
+  dense | 79.00% | 96.22% | 85.56% | 88.13% | 98.32%
+  dense + tfidf ($\alpha$) | 79.10% | 97.82% | 86.12% | 88.94% | 98.40%
+  dense + tfidf (RRF) | 74.20% | 97.05% | 82.97% | 86.40% | 98.25%
+  dense + bm25 ($\alpha$) | 80.90% | 97.17% | 87.09% | 89.52% | 97.97%
+  dense + bm25 (RRF) | 76.60% | 95.27% | 83.68% | 86.48% | 97.07%
+**Dense model: Alibaba-NLP_gte-Qwen2-1_5B-instruct** |  |  |  |  | 
+  dense | 84.10% | 98.23% | 89.76% | 91.77% | 99.05%
+  dense + tfidf ($\alpha$) | 82.50% | 98.60% | 88.79% | 91.19% | 99.05%
+  dense + tfidf (RRF) | 75.90% | 97.25% | 84.42% | 87.58% | 98.70%
+  dense + bm25 ($\alpha$) | 86.00% | 98.47% | 90.99% | <u>92.76%</u> | 98.95%
+  dense + bm25 (RRF) | 78.20% | 95.67% | 85.03% | 87.62% | 97.90%
+**Dense model: BAAI_bge-multilingual-gemma2** |  |  |  |  | 
+  dense | 75.60% | 95.68% | 83.21% | 86.18% | 97.15%
+  dense + tfidf ($\alpha$) | 79.10% | 97.75% | 86.53% | 89.26% | 98.90%
+  dense + tfidf (RRF) | 75.60% | 96.50% | 83.77% | 86.87% | 98.60%
+  dense + bm25 ($\alpha$) | 82.60% | 97.72% | 88.60% | 90.78% | 98.60%
+  dense + bm25 (RRF) | 76.50% | 96.10% | 84.47% | 87.28% | 97.85%
+**Dense model: google_embeddinggemma-300m** |  |  |  |  | 
+  dense | 82.50% | 96.67% | 88.11% | 90.12% | 97.87%
+  dense + tfidf ($\alpha$) | 80.60% | 97.87% | 87.42% | 89.94% | 98.57%
+  dense + tfidf (RRF) | 76.00% | 96.72% | 84.19% | 87.23% | 98.27%
+  dense + bm25 ($\alpha$) | 83.00% | 97.37% | 88.65% | 90.71% | 98.22%
+  dense + bm25 (RRF) | 77.90% | 94.97% | 84.39% | 86.94% | 96.97%
+**Dense model: intfloat_multilingual-e5-large** |  |  |  |  | 
+  dense | 83.80% | 97.98% | 89.69% | 91.64% | 98.88%
+  dense + tfidf ($\alpha$) | 83.80% | 98.48% | 89.56% | 91.71% | 98.77%
+  dense + tfidf (RRF) | 76.40% | 97.58% | 84.82% | 87.92% | 98.42%
+  dense + bm25 ($\alpha$) | 84.80% | 98.08% | 90.15% | 92.05% | 98.53%
+  dense + bm25 (RRF) | 78.20% | 95.33% | 84.86% | 87.41% | 97.57%
+**Dense model: jinaai_jina-embeddings-v3** |  |  |  |  | 
+  dense | 83.10% | <u>98.85%</u> | 89.39% | 91.67% | **99.40%**
+  dense + tfidf ($\alpha$) | 81.40% | **98.90%** | 88.36% | 90.94% | 99.25%
+  dense + tfidf (RRF) | 76.40% | 97.75% | 84.77% | 87.95% | 98.90%
+  dense + bm25 ($\alpha$) | 85.00% | 98.55% | 90.43% | 92.40% | 99.15%
+  dense + bm25 (RRF) | 78.80% | 96.17% | 85.27% | 87.92% | 97.65%
+**Dense model: openai-text-embedding-3-large** |  |  |  |  | 
+  dense | 80.50% | 96.83% | 87.10% | 89.39% | 98.53%
+  dense + tfidf ($\alpha$) | 82.20% | 98.07% | 88.52% | 90.80% | <u>99.27%</u>
+  dense + tfidf (RRF) | 77.10% | 97.72% | 85.08% | 88.15% | 98.90%
+  dense + bm25 ($\alpha$) | 84.00% | 97.93% | 89.83% | 91.77% | 98.92%
+  dense + bm25 (RRF) | 78.10% | 96.28% | 85.50% | 88.13% | 98.12%
+**Dense model: Qwen_Qwen3-Embedding-0_6B** |  |  |  |  | 
+  dense | 80.80% | 97.68% | 87.48% | 89.88% | 98.40%
+  dense + tfidf ($\alpha$) | 80.10% | 98.20% | 87.15% | 89.82% | 98.65%
+  dense + tfidf (RRF) | 77.10% | 97.25% | 84.84% | 87.86% | 98.35%
+  dense + bm25 ($\alpha$) | 83.20% | 97.63% | 88.90% | 90.96% | 98.45%
+  dense + bm25 (RRF) | 77.60% | 95.27% | 84.47% | 87.09% | 97.45%
+**Dense model: sbert-bge-m3** |  |  |  |  | 
+  dense | 82.30% | 97.83% | 88.52% | 90.75% | 98.77%
+  dense + tfidf ($\alpha$) | 80.50% | 98.12% | 87.69% | 90.26% | 99.05%
+  dense + tfidf (RRF) | 76.00% | 97.22% | 84.43% | 87.58% | 98.70%
+  dense + bm25 ($\alpha$) | 82.10% | 98.02% | 88.62% | 90.93% | 98.62%
+  dense + bm25 (RRF) | 79.20% | 96.17% | 86.05% | 88.52% | 97.67%
+**Dense model: sbert-paraphrase-multilingual-MiniLM-L12-v2** |  |  |  |  | 
+  dense | 51.10% | 80.23% | 60.75% | 65.30% | 85.87%
+  dense + tfidf ($\alpha$) | 69.70% | 93.92% | 78.50% | 82.18% | 96.60%
+  dense + tfidf (RRF) | 64.10% | 91.60% | 73.74% | 78.00% | 96.25%
+  dense + bm25 ($\alpha$) | 70.60% | 94.32% | 79.43% | 82.98% | 95.95%
+  dense + bm25 (RRF) | 64.60% | 91.62% | 74.46% | 78.56% | 96.70%
+**Dense model: sbert-vietnamese-bi-encoder** |  |  |  |  | 
+  dense | 71.00% | 92.72% | 79.20% | 82.46% | 94.72%
+  dense + tfidf ($\alpha$) | 77.40% | 96.72% | 84.88% | 87.76% | 98.20%
+  dense + tfidf (RRF) | 72.90% | 95.52% | 81.48% | 84.88% | 97.85%
+  dense + bm25 ($\alpha$) | 80.30% | 96.67% | 86.67% | 89.08% | 97.97%
+  dense + bm25 (RRF) | 75.30% | 95.62% | 82.96% | 85.99% | 97.20%
+**Dense model: sbert-vietnamese-document-embedding** |  |  |  |  | 
+  dense | 77.70% | 96.27% | 85.08% | 87.81% | 97.95%
+  dense + tfidf ($\alpha$) | 79.80% | 98.35% | 86.80% | 89.60% | 99.00%
+  dense + tfidf (RRF) | 76.20% | 97.10% | 84.15% | 87.31% | 98.50%
+  dense + bm25 ($\alpha$) | 82.40% | 97.42% | 88.33% | 90.54% | 98.60%
+  dense + bm25 (RRF) | 77.60% | 96.30% | 84.92% | 87.68% | 97.80%
+**Dense model: sbert-Vietnamese_Embedding_V2** |  |  |  |  | 
+  dense | <u>86.20%</u> | 98.32% | <u>91.04%</u> | 92.74% | 98.97%
+  dense + tfidf ($\alpha$) | 85.40% | 98.42% | 90.91% | 92.71% | 99.10%
+  dense + tfidf (RRF) | 79.10% | 97.65% | 86.65% | 89.35% | 98.60%
+  dense + bm25 ($\alpha$) | **87.40%** | 98.17% | **91.67%** | **93.18%** | 98.67%
+  dense + bm25 (RRF) | 81.00% | 96.27% | 87.12% | 89.31% | 97.75%
+**Dense model: Snowflake_snowflake-arctic-embed-l-v2_0** |  |  |  |  | 
+  dense | 83.20% | 98.03% | 89.30% | 91.42% | 98.72%
+  dense + tfidf ($\alpha$) | 82.00% | 98.12% | 88.28% | 90.68% | 98.47%
+  dense + tfidf (RRF) | 76.80% | 97.02% | 84.59% | 87.63% | 98.42%
+  dense + bm25 ($\alpha$) | 84.90% | 98.13% | 90.07% | 91.99% | 98.42%
+  dense + bm25 (RRF) | 77.70% | 95.33% | 84.63% | 87.23% | 97.32%

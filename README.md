@@ -14,7 +14,7 @@ Benchmarking retrieval fairly is harder than it looks — different tools use di
 
 - Unified CLI to benchmark BM25, TF-IDF, Dense, SPLADE, ColBERT, and hybrid retrieval with fair, reproducible settings
 - Dataset-agnostic schema — plug in any CSV/qrels following the standard specification
-- Full pipeline: normalization → indexing → evaluation → error analysis → reporting
+- Full pipeline: normalization $\rightarrow$ indexing $\rightarrow$ evaluation $\rightarrow$ error analysis $\rightarrow$ reporting
 
 ---
 
@@ -262,9 +262,9 @@ Not every method needs the same set of flags. The table below shows exactly what
 
 Each dense backend uses a different flag to specify the model checkpoint:
 
-- `--dense-backend openai` → `--embed-model`
-- `--dense-backend gemini` → `--gemini-model`
-- `--dense-backend sbert` or `llm` → `--sbert-model`
+- `--dense-backend openai` $\rightarrow$ `--embed-model`
+- `--dense-backend gemini` $\rightarrow$ `--gemini-model`
+- `--dense-backend sbert` or `llm` $\rightarrow$ `--sbert-model`
 
 ### Batch Runs for Multiple Datasets
 
