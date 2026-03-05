@@ -10,7 +10,7 @@ from .qrels import rank_of_first_gold
 from .dense_index import DenseFAISS
 from .metrics import evaluate_all
 
-# Kích hoạt registry các backend (side-effect import)
+# Trigger backend registry via side-effect imports
 from .embeddings import *  # noqa: F401
 from .embeddings.base import get_embedder
 
@@ -18,22 +18,55 @@ from .embeddings.base import get_embedder
 try:
     from .logging_utils import setup_logger
 except Exception:
+
     def setup_logger(level: str = "info"):
+        """Return a no-op logger when logging utilities are unavailable.
+
+        Args:
+            level: Requested log level (ignored by the fallback logger).
+
+        Returns:
+            _Dummy: Logger-compatible object with no-op logging methods.
+        """
+
         class _Dummy:
-            def info(self, *a, **k): pass
-            def debug(self, *a, **k): pass
-            def warning(self, *a, **k): pass
-            def error(self, *a, **k): pass
+            """Minimal logger-compatible object with no-op methods."""
+
+            def info(self, *a, **k):
+                """Ignore info-level log calls."""
+                pass
+
+            def debug(self, *a, **k):
+                """Ignore debug-level log calls."""
+                pass
+
+            def warning(self, *a, **k):
+                """Ignore warning-level log calls."""
+                pass
+
+            def error(self, *a, **k):
+                """Ignore error-level log calls."""
+                pass
+
         return _Dummy()
 
 
 def safe_model_name(name: str) -> str:
+    """Sanitize model names for filesystem-safe paths.
+
+    Args:
+        name: Raw model identifier.
+
+    Returns:
+        str: Sanitized model identifier safe for directories/files.
+    """
     return name.replace("/", "__").replace(":", "_").replace(" ", "_")
 
 
 # =====================================================================
 # Helpers
 # =====================================================================
+
 
 def _ensure_dir(p: str):
     os.makedirs(p, exist_ok=True)
@@ -49,6 +82,7 @@ def _save_csv(path: str, rows: List[Dict[str, Any]], field_order: List[str]):
             for k, v in r.items():
                 if isinstance(v, (list, tuple, dict)):
                     import json as _json
+
                     rr[k] = _json.dumps(v, ensure_ascii=False)
                 else:
                     rr[k] = v
@@ -58,7 +92,7 @@ def _save_csv(path: str, rows: List[Dict[str, Any]], field_order: List[str]):
 def _topk_indices_rowwise(score_mat: np.ndarray, k: int) -> np.ndarray:
     Q, N = score_mat.shape
     k = min(max(k, 1), N)
-    part = np.argpartition(-score_mat, kth=k-1, axis=1)[:, :k]
+    part = np.argpartition(-score_mat, kth=k - 1, axis=1)[:, :k]
     row_idx = np.arange(Q)[:, None]
     ord_in_k = np.argsort(-score_mat[row_idx, part], axis=1)
     return part[row_idx, ord_in_k]
@@ -79,7 +113,7 @@ def _validate_method_and_models(
     colbert_model: Optional[str],
 ):
     """
-    Áp các quy tắc bạn đã chốt:
+    Enforce method/model constraints:
 
     - PURE:
         tfidf, bm25
@@ -102,7 +136,7 @@ def _validate_method_and_models(
     dense_backends_valid = {"sbert", "openai", "gemini", "llm"}
 
     if method in ("tfidf", "bm25"):
-        # Không cần model gì
+        # No model required
         return
 
     if method == "dense":
@@ -132,7 +166,7 @@ def _validate_method_and_models(
     if method == "colbert":
         if not colbert_model:
             raise ValueError("[colbert] require --colbert-model.")
-        # dense_backend / dense_model / splade_model bị bỏ qua
+        # dense_backend / dense_model / splade_model are ignored for colbert
         return
 
     if method in ("splade+tfidf", "splade+bm25"):
@@ -157,6 +191,7 @@ def _validate_method_and_models(
 # =====================================================================
 # MAIN RUN
 # =====================================================================
+
 
 def run(
     method: str,
@@ -184,8 +219,38 @@ def run(
     qids: Optional[List[str]] = None,
     error_k: Optional[int] = None,
 ) -> Dict[str, float]:
+    """Execute one retrieval evaluation run and export artifacts.
 
-    # Chuẩn hoá string, rồi validate theo rule
+    Args:
+        method: Retrieval method name.
+        fusion: Fusion strategy for hybrid methods.
+        questions: Query texts.
+        contexts: Candidate document/passages.
+        gold_lists: Gold document indices per query.
+        out_dir: Output directory for run artifacts.
+        dense_backend: Dense backend name, if applicable.
+        dense_model: Dense model name, if applicable.
+        splade_model: SPLADE model name, if applicable.
+        colbert_model: ColBERT model name, if applicable.
+        batch_size: Embedding batch size hint.
+        max_len: Optional token-length truncation for embedding backends.
+        index_metric: Vector index metric (`ip` or `l2`).
+        alpha: Alpha for score-based fusion.
+        rrf_k: Constant for Reciprocal Rank Fusion.
+        force: Whether to force rebuilding caches/indexes.
+        ks: Evaluation cutoffs.
+        show_progress: Whether to display progress bars.
+        log_level: Logging level.
+        bm25_k1: BM25 k1 parameter.
+        bm25_b: BM25 b parameter.
+        qids: Optional query IDs.
+        error_k: Optional cutoff used for fail@K artifacts.
+
+    Returns:
+        Dict[str, float]: Evaluation metrics for the run.
+    """
+
+    # Normalize inputs then validate method/model constraints
     dense_backend = _normalize_str(dense_backend)
     dense_model = _normalize_str(dense_model)
     splade_model = _normalize_str(splade_model)
@@ -225,11 +290,11 @@ def run(
         scores = bm25_scores(bm25, questions, show_progress=show_progress)
 
     # =====================================================================
-    # COLBERT: late interaction, không qua FAISS / dense-backend
+    # COLBERT: late-interaction, does not use FAISS / dense backend
     # =====================================================================
     elif method == "colbert":
         assert colbert_model is not None
-        # Lưu index ColBERT theo tên dataset
+        # Store ColBERT index under the dataset name
         dataset_name = os.path.normpath(out_dir).split(os.sep)[-2]
         colbert_root = os.path.join("cache", "colbert_indexes", dataset_name)
         _ensure_dir(colbert_root)
@@ -279,7 +344,9 @@ def run(
             t_scores = tfidf_scores(vect, X_docs, questions)
 
             if fusion == "alpha":
-                scores = alpha * minmax_rowwise(splade_scores) + (1 - alpha) * minmax_rowwise(t_scores)
+                scores = alpha * minmax_rowwise(splade_scores) + (
+                    1 - alpha
+                ) * minmax_rowwise(t_scores)
             elif fusion == "rrf":
                 Q, N = len(questions), len(contexts)
                 ranks_splade = np.zeros((Q, N), dtype=np.int32)
@@ -293,13 +360,17 @@ def run(
 
         # ---- SPLADE + BM25 ----
         elif method == "splade+bm25":
-            logger.info(f"Building BM25 (k1={bm25_k1}, b={bm25_b}) for hybrid SPLADE+BM25...")
+            logger.info(
+                f"Building BM25 (k1={bm25_k1}, b={bm25_b}) for hybrid SPLADE+BM25..."
+            )
             bm25 = build_bm25(contexts, k1=bm25_k1, b=bm25_b)
             logger.info("Scoring BM25...")
             b_scores = bm25_scores(bm25, questions, show_progress=show_progress)
 
             if fusion == "alpha":
-                scores = alpha * minmax_rowwise(splade_scores) + (1 - alpha) * minmax_rowwise(b_scores)
+                scores = alpha * minmax_rowwise(splade_scores) + (
+                    1 - alpha
+                ) * minmax_rowwise(b_scores)
             elif fusion == "rrf":
                 Q, N = len(questions), len(contexts)
                 ranks_splade = np.zeros((Q, N), dtype=np.int32)
@@ -314,7 +385,9 @@ def run(
         # ---- SPLADE + DENSE ----
         elif method == "splade+dense":
             assert dense_backend is not None and dense_model is not None
-            logger.info(f"Preparing dense backend for SPLADE+DENSE: {dense_backend} | model={dense_model}")
+            logger.info(
+                f"Preparing dense backend for SPLADE+DENSE: {dense_backend} | model={dense_model}"
+            )
 
             # load dense embedder
             if dense_backend == "openai":
@@ -346,7 +419,9 @@ def run(
                 dense_model_name = dense_model
 
             else:
-                raise ValueError(f"Unknown dense_backend for splade+dense: {dense_backend}")
+                raise ValueError(
+                    f"Unknown dense_backend for splade+dense: {dense_backend}"
+                )
 
             # FAISS index cho dense
             dataset_name = os.path.normpath(out_dir).split(os.sep)[-2]
@@ -373,11 +448,15 @@ def run(
             )
 
             logger.info("[SPLADE+DENSE] Dense scoring (q @ d.T)...")
-            d_scores = dense.dense_scores_for_queries(q_embs, show_progress=show_progress)
+            d_scores = dense.dense_scores_for_queries(
+                q_embs, show_progress=show_progress
+            )
 
             # Fusion SPLADE (splade_scores) + dense (d_scores)
             if fusion == "alpha":
-                scores = alpha * minmax_rowwise(d_scores) + (1 - alpha) * minmax_rowwise(splade_scores)
+                scores = alpha * minmax_rowwise(d_scores) + (
+                    1 - alpha
+                ) * minmax_rowwise(splade_scores)
             elif fusion == "rrf":
                 Q, N = len(questions), len(contexts)
                 ranks_dense = np.zeros((Q, N), dtype=np.int32)
@@ -393,29 +472,42 @@ def run(
             raise ValueError(f"Unknown SPLADE-based method: {method}")
 
     # =====================================================================
-    # DENSE-ONLY & LEGACY HYBRID DENSE (giữ lại nếu bạn còn dùng)
+    # DENSE-ONLY & LEGACY HYBRID DENSE
     # =====================================================================
     else:
-        # Nhánh này giữ lại cấu trúc cũ cho dense, dense+tfidf, dense+bm25
-        # nhưng bây giờ dùng dense_backend + dense_model.
+        # Legacy branch for dense, dense+tfidf, dense+bm25 methods
+        # now using dense_backend + dense_model.
         assert dense_backend is not None and dense_model is not None
 
         logger.info(f"Preparing dense backend: {dense_backend}")
 
         # ------------ load embedder -----------------
         if dense_backend == "openai":
-            embedder = get_embedder("openai", model=dense_model,
-                                    batch_size=batch_size, show_progress=show_progress)
+            embedder = get_embedder(
+                "openai",
+                model=dense_model,
+                batch_size=batch_size,
+                show_progress=show_progress,
+            )
             model_name = dense_model
 
         elif dense_backend == "gemini":
-            embedder = get_embedder("gemini", model=dense_model,
-                                    batch_size=batch_size, show_progress=show_progress)
+            embedder = get_embedder(
+                "gemini",
+                model=dense_model,
+                batch_size=batch_size,
+                show_progress=show_progress,
+            )
             model_name = dense_model
 
         elif dense_backend in ("sbert", "llm"):
-            embedder = get_embedder(dense_backend, model_name=dense_model,
-                                    batch_size=batch_size, show_progress=show_progress, max_len=max_len)
+            embedder = get_embedder(
+                dense_backend,
+                model_name=dense_model,
+                batch_size=batch_size,
+                show_progress=show_progress,
+                max_len=max_len,
+            )
             model_name = dense_model
 
         else:
@@ -460,7 +552,9 @@ def run(
             t_scores = tfidf_scores(vect, X_docs, questions)
 
             if fusion == "alpha":
-                scores = alpha * minmax_rowwise(d_scores) + (1 - alpha) * minmax_rowwise(t_scores)
+                scores = alpha * minmax_rowwise(d_scores) + (
+                    1 - alpha
+                ) * minmax_rowwise(t_scores)
 
             elif fusion == "rrf":
                 Q, N = len(questions), len(contexts)
@@ -477,7 +571,9 @@ def run(
             b_scores = bm25_scores(bm25, questions, show_progress=show_progress)
 
             if fusion == "alpha":
-                scores = alpha * minmax_rowwise(d_scores) + (1 - alpha) * minmax_rowwise(b_scores)
+                scores = alpha * minmax_rowwise(d_scores) + (
+                    1 - alpha
+                ) * minmax_rowwise(b_scores)
 
             elif fusion == "rrf":
                 Q, N = len(questions), len(contexts)
@@ -531,25 +627,32 @@ def run(
         ret_texts = [contexts[d] for d in ret_ids]
         ret_scores_list = topk_scores[qi].tolist()
 
-        rows.append({
-            "k_ref": k_ref,
-            "qid": (qids[qi] if (qids and qi < len(qids)) else str(qi)),
-            "question": questions[qi],
-            "gold_doc_ids": gold_ids,
-            "gold_texts": gold_texts,
-            "retrieved_doc_ids": ret_ids,
-            "retrieved_texts": ret_texts,
-            "retrieved_scores": ret_scores_list,
-        })
+        rows.append(
+            {
+                "k_ref": k_ref,
+                "qid": (qids[qi] if (qids and qi < len(qids)) else str(qi)),
+                "question": questions[qi],
+                "gold_doc_ids": gold_ids,
+                "gold_texts": gold_texts,
+                "retrieved_doc_ids": ret_ids,
+                "retrieved_texts": ret_texts,
+                "retrieved_scores": ret_scores_list,
+            }
+        )
 
     fail_csv = os.path.join(errors_dir, f"fail@{k_ref}.csv")
     _save_csv(
         fail_csv,
         rows,
         field_order=[
-            "k_ref", "qid", "question",
-            "gold_doc_ids", "gold_texts",
-            "retrieved_doc_ids", "retrieved_texts", "retrieved_scores",
+            "k_ref",
+            "qid",
+            "question",
+            "gold_doc_ids",
+            "gold_texts",
+            "retrieved_doc_ids",
+            "retrieved_texts",
+            "retrieved_scores",
         ],
     )
 

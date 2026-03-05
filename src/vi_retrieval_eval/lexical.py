@@ -10,6 +10,7 @@ from .progress import iter_progress
 HAVE_BM25 = False
 try:
     from rank_bm25 import BM25Okapi  # type: ignore
+
     HAVE_BM25 = True
 except Exception:
     BM25Okapi = object  # type: ignore
@@ -17,12 +18,30 @@ except Exception:
 
 # ---------- TF-IDF ----------
 def build_tfidf(docs: List[str]) -> Tuple[TfidfVectorizer, np.ndarray]:
+    """Fit a TF-IDF vectorizer on documents.
+
+    Args:
+        docs: Input documents.
+
+    Returns:
+        Tuple[TfidfVectorizer, np.ndarray]: Fitted vectorizer and document matrix.
+    """
     vect = TfidfVectorizer(analyzer=vi_segment)
     X_docs = vect.fit_transform(docs)
     return vect, X_docs
 
 
 def tfidf_scores(vect: TfidfVectorizer, X_docs, queries: List[str]) -> np.ndarray:
+    """Compute TF-IDF cosine similarity scores.
+
+    Args:
+        vect: Fitted TF-IDF vectorizer.
+        X_docs: Document TF-IDF matrix.
+        queries: Query texts.
+
+    Returns:
+        np.ndarray: Score matrix with shape (Q, N).
+    """
     X_q = vect.transform(queries)
     sims = cosine_similarity(X_q, X_docs)
     return sims.astype(np.float32)
@@ -35,8 +54,8 @@ def build_bm25(
     b: float = 0.75,
 ) -> "BM25Okapi":
     """
-    Tạo BM25Okapi với tham số Okapi:
-      - k1: (thường 1.2 ~ 2.0)
+    Build BM25Okapi with Okapi parameters:
+      - k1: (typically 1.2 ~ 2.0)
       - b:  (0 ~ 1)
     """
     if not HAVE_BM25:
@@ -50,11 +69,20 @@ def bm25_scores(
     queries: List[str],
     show_progress: bool = False,
 ) -> np.ndarray:
-    """
-    Tính điểm BM25 cho từng query với progress bar (nếu bật).
+    """Compute BM25 scores for queries.
+
+    Args:
+        bm25: Fitted BM25 object.
+        queries: Query texts.
+        show_progress: Whether to show a progress bar.
+
+    Returns:
+        np.ndarray: Score matrix with shape (Q, N).
     """
     rows: List[np.ndarray] = []
-    it = iter_progress(queries, enable=show_progress, tqdm_desc="BM25 scoring", total=len(queries))
+    it = iter_progress(
+        queries, enable=show_progress, tqdm_desc="BM25 scoring", total=len(queries)
+    )
     for q in it:
         rows.append(np.array(bm25.get_scores(vi_segment(q)), dtype=np.float32))
     return np.vstack(rows)

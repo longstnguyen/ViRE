@@ -10,19 +10,20 @@ LEVEL_MAP = {
     "error": logging.ERROR,
 }
 
+
 def setup_logger(level: str = "info", log_file: Optional[str] = None) -> logging.Logger:
     """
-    Tạo logger cho vi-retrieval-eval.
-    
+    Create and configure the logger for vi-retrieval-eval.
+
     Args:
-        level: mức log ("debug", "info", "warning", "error").
-        log_file: nếu set, log thêm vào file UTF-8.
+        level: log level ("debug", "info", "warning", "error").
+        log_file: if set, also log to a UTF-8 encoded file.
     """
     logger = logging.getLogger("vi-retrieval-eval")
     logger.setLevel(LEVEL_MAP.get(level.lower(), logging.INFO))
-    logger.propagate = False  # tránh log đúp ra root logger
+    logger.propagate = False  # avoid duplicate log entries in root logger
 
-    # clear handler cũ
+    # clear existing handlers
     if logger.hasHandlers():
         logger.handlers.clear()
 

@@ -12,9 +12,9 @@ from ..progress import iter_progress
 @register("gemini")
 class GeminiEmbedder:
     """
-    Dùng Google Gemini embeddings.
+    Google Gemini embeddings backend.
 
-    Yêu cầu:
+    Requirements:
       - Env: GOOGLE_API_KEY
       - pip install google-generativeai
     """
@@ -52,8 +52,8 @@ class GeminiEmbedder:
 
     def _embed_one(self, text: str) -> np.ndarray:
         """
-        Gọi 1 lần API embed_content với retry/backoff.
-        Trả về vector np.float32.
+        Call the embed_content API once with retry/backoff.
+        Returns a np.float32 vector.
         """
         last_err: Optional[Exception] = None
         for attempt in range(self.max_retries):
@@ -71,14 +71,14 @@ class GeminiEmbedder:
                     time.sleep(delay)
                 else:
                     break
-        # hết retry
+        # exhausted retries
         raise last_err if last_err is not None else RuntimeError("Unknown Gemini error")
 
     def embed(self, texts: List[str]) -> np.ndarray:
         """
-        Tạo embedding cho danh sách texts, có progress bar:
-          - Progress batch ngoài (chia theo batch_size)
-          - Progress từng call trong batch (do API chưa hỗ trợ batch ổn định)
+        Return embeddings for the list of texts, with progress bars:
+          - Outer batch progress (split by batch_size)
+          - Inner per-call progress (API does not support stable batch calls)
         """
         if not texts:
             return np.zeros((0, 0), dtype=np.float32)
@@ -121,6 +121,10 @@ class GeminiEmbedder:
 
     @property
     def dim(self) -> int:
-        """Tiện ích: chiều embedding (gọi 1 lần nhẹ)."""
+        """Return embedding dimensionality.
+
+        Returns:
+            int: Embedding dimension.
+        """
         v = self._embed_one("dimension probe")
         return int(v.shape[0])

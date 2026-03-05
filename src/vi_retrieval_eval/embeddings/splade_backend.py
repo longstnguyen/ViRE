@@ -16,11 +16,11 @@ logger = logging.getLogger("vi-retrieval-eval")
 @register("splade")
 class SpladeBackend:
     """
-    SPLADE backend dùng `sentence-transformers` SparseEncoder.
+    SPLADE backend using `sentence-transformers` SparseEncoder.
 
-    - Model default: `naver/splade-v3`
-    - Trả về sparse similarity (dot product) giữa query và document.
-    - Trong ViRE:
+    - Default model: `naver/splade-v3`
+    - Returns sparse similarity (dot product) between query and document.
+    - In ViRE:
         * method = "splade"          → SPLADE-only (sparse retriever)
         * method = "splade+tfidf"    → hybrid SPLADE + TF-IDF
         * method = "splade+bm25"     → hybrid SPLADE + BM25
@@ -35,15 +35,15 @@ class SpladeBackend:
     ) -> None:
         """
         Args:
-            model_name: tên checkpoint HF SPLADE (default: naver/splade-v3).
-            batch_size: hiện tại không dùng, chỉ để đồng bộ với get_embedder.
-            show_progress: nếu True thì bật tqdm.
+            model_name: HF SPLADE checkpoint (default: naver/splade-v3).
+            batch_size: currently unused; present for get_embedder compatibility.
+            show_progress: enable tqdm if True.
         """
         try:
             from sentence_transformers import SparseEncoder  # type: ignore
         except Exception as e:
             raise RuntimeError(
-                "To use backend='splade', cần cài sentence-transformers:\n"
+                "To use backend='splade', install sentence-transformers:\n"
                 "    pip install -U sentence-transformers"
             ) from e
 
@@ -57,14 +57,15 @@ class SpladeBackend:
         logger.info("[SPLADE] Loaded SparseEncoder model: %s", self.model_name)
 
     # ------------------------------------------------------------------
-    # API chính: tính score(Q, N) giữa list queries và list contexts
+    # ------------------------------------------------------------------
+    # Main API: compute score(Q, N) between a list of queries and contexts
     # ------------------------------------------------------------------
     def score(self, questions: List[str], contexts: List[str]) -> np.ndarray:
         """
-        Tính sparse similarity giữa queries và contexts.
+        Compute sparse similarity between queries and contexts.
 
         Returns:
-            scores: np.ndarray shape (Q, N), là dot product SPLADE.
+            scores: np.ndarray shape (Q, N), dot product from SPLADE.
         """
         import torch
 

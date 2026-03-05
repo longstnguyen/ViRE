@@ -8,7 +8,15 @@ from .tokenization import vi_segment
 
 def _summarize(arr: np.ndarray) -> Dict[str, float]:
     if arr.size == 0:
-        return {"min": 0, "max": 0, "mean": 0, "median": 0, "std": 0, "p95": 0, "p99": 0}
+        return {
+            "min": 0,
+            "max": 0,
+            "mean": 0,
+            "median": 0,
+            "std": 0,
+            "p95": 0,
+            "p99": 0,
+        }
     return {
         "min": float(np.min(arr)),
         "max": float(np.max(arr)),
@@ -28,16 +36,18 @@ def _lengths_token(texts: List[str]) -> np.ndarray:
     return np.array([len(vi_segment(t or "")) for t in texts], dtype=np.int32)
 
 
-def compute_dataset_stats(questions: List[str], contexts: List[str]) -> Dict[str, object]:
+def compute_dataset_stats(
+    questions: List[str], contexts: List[str]
+) -> Dict[str, object]:
     """
-    Thống kê dựa trên TẬP THỰC SỰ đem đi eval (sau sampling/dedup/lower nếu có).
-    - Ký tự & token cho question / context
-    - Đếm số context duy nhất (raw)
+    Statistics computed on the actual evaluation set (after sampling/dedup/lowercasing if applied).
+    - Character & token lengths for question / context.
+    - Count of unique raw contexts.
     """
     q_len_char = _lengths_char(questions)
-    q_len_tok  = _lengths_token(questions)
+    q_len_tok = _lengths_token(questions)
     c_len_char = _lengths_char(contexts)
-    c_len_tok  = _lengths_token(contexts)
+    c_len_tok = _lengths_token(contexts)
 
     num_rows = len(questions)
     num_docs = len(contexts)

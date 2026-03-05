@@ -15,30 +15,33 @@ _WS_RE = re.compile(r"\s+", flags=re.UNICODE)
 
 # A broad emoji / pictograph range (covers most common emoji)
 _EMOJI_RE = re.compile(
-    "["                       # start char class
-    "\U0001F600-\U0001F64F"   # emoticons
-    "\U0001F300-\U0001F5FF"   # symbols & pictographs
-    "\U0001F680-\U0001F6FF"   # transport & map symbols
-    "\U0001F1E0-\U0001F1FF"   # flags
-    "\U00002702-\U000027B0"   # dingbats
-    "\U000024C2-\U0001F251"   # enclosed characters
+    "["  # start char class
+    "\U0001f600-\U0001f64f"  # emoticons
+    "\U0001f300-\U0001f5ff"  # symbols & pictographs
+    "\U0001f680-\U0001f6ff"  # transport & map symbols
+    "\U0001f1e0-\U0001f1ff"  # flags
+    "\U00002702-\U000027b0"  # dingbats
+    "\U000024c2-\U0001f251"  # enclosed characters
     "]+",
-    flags=re.UNICODE
+    flags=re.UNICODE,
 )
 
-# Control characters (ASCII 0..31, 127) — loại bỏ cho sạch
+# Control characters (ASCII 0..31, 127) — removed for cleanliness
 _CTRL_RE = re.compile(r"[\x00-\x1F\x7F]")
 
-def normalize_for_dedup(s: str, *, do_lower: bool = False, remove_emoji: bool = False) -> str:
+
+def normalize_for_dedup(
+    s: str, *, do_lower: bool = False, remove_emoji: bool = False
+) -> str:
     """
-    Chuẩn hoá chuỗi để so trùng/dedup:
+    Normalize a string for deduplication / matching:
       - Unicode normalize NFKC
       - remove control chars (ASCII control)
-      - remove zero-width/invisible
-      - optional: remove emoji/icon nếu remove_emoji=True
-      - strip() hai đầu
-      - collapse whitespaces (một khoảng trắng)
-      - optional: lower-case nếu do_lower=True
+      - remove zero-width/invisible characters
+      - optional: remove emoji/icons if remove_emoji=True
+      - strip leading/trailing whitespace
+      - collapse whitespace to a single space
+      - optional: lowercase if do_lower=True
     """
     if s is None:
         return ""

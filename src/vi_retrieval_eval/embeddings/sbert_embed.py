@@ -10,15 +10,15 @@ from ..progress import iter_progress
 @register("sbert")
 class SBERTEmbedder:
     """
-    Sentence-Transformers (local).
+    Sentence-Transformers (local) embedding backend.
 
-    Yêu cầu:
+    Requirements:
       - pip install sentence-transformers
-      - GPU (tuỳ chọn): tự dùng 'cuda' nếu có, hoặc bạn có thể chỉ định device.
+      - GPU (optional): automatically uses 'cuda' if available; can also specify device explicitly.
 
     NEW:
-      - max_len: nếu set, sẽ truncate input theo token length để giảm OOM do sequence dài.
-        Nếu max_len=None: giữ nguyên (không cắt).
+      - max_len: if set, truncates input by token length to reduce OOM on long sequences.
+        If max_len=None: no truncation.
     """
 
     def __init__(
@@ -28,16 +28,18 @@ class SBERTEmbedder:
         device: Optional[str] = None,
         show_progress: bool = False,
         normalize: bool = True,
-        min_batch_size: int = 8,  # chống OOM: không giảm dưới mức này
+        min_batch_size: int = 8,  # OOM guard: batch size will not be reduced below this
         max_len: Optional[int] = None,  # <<< NEW (CLI: --max-len)
     ):
         try:
             from sentence_transformers import SentenceTransformer  # type: ignore
             import torch  # type: ignore
         except Exception as e:
-            raise RuntimeError("Please `pip install sentence-transformers` to use SBERT") from e
+            raise RuntimeError(
+                "Please `pip install sentence-transformers` to use SBERT"
+            ) from e
 
-        # auto-select device nếu không chỉ định
+        # auto-select device if not specified
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -53,14 +55,18 @@ class SBERTEmbedder:
 
         # load model
         self._logger.debug(f"[SBERT] loading model `{model_name}` on `{device}` ...")
-        self._st = SentenceTransformer(model_name, device=device, trust_remote_code=True)
+        self._st = SentenceTransformer(
+            model_name, device=device, trust_remote_code=True
+        )
 
         # NEW: global truncation config (only if provided)
         if self.max_len is not None:
             # SentenceTransformer may respect this
             try:
                 self._st.max_seq_length = int(self.max_len)
-                self._logger.warning(f"[SBERT] Set SentenceTransformer.max_seq_length={self.max_len}")
+                self._logger.warning(
+                    f"[SBERT] Set SentenceTransformer.max_seq_length={self.max_len}"
+                )
             except Exception:
                 pass
 
@@ -70,7 +76,9 @@ class SBERTEmbedder:
                 if tok is not None:
                     tok.model_max_length = int(self.max_len)
                     tok.truncation_side = "right"
-                    self._logger.warning(f"[SBERT] Set tokenizer.model_max_length={self.max_len}")
+                    self._logger.warning(
+                        f"[SBERT] Set tokenizer.model_max_length={self.max_len}"
+                    )
             except Exception:
                 pass
 
@@ -78,8 +86,8 @@ class SBERTEmbedder:
 
     def _truncate_texts_if_needed(self, texts: List[str]) -> List[str]:
         """
-        Truncate theo TOKEN bằng tokenizer nếu có.
-        Không truyền truncation/max_length vào SentenceTransformer.encode().
+        Truncate by token count using the tokenizer if available.
+        Does NOT pass truncation/max_length to SentenceTransformer.encode().
         """
         if self.max_len is None or not texts:
             return texts
@@ -106,20 +114,22 @@ class SBERTEmbedder:
             out = tok.batch_decode(input_ids, skip_special_tokens=True)
             return out
         except Exception as e:
-            self._logger.warning(f"[SBERT] Tokenizer truncate failed ({e}). Falling back to char-truncate.")
+            self._logger.warning(
+                f"[SBERT] Tokenizer truncate failed ({e}). Falling back to char-truncate."
+            )
             return [t[: self.max_len] for t in texts]
 
     # ----------------- encode -----------------
 
     def _encode_batch(self, texts: List[str], batch_size: int) -> np.ndarray:
         """
-        Encode một batch → np.ndarray (B, D), có normalize nếu bật.
+        Encode a batch → np.ndarray (B, D), with optional L2 normalization.
         """
         arr = self._st.encode(
             texts,
             batch_size=batch_size,
             convert_to_numpy=True,
-            normalize_embeddings=False,  # normalize thủ công để thống nhất
+            normalize_embeddings=False,  # normalize manually for consistency
             show_progress_bar=False,
         ).astype(np.float32)
 
@@ -133,8 +143,13 @@ class SBERTEmbedder:
     # ----------------- public API -----------------
 
     def embed(self, texts: List[str]) -> np.ndarray:
-        """
-        Trả về embeddings cho toàn bộ `texts` với progress bar theo batch và chống OOM.
+        """Embed input texts with batching and OOM fallback.
+
+        Args:
+            texts: Input texts.
+
+        Returns:
+            np.ndarray: Embedding matrix.
         """
         if not texts:
             return np.zeros((0, 0), dtype=np.float32)
@@ -153,14 +168,16 @@ class SBERTEmbedder:
         for start in it:
             while True:
                 try:
-                    batch = texts[start: start + bs]
+                    batch = texts[start : start + bs]
                     batch = self._truncate_texts_if_needed(batch)  # <<< truncate here
                     arr = self._encode_batch(batch, batch_size=bs)
                     out_chunks.append(arr)
                     break
                 except RuntimeError as e:
                     msg = str(e).lower()
-                    if ("out of memory" in msg or "cuda" in msg) and bs > self.min_batch_size:
+                    if (
+                        "out of memory" in msg or "cuda" in msg
+                    ) and bs > self.min_batch_size:
                         new_bs = max(self.min_batch_size, bs // 2)
                         self._logger.warning(
                             f"[SBERT] OOM detected with batch_size={bs}. Retrying with batch_size={new_bs}."
@@ -173,6 +190,10 @@ class SBERTEmbedder:
 
     @property
     def dim(self) -> int:
-        """Chiều embedding (encode 1 câu để đo)."""
+        """Return embedding dimensionality.
+
+        Returns:
+            int: Embedding dimension.
+        """
         arr = self._encode_batch(["dimension probe"], batch_size=1)
         return int(arr.shape[1])

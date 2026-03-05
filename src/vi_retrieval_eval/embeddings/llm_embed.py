@@ -13,20 +13,20 @@ class LLMEmbedder:
     """
     LLM-based embedding backend using SentenceTransformer.
 
-    Dùng cho các model như:
+    Suitable for models such as:
       - Qwen/Qwen3-Embedding-0.6B
       - Alibaba-NLP/gte-Qwen2-1.5B-instruct
       - BAAI/bge-multilingual-gemma2
       - jinaai/jina-embeddings-v3
-      - v.v. (các HF embedding model có trust_remote_code)
+      - Any HF embedding model with trust_remote_code
 
     NEW:
-      - max_len: nếu set, sẽ truncate input theo token length để tránh OOM do sequence quá dài.
-        Nếu max_len=None: giữ nguyên (không cắt).
+      - max_len: if set, truncates input by token length to avoid OOM on long sequences.
+        If max_len=None: no truncation.
 
     NOTE (important for jina):
-      - jinaai/jina-embeddings-v3 đôi khi kéo remote module "xlm-roberta-flash-implementation"
-        và dễ bị cache lỗi thiếu file (rotary.py). Vì vậy: **tắt flash_attention_2** riêng cho jina.
+      - jinaai/jina-embeddings-v3 sometimes pulls a remote module "xlm-roberta-flash-implementation"
+        and may fail due to a cached missing file (rotary.py). To mitigate: **disable flash_attention_2** for jina.
     """
 
     def __init__(
@@ -41,9 +41,13 @@ class LLMEmbedder:
     ):
         try:
             import torch  # type: ignore
-            from sentence_transformers import SentenceTransformer  # noqa: F401  # type: ignore
+            from sentence_transformers import (
+                SentenceTransformer,
+            )  # noqa: F401  # type: ignore
         except Exception as e:
-            raise RuntimeError("Please `pip install sentence-transformers` to use LLM backend") from e
+            raise RuntimeError(
+                "Please `pip install sentence-transformers` to use LLM backend"
+            ) from e
 
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -64,9 +68,21 @@ class LLMEmbedder:
         # ---------------------------------------------------------------------
         try:
             from transformers.cache_utils import DynamicCache  # type: ignore
-            if (not hasattr(DynamicCache, "get_usable_length")) and hasattr(DynamicCache, "get_seq_length"):
+
+            if (not hasattr(DynamicCache, "get_usable_length")) and hasattr(
+                DynamicCache, "get_seq_length"
+            ):
 
                 def get_usable_length(self, *args, **kwargs):
+                    """Compatibility shim for older cache API calls.
+
+                    Args:
+                        *args: Positional arguments (ignored).
+                        **kwargs: Keyword arguments (ignored).
+
+                    Returns:
+                        int: Sequence length from `get_seq_length()`.
+                    """
                     return self.get_seq_length()
 
                 DynamicCache.get_usable_length = get_usable_length  # type: ignore[attr-defined]
@@ -83,8 +99,14 @@ class LLMEmbedder:
         name_l = model_name.lower()
 
         # Disable flash for jina to avoid remote module import/cache issues
-        disable_flash_env = os.getenv("VIRE_DISABLE_FLASH", "").strip() in {"1", "true", "yes"}
-        is_jina = ("jinaai/" in name_l) or ("jina-embeddings" in name_l) or ("jina" in name_l)
+        disable_flash_env = os.getenv("VIRE_DISABLE_FLASH", "").strip() in {
+            "1",
+            "true",
+            "yes",
+        }
+        is_jina = (
+            ("jinaai/" in name_l) or ("jina-embeddings" in name_l) or ("jina" in name_l)
+        )
 
         use_flash = (not disable_flash_env) and (not is_jina)
 
@@ -118,9 +140,13 @@ class LLMEmbedder:
         else:
             # jina or env disabled flash -> default init (no flash)
             if is_jina:
-                self._logger.warning("[LLM] Detected jina model -> disable flash_attention_2 (stability fix).")
+                self._logger.warning(
+                    "[LLM] Detected jina model -> disable flash_attention_2 (stability fix)."
+                )
             if disable_flash_env:
-                self._logger.warning("[LLM] VIRE_DISABLE_FLASH=1 -> disable flash_attention_2.")
+                self._logger.warning(
+                    "[LLM] VIRE_DISABLE_FLASH=1 -> disable flash_attention_2."
+                )
             st = ST(
                 model_name,
                 device=device,
@@ -134,7 +160,9 @@ class LLMEmbedder:
         if self.max_len is not None:
             try:
                 self._st.max_seq_length = int(self.max_len)
-                self._logger.warning(f"[LLM] Set SentenceTransformer.max_seq_length={self.max_len}")
+                self._logger.warning(
+                    f"[LLM] Set SentenceTransformer.max_seq_length={self.max_len}"
+                )
             except Exception:
                 pass
 
@@ -143,7 +171,9 @@ class LLMEmbedder:
                 if tok is not None:
                     tok.model_max_length = int(self.max_len)
                     tok.truncation_side = "right"
-                    self._logger.warning(f"[LLM] Set tokenizer.model_max_length={self.max_len}")
+                    self._logger.warning(
+                        f"[LLM] Set tokenizer.model_max_length={self.max_len}"
+                    )
             except Exception:
                 pass
 
@@ -161,9 +191,9 @@ class LLMEmbedder:
 
     def _truncate_texts_if_needed(self, texts: List[str]) -> List[str]:
         """
-        Truncate theo TOKEN bằng tokenizer nếu có.
-        KHÔNG truyền (truncation/max_length) vào SentenceTransformer.encode()
-        vì nhiều model sẽ ném ValueError "additional keyword arguments...".
+        Truncate by token count using the tokenizer if available.
+        Does NOT pass (truncation/max_length) to SentenceTransformer.encode()
+        because many models raise ValueError "additional keyword arguments...".
         """
         if self.max_len is None or not texts:
             return texts
@@ -174,7 +204,7 @@ class LLMEmbedder:
 
         tok = getattr(self._st, "tokenizer", None)
         if tok is None:
-            # fallback char-level (an toàn)
+            # fallback char-level (safe)
             return [t[: self.max_len] for t in texts]
 
         try:
@@ -194,7 +224,9 @@ class LLMEmbedder:
             out = tok.batch_decode(input_ids, skip_special_tokens=True)
             return out
         except Exception as e:
-            self._logger.warning(f"[LLM] Tokenizer truncate failed ({e}). Falling back to char-truncate.")
+            self._logger.warning(
+                f"[LLM] Tokenizer truncate failed ({e}). Falling back to char-truncate."
+            )
             return [t[: self.max_len] for t in texts]
 
     # ----------------- core encode helpers -----------------
@@ -207,12 +239,12 @@ class LLMEmbedder:
         is_query: bool,
     ) -> np.ndarray:
         """
-        Encode 1 batch. Nếu is_query=True và model có prompt 'query'
-        thì dùng prompt_name='query' như Qwen khuyến nghị.
+        Encode one batch. If is_query=True and the model has a 'query' prompt,
+        pass prompt_name='query' as recommended by Qwen.
 
         IMPORTANT:
-          - Không truyền truncation/max_length vào encode().
-          - Truncation đã xử lý ở _truncate_texts_if_needed().
+          - Do not pass truncation/max_length to encode().
+          - Truncation is handled in _truncate_texts_if_needed().
         """
         encode_kwargs = dict(
             batch_size=batch_size,
@@ -236,11 +268,27 @@ class LLMEmbedder:
     # ----------------- public APIs -----------------
 
     def embed(self, texts: List[str]) -> np.ndarray:
-        """Embed (doc-mode)."""
+        """Embed texts in document mode.
+
+        Args:
+            texts: Input texts.
+
+        Returns:
+            np.ndarray: Embedding matrix.
+        """
         return self._embed_generic(texts, is_query=False)
 
     def embed_queries(self, texts: List[str]) -> np.ndarray:
-        """Embed (query-mode, dùng prompt_name='query' nếu có)."""
+        """Embed texts in query mode.
+
+        Uses `prompt_name='query'` when supported by the loaded model.
+
+        Args:
+            texts: Input query texts.
+
+        Returns:
+            np.ndarray: Query embedding matrix.
+        """
         return self._embed_generic(texts, is_query=True)
 
     # ----------------- internal generic loop -----------------
@@ -264,16 +312,20 @@ class LLMEmbedder:
         for start in it:
             while True:
                 try:
-                    batch = texts[start: start + bs]
+                    batch = texts[start : start + bs]
                     batch = self._truncate_texts_if_needed(batch)
                     arr = self._encode_batch(batch, batch_size=bs, is_query=is_query)
                     out_chunks.append(arr)
                     break
                 except RuntimeError as e:
                     msg = str(e).lower()
-                    if ("out of memory" in msg or "cuda" in msg) and bs > self.min_batch_size:
+                    if (
+                        "out of memory" in msg or "cuda" in msg
+                    ) and bs > self.min_batch_size:
                         new_bs = max(self.min_batch_size, bs // 2)
-                        self._logger.warning(f"[LLM] OOM with batch_size={bs}. Retrying with batch_size={new_bs}.")
+                        self._logger.warning(
+                            f"[LLM] OOM with batch_size={bs}. Retrying with batch_size={new_bs}."
+                        )
                         bs = new_bs
                         continue
                     raise
@@ -282,5 +334,10 @@ class LLMEmbedder:
 
     @property
     def dim(self) -> int:
+        """Return embedding dimensionality.
+
+        Returns:
+            int: Embedding dimension.
+        """
         arr = self._encode_batch(["dimension probe"], batch_size=1, is_query=False)
         return int(arr.shape[1])

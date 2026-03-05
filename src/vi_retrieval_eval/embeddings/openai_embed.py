@@ -12,8 +12,8 @@ from ..progress import iter_progress
 @register("openai")
 class OpenAIEmbedder:
     """
-    Dùng OpenAI embeddings (SDK >= 1.0).
-    Yêu cầu:
+    OpenAI embeddings backend (SDK >= 1.0).
+    Requirements:
       - Env: OPENAI_API_KEY
       - pip install openai>=1.0
     """
@@ -32,13 +32,17 @@ class OpenAIEmbedder:
         try:
             from openai import OpenAI  # type: ignore
         except Exception as e:
-            raise RuntimeError("Please `pip install openai>=1.0` to use OpenAI embeddings") from e
+            raise RuntimeError(
+                "Please `pip install openai>=1.0` to use OpenAI embeddings"
+            ) from e
 
         if not os.getenv("OPENAI_API_KEY"):
             raise RuntimeError("Missing OPENAI_API_KEY in environment")
 
-        # Khởi tạo client; hỗ trợ org/project nếu có
-        self.client = OpenAI(organization=organization, project=project)  # kwargs None sẽ bị bỏ qua
+        # Initialize client; supports org/project kwargs if provided
+        self.client = OpenAI(
+            organization=organization, project=project
+        )  # None kwargs are ignored
         self.model = model
         self.batch_size = int(batch_size)
         self.show_progress = bool(show_progress)
@@ -50,19 +54,21 @@ class OpenAIEmbedder:
 
     def _embed_batch(self, batch: List[str]) -> np.ndarray:
         """
-        Gọi embeddings.create cho 1 batch, có retry/backoff.
-        Trả về np.ndarray (B, D) float32 (chưa normalize).
+        Call embeddings.create for one batch, with retry/backoff.
+        Returns np.ndarray (B, D) float32 (unnormalized).
         """
         last_err: Optional[Exception] = None
         for attempt in range(self.max_retries):
             try:
                 resp = self.client.embeddings.create(model=self.model, input=batch)
-                vecs = [np.asarray(item.embedding, dtype=np.float32) for item in resp.data]
+                vecs = [
+                    np.asarray(item.embedding, dtype=np.float32) for item in resp.data
+                ]
                 return np.stack(vecs, axis=0).astype(np.float32)
             except Exception as e:
                 last_err = e
                 if attempt + 1 < self.max_retries:
-                    delay = self.retry_base_delay * (2 ** attempt)
+                    delay = self.retry_base_delay * (2**attempt)
                     self._logger.debug(
                         f"[OpenAI] retry {attempt+1}/{self.max_retries-1} in {delay:.1f}s due to: {e}"
                     )
@@ -73,9 +79,9 @@ class OpenAIEmbedder:
 
     def embed(self, texts: List[str]) -> np.ndarray:
         """
-        Trả về embeddings cho toàn bộ `texts`.
-        - Có progress bar theo batch nếu show_progress=True (cần `tqdm`).
-        - Normalize L2 (mặc định) để dot = cosine (hợp với FAISS IP).
+        Return embeddings for all `texts`.
+        - Batch-level progress bar if show_progress=True (requires `tqdm`).
+        - L2 normalize (default) so dot product equals cosine (compatible with FAISS IP).
         """
         if not texts:
             return np.zeros((0, 0), dtype=np.float32)
@@ -105,6 +111,10 @@ class OpenAIEmbedder:
 
     @property
     def dim(self) -> int:
-        """Chiều embedding (gọi 1 batch nhỏ để đo)."""
+        """Return embedding dimensionality.
+
+        Returns:
+            int: Embedding dimension.
+        """
         tmp = self._embed_batch(["dimension probe"])
         return int(tmp.shape[1])

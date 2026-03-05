@@ -18,60 +18,60 @@ from ..progress import iter_progress
 @register("colbert")
 class ColBERTBackend:
     """
-    ColBERT backend (dùng thư viện chính thức `colbert-ai`) cho vi-retrieval-eval.
+    ColBERT backend (using the official `colbert-ai` library) for vi-retrieval-eval.
 
-    ✅ Đặc điểm:
-      - Sử dụng đúng pipeline ColBERTv2:
-          * Indexer: encode + build index với late interaction.
-          * Searcher: MaxSim search trên corpus.
-      - Trả về full score matrix (Q, N) để tái dùng toàn bộ pipeline:
-          * rank_of_first_gold, evaluate_all, fail@K, v.v.
+    Features:
+      - Uses the full ColBERTv2 pipeline:
+          * Indexer: encode + build index with late interaction.
+          * Searcher: MaxSim search over the corpus.
+      - Returns the full score matrix (Q, N) for use in the complete pipeline:
+          * rank_of_first_gold, evaluate_all, fail@K, etc.
 
-    ⚠️ Lưu ý:
-      - KHÔNG phải dense-embedding kiểu single-vector → không dùng với DenseFAISS.
-      - Được tích hợp qua get_embedder("colbert", model_name=..., batch_size=..., show_progress=...).
-      - `runner.py` hiện đang gọi:
+    Note:
+      - NOT a single-vector dense embedding — do not use with DenseFAISS.
+      - Integrated via get_embedder("colbert", model_name=..., batch_size=..., show_progress=...).
+      - `runner.py` calls:
             embedder.build_docs(contexts)
             scores = embedder.score(questions)
 
-    Cần cài (theo env của bạn hiện tại):
+    Install (per the current environment):
         pip install "colbert-ai==0.2.22" --no-deps
         pip install faiss-cpu ujson gitpython transformers
-    và PyTorch (2.x) + FAISS đã ok.
+    PyTorch (2.x) + FAISS required.
     """
 
     def __init__(
         self,
-        # alias để hợp với get_embedder(...)
+        # alias for compatibility with get_embedder(...)
         model_name: Optional[str] = None,
-        # cho phép truyền thẳng checkpoint nếu muốn
+        # allow passing checkpoint directly
         checkpoint: Optional[str] = None,
-        # root mặc định: cache/colbert_indexes (runner nên override theo dataset)
+        # default root: cache/colbert_indexes (runner should override per dataset)
         root: str = os.path.join("cache", "colbert_indexes"),
         index_name: str = "colbert_index",
         nbits: int = 2,
         doc_maxlen: int = 256,
         k_search: Optional[int] = None,
         show_progress: bool = True,
-        batch_size: int = 16,  # được get_embedder truyền vào, nhưng ColBERT-ai tự lo, nên tạm không dùng
-        **_: object,          # nuốt bớt keyword thừa nếu sau này có thêm
+        batch_size: int = 16,  # passed by get_embedder but ColBERT-ai manages its own batching; unused
+        **_: object,  # absorb extra keyword args for future compatibility
     ) -> None:
         """
         Args:
-            model_name: tên HF model (sẽ map sang checkpoint, ví dụ 'colbert-ir/colbertv2.0').
-            checkpoint: nếu truyền trực tiếp checkpoint thì ưu tiên cái này.
-            root: thư mục root cho ColBERT (experiments/, indexes/…).
-                  Thực tế nên được runner set thành cache/colbert_indexes/<dataset_name>.
-            index_name: tên index trong ColBERT.
-            nbits: số bit residual compression (ColBERTConfig).
-            doc_maxlen: max tokens cho passage.
-            k_search: số doc top-k mỗi query; nếu None sẽ được suy trong _search_all.
-            show_progress: bật/tắt tqdm.
-            batch_size: không dùng trực tiếp, chỉ để tương thích với get_embedder.
+            model_name: HF model name (mapped to checkpoint, e.g. 'colbert-ir/colbertv2.0').
+            checkpoint: if provided, takes priority over model_name.
+            root: root directory for ColBERT (experiments/, indexes/, etc.).
+                  Should be set by runner to cache/colbert_indexes/<dataset_name>.
+            index_name: name of the ColBERT index.
+            nbits: residual compression bits (ColBERTConfig).
+            doc_maxlen: max tokens per passage.
+            k_search: top-k docs per query; inferred in _search_all if None.
+            show_progress: enable/disable tqdm.
+            batch_size: not used directly; present for get_embedder compatibility.
         """
         self.logger = logging.getLogger("vi-retrieval-eval")
 
-        # Import LAZY để không crash nếu user không dùng ColBERT
+        # Lazy import to avoid crashing if the user doesn't install ColBERT
         try:
             from colbert.infra import Run, RunConfig, ColBERTConfig  # type: ignore
             from colbert import Indexer, Searcher  # type: ignore
@@ -82,15 +82,14 @@ class ColBERTBackend:
                 "and ensure PyTorch + FAISS are available."
             ) from e
 
-        # Lưu reference class (để dùng sau, tránh re-import mỗi lần)
+        # Store class references to avoid re-importing on each call
         self.Run = Run
         self.RunConfig = RunConfig
         self.ColBERTConfig = ColBERTConfig
         self.Indexer = Indexer
         self.Searcher = Searcher
 
-        # Ưu tiên checkpoint nếu truyền trực tiếp, ngược lại lấy từ model_name,
-        # cuối cùng fallback về colbert-ir/colbertv2.0
+        # Priority: explicit checkpoint > model_name > default fallback
         if checkpoint is not None:
             self.checkpoint = checkpoint
         elif model_name is not None:
@@ -102,16 +101,18 @@ class ColBERTBackend:
         self.index_name = index_name
         self.nbits = int(nbits)
         self.doc_maxlen = int(doc_maxlen)
-        self.k_search_default = k_search  # có thể None
+        self.k_search_default = k_search  # may be None
         self.show_progress = bool(show_progress)
 
-        # heartbeat interval (seconds) khi ColBERT encode/index mà không in progress
+        # heartbeat interval (seconds) during ColBERT encode/index when progress is not visible
         self._heartbeat_sec = 10
 
         os.makedirs(self.root, exist_ok=True)
 
         self._num_docs: Optional[int] = None
-        self._contexts: Optional[List[str]] = None  # giữ lại để Searcher biết collection
+        self._contexts: Optional[List[str]] = (
+            None  # retained so Searcher knows the collection
+        )
 
         self.logger.info(
             "[ColBERT] Initialized backend with checkpoint=%s, root=%s, index_name=%s",
@@ -121,13 +122,13 @@ class ColBERTBackend:
         )
 
     # ------------------------------------------------------------------
-    # Internal: build index từ contexts (passages)
+    # Internal: build index from contexts (passages)
     # ------------------------------------------------------------------
     def _build_index(self, contexts: List[str]) -> None:
         """
-        Xây index ColBERT trên `contexts` (list[str]).
+        Build a ColBERT index from `contexts` (list[str]).
 
-        Gọi mỗi lần cho một corpus (ví dụ, sau khi sampling/dedup).
+        Called once per corpus (e.g., after sampling/dedup).
         """
         if not contexts:
             self.logger.warning("[ColBERT] _build_index called with empty contexts.")
@@ -136,7 +137,7 @@ class ColBERTBackend:
             return
 
         self._num_docs = len(contexts)
-        self._contexts = list(contexts)  # giữ lại cho Searcher
+        self._contexts = list(contexts)  # retained so Searcher knows the collection
 
         self.logger.info(
             "[ColBERT] Building index for %d documents (doc_maxlen=%d, nbits=%d) ...",
@@ -145,7 +146,7 @@ class ColBERTBackend:
             self.nbits,
         )
 
-        # ---- heartbeat thread: để biết chắc là không treo ----
+        # ---- heartbeat thread: ensures we know the process isn't frozen ----
         stop_flag = {"stop": False}
 
         def _heartbeat() -> None:
@@ -162,14 +163,14 @@ class ColBERTBackend:
         hb.start()
 
         try:
-            # nranks=1: dùng 1 GPU / tiến trình
+            # nranks=1: use one GPU / process
             with self.Run().context(
                 self.RunConfig(
                     nranks=1,
                     experiment="vi-retrieval-eval",
-                    # QUAN TRỌNG: root ở đây → mọi experiments, plans, logs đều nằm trong self.root
+                    # IMPORTANT: root here → all experiments, plans, logs live under self.root
                     root=self.root,
-                    # ✅ giảm nguy cơ deadlock do fork/tokenizers
+                    # reduce deadlock risk from fork/tokenizers
                     avoid_fork_if_possible=True,
                 )
             ):
@@ -181,11 +182,11 @@ class ColBERTBackend:
 
                 indexer = self.Indexer(checkpoint=self.checkpoint, config=config)
 
-                # collection: có thể là list[str]; ColBERT sẽ tự gán pid = index
+                # collection may be list[str]; ColBERT assigns pid = position index
                 indexer.index(
                     name=self.index_name,
                     collection=self._contexts,
-                    overwrite=True,  # benchmark corpus nhỏ, rebuild mỗi lần OK
+                    overwrite=True,  # benchmark corpus is small; rebuilding each run is fine
                 )
         finally:
             stop_flag["stop"] = True
@@ -197,7 +198,7 @@ class ColBERTBackend:
         self.logger.info("[ColBERT] Index build completed for %d docs.", self._num_docs)
 
     # ------------------------------------------------------------------
-    # Internal: search tất cả queries → scores(Q, N)
+    # Internal: search all queries → scores(Q, N)
     # ------------------------------------------------------------------
     def _search_all(
         self,
@@ -205,14 +206,14 @@ class ColBERTBackend:
         ks: List[int],
     ) -> np.ndarray:
         """
-        Chạy search ColBERT cho toàn bộ queries và trả về scores(Q, N).
+        Run ColBERT search for all queries and return scores(Q, N).
 
-        Ý tưởng:
-          - Với mỗi query q:
+        Approach:
+          - For each query q:
               pids, ranks, _ = searcher.search(q, k=k_search)
-          - Đặt score(q, pid) = k_search + 1 - rank  (rank bắt đầu từ 1).
-            Các doc không trong top-k → score = 0 (coi như rất thấp).
-          - Như vậy thứ hạng theo score trùng với thứ hạng ColBERT.
+          - Set score(q, pid) = k_search + 1 - rank  (rank starts at 1).
+            Docs outside top-k get score = 0 (treated as very low).
+          - Score-based ranking therefore matches ColBERT ranking.
         """
         if self._num_docs is None or self._contexts is None:
             raise RuntimeError("[ColBERT] Index not built. Call _build_index() first.")
@@ -224,7 +225,7 @@ class ColBERTBackend:
         if Q == 0 or N == 0:
             return scores
 
-        # k_search: max(max(ks), 10) nhưng không vượt quá N
+        # k_search: max(max(ks), 10) but capped at N
         k_search = self.k_search_default
         if k_search is None:
             k_search = max(max(ks) if ks else 0, 10)
@@ -237,7 +238,7 @@ class ColBERTBackend:
                 nranks=1,
                 experiment="vi-retrieval-eval",
                 root=self.root,
-                # ✅ đồng bộ với index, giảm deadlock
+                # synchronize with index, reduce deadlock risk
                 avoid_fork_if_possible=True,
             )
         ):
@@ -262,7 +263,7 @@ class ColBERTBackend:
 
             for qi in it:
                 q = questions[qi]
-                # ColBERT trả về pid, rank, colbert_score
+                # ColBERT returns pid, rank, colbert_score
                 pids, ranks, _colbert_scores = searcher.search(q, k=k_search)
 
                 for pid, r in zip(pids, ranks):
@@ -274,34 +275,36 @@ class ColBERTBackend:
         return scores
 
     # ------------------------------------------------------------------
-    # Public: API cho pipeline – build_docs + score
+    # Public: pipeline API – build_docs + score
     # ------------------------------------------------------------------
     def build_docs(self, contexts: List[str]) -> None:
-        """
-        Được `runner.run()` gọi để build index từ list `contexts`.
+        """Build a ColBERT index from contexts.
+
+        Args:
+            contexts: Corpus passages/documents to index.
         """
         self._build_index(contexts)
 
     def score(self, questions: List[str]) -> np.ndarray:
         """
-        Được `runner.run()` gọi sau khi build_docs().
-        Trả về ma trận score (Q, N).
+        Called by `runner.run()` after build_docs().
+        Returns the score matrix (Q, N).
 
         IMPORTANT:
-        - Không được dùng ks=[N], vì sẽ khiến ColBERT search k=N (rất chậm).
-        - Mặc định dùng ks=[1,10,20], phù hợp P@1, MRR@10, nDCG@10, R@10, R@20.
+        - Do not pass ks=[N]; this would cause ColBERT to search k=N (very slow).
+        - Default ks=[1,10,20] suits P@1, MRR@10, nDCG@10, R@10, R@20.
         """
         if self._num_docs is None:
             raise RuntimeError(
-                "[ColBERT] score() được gọi trước khi build_docs(). "
-                "Hãy gọi embedder.build_docs(contexts) trước."
+                "[ColBERT] score() called before build_docs(). "
+                "Call embedder.build_docs(contexts) first."
             )
 
         ks = [1, 10, 20]
         return self._search_all(questions, ks)
 
     # ------------------------------------------------------------------
-    # Public: API "real" – nếu muốn gọi trực tiếp ngoài runner
+    # Public: standalone API – for direct use outside runner
     # ------------------------------------------------------------------
     def run(
         self,
@@ -311,22 +314,22 @@ class ColBERTBackend:
         out_dir: Optional[str] = None,
     ) -> np.ndarray:
         """
-        API tiện nếu bạn muốn dùng ColBERTBackend độc lập:
+        Convenience API for using ColBERTBackend independently:
 
             backend = ColBERTBackend(...)
             scores = backend.run(questions, contexts, ks, out_dir)
 
         Args:
-            questions: list câu hỏi (Q).
-            contexts: list passages/docs (N).
-            ks: danh sách k (P@k, R@k, MRR@k...), dùng để suy ra k_search.
-            out_dir: thư mục output; nếu set, có thể dùng để đặt root riêng cho ColBERT.
+            questions: list of query strings (Q).
+            contexts: list of passages/docs (N).
+            ks: list of k values (P@k, R@k, MRR@k ...) used to determine k_search.
+            out_dir: output directory; if set, can be used to set a custom ColBERT root.
 
         Returns:
-            scores: np.ndarray shape (Q, N), score(q, d) theo thứ hạng ColBERT.
+            scores: np.ndarray shape (Q, N), score(q, d) per ColBERT ranking.
         """
         if out_dir is not None:
-            # Nếu muốn map 1-1 theo out_dir:
+            # Map 1-to-1 according to out_dir if desired:
             base_name = os.path.basename(os.path.normpath(out_dir))
             self.root = os.path.join("cache", "colbert_indexes", base_name)
             os.makedirs(self.root, exist_ok=True)
