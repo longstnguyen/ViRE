@@ -72,9 +72,9 @@ K_REF=20     # reference k for fail@K error analysis
 OUTDIR_ROOT="outputs"
 
 # Per-dataset token-level truncation for OOD long-document datasets.
-# ALQAC articles are very long; truncating to 256 tokens avoids OOM
+# ZaloLegalQA articles are very long; truncating to 256 tokens avoids OOM
 # and keeps contexts within most models' effective range.
-ALQAC_MAX_LEN=256
+ZALO_MAX_LEN=256
 
 BM25_K1=1.5  # Okapi BM25 k1
 BM25_B=0.75  # Okapi BM25 b
@@ -106,8 +106,8 @@ setup_dataset() {
   fi
 
   # Apply per-dataset max-len truncation where needed
-  if [[ "$NAME" == "ALQAC" ]]; then
-    MAXLEN_ARGS=(--max-len "$ALQAC_MAX_LEN")
+  if [[ "$NAME" == "ZaloLegalQA" ]]; then
+    MAXLEN_ARGS=(--max-len "$ZALO_MAX_LEN")
   else
     MAXLEN_ARGS=()
   fi

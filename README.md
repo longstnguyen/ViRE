@@ -546,7 +546,7 @@ All results reported in the paper can be reproduced exactly using [`scripts/eval
 - Cached embeddings and FAISS indices for efficient reruns
 - Deterministic text normalization
 
-> **Note on long-document datasets:** for datasets with very long contexts (e.g. ALQAC), pass `--max-len 256` to truncate inputs at the token level before embedding, avoiding OOD inputs and OOM errors. This is applied automatically in `eval_full.sh`.
+> **Note on long-document datasets:** for datasets with very long contexts (e.g. ZaloLegalQA), pass `--max-len 256` to truncate inputs at the token level before embedding, avoiding OOD inputs and OOM errors. This is applied automatically in `eval_full.sh`.
 
 ---
 
