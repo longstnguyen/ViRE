@@ -239,6 +239,7 @@ vi-retrieval-eval --csv data/CSConDa.csv \
 
 # ColBERT (late interaction)
 vi-retrieval-eval --csv data/CSConDa.csv --method colbert \
+  --dense-backend colbert \
   --colbert-model colbert-ir/colbertv2.0 \
   --max-samples 1000 --prefer-unique --dedup --output-dir outputs
 ```
@@ -258,7 +259,7 @@ Not every method needs the same set of flags. The table below shows exactly what
 | `splade+tfidf` | `--splade-model`, `--fusion`                                | $\alpha$ or RRF                              |
 | `splade+bm25`  | `--splade-model`, `--fusion`                                | $\alpha$ or RRF                              |
 | `splade+dense` | `--splade-model`, `--dense-backend`, model flag, `--fusion` | Sparse + dense hybrid                        |
-| `colbert`      | `--colbert-model`                                           | Requires `colbert-ai` installed              |
+| `colbert`      | `--colbert-model`, `--dense-backend colbert`                | Requires `colbert-ai` installed              |
 
 Each dense backend uses a different flag to specify the model checkpoint:
 

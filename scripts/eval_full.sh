@@ -159,6 +159,7 @@ for NAME in "${DATASETS[@]}"; do
        --splade-model "$SPLADE_MODEL"
 
   vire --method colbert \
+       --dense-backend colbert \
        --colbert-model "$COLBERT_MODEL"
 
 done
