@@ -28,7 +28,7 @@ VIRE covers the full retrieval benchmarking lifecycle — from corpus deduplicat
 - Dense (single-vector): OpenAI API, Gemini API, local SBERT (`--dense-backend sbert`), local LLM embedders (`--dense-backend llm`)
 - Sparse neural: SPLADE (`--method splade`)
 - Late interaction: ColBERT / ColBERTv2 (`--method colbert`)
-- Hybrid: dense/SPLADE + TF-IDF or BM25 with $\alpha$-fusion or **Reciprocal Rank Fusion (RRF)**
+- Hybrid: dense/SPLADE + TF-IDF or BM25 with $\alpha$-fusion or Reciprocal Rank Fusion (RRF)
 
 **Vietnamese-aware Preprocessing**
 
@@ -545,6 +545,8 @@ All results reported in the paper can be reproduced exactly using [`scripts/eval
 - Dependency pinning via `pyproject.toml`
 - Cached embeddings and FAISS indices for efficient reruns
 - Deterministic text normalization
+
+> **Note on long-document datasets:** for datasets with very long contexts (e.g. ALQAC), pass `--max-len 256` to truncate inputs at the token level before embedding, avoiding OOD inputs and OOM errors. This is applied automatically in `eval_full.sh`.
 
 ---
 
