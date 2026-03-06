@@ -3,6 +3,7 @@
 import os
 import argparse
 import json
+import logging
 import pandas as pd
 
 # side-effect import to register embedders
@@ -16,6 +17,7 @@ from .dedup import dedup_by_content, remap_gold
 from .sampling import sample_with_flags
 from .textnorm import normalize_for_dedup
 from .stats import compute_dataset_stats
+from .logging_utils import setup_logger
 
 
 def parse_args():
@@ -318,11 +320,12 @@ def main():
     Loads data, executes retrieval, computes metrics, and writes output artifacts.
     """
     args = parse_args()
+    logger = setup_logger(args.log_level, getattr(args, "log_file", None))
 
     # If method=colbert but dense-backend differs, override (runner ignores dense_backend for colbert)
     if args.method.lower() == "colbert" and args.dense_backend != "colbert":
-        print(
-            f"[WARN] --method colbert but --dense-backend={args.dense_backend}. Overriding to 'colbert'."
+        logger.warning(
+            f"--method colbert but --dense-backend={args.dense_backend}. Overriding to 'colbert'."
         )
         args.dense_backend = "colbert"
 
@@ -370,7 +373,7 @@ def main():
 
     if args.show_size:
         print(df.head(3))
-        print(f"[INFO] Loaded {orig_n} rows. Using {len(df)} rows after sampling.")
+        logger.info(f"Loaded {orig_n} rows. Using {len(df)} rows after sampling.")
         key_series = (
             df[args.unique_col]
             .astype(str)
@@ -380,8 +383,8 @@ def main():
                 )
             )
         )
-        print(
-            f"[INFO] Unique {args.unique_col} after sampling (normalized): {key_series.nunique()}"
+        logger.info(
+            f"Unique {args.unique_col} after sampling (normalized): {key_series.nunique()}"
         )
 
     # === Persist the sampled set (1–1, BEFORE additional lower & BEFORE corpus dedup) ===
@@ -415,7 +418,7 @@ def main():
     csv_out = os.path.join(stats_dir, "sampled.csv")
     df_snapshot.to_csv(csv_out, index=False)
     if args.show_size:
-        print(f"[SNAPSHOT] Sampled dataset saved to {csv_out}")
+        logger.info(f"Sampled dataset saved to {csv_out}")
 
     # Dataset statistics for the sampled set (pre-dedup)
     stats = compute_dataset_stats(
@@ -424,7 +427,7 @@ def main():
     )
     save_json(stats, os.path.join(stats_dir, "stats.json"))
     if args.show_size:
-        print(f"[SNAPSHOT] Dataset statistics saved to {stats_dir}/stats.json")
+        logger.info(f"Dataset statistics saved to {stats_dir}/stats.json")
 
     # If qrels provided: filter to subset and save snapshot qrels.filtered.csv
     qrels_filtered_csv = None
@@ -472,8 +475,8 @@ def main():
         qrels_f[[qc, dc, rc]].to_csv(qrels_filtered_csv, index=False)
 
         if args.show_size:
-            print(
-                f"[SNAPSHOT] Qrels filtered saved: {qrels_filtered_count}/{total_positive_in_qrels} → {qrels_filtered_csv}"
+            logger.info(
+                f"Qrels filtered saved: {qrels_filtered_count}/{total_positive_in_qrels} → {qrels_filtered_csv}"
             )
 
     # Meta: full snapshot paths for exact rerun
@@ -536,7 +539,7 @@ def main():
     }
     save_json(meta, os.path.join(stats_dir, "meta.json"))
     if args.show_size:
-        print(f"[SNAPSHOT] Meta saved to {os.path.join(stats_dir, 'meta.json')}")
+        logger.info(f"Meta saved to {os.path.join(stats_dir, 'meta.json')}")
 
     # ==== Build questions/contexts for EVAL ====
     questions = df["question"].astype(str).tolist()
@@ -569,10 +572,10 @@ def main():
         gold_lists = remap_gold(gold_lists, mapping)
         new_n = len(contexts)
         if old_n == new_n:
-            print(f"[INFO] Dedup enabled: no duplicates found (kept {new_n})")
+            logger.info(f"Dedup enabled: no duplicates found (kept {new_n})")
         else:
-            print(
-                f"[INFO] Dedup enabled: removed {old_n - new_n} duplicates (kept {new_n})"
+            logger.info(
+                f"Dedup enabled: removed {old_n - new_n} duplicates (kept {new_n})"
             )
         dedup_suffix = "-dedup"
 
@@ -691,7 +694,9 @@ def main():
                     method_csvs.append((name, fpath))
 
         if not method_csvs:
-            print(f"[INTERSECTION] No fail@{k_ref}.csv found under {dataset_root}")
+            logger.info(
+                f"[INTERSECTION] No fail@{k_ref}.csv found under {dataset_root}"
+            )
         else:
             frames = []
             for mname, fpath in method_csvs:
@@ -701,7 +706,9 @@ def main():
                     frames.append(dfm)
 
             if not frames:
-                print(f"[INTERSECTION] No rows present in fail CSVs for k={k_ref}")
+                logger.info(
+                    f"[INTERSECTION] No rows present in fail CSVs for k={k_ref}"
+                )
             else:
                 all_fail = pd.concat(frames, ignore_index=True)
 
@@ -747,8 +754,10 @@ def main():
                 mat.to_csv(mat_out, index=False)
                 inter.to_csv(inter_out, index=False)
 
-                print(f"[INTERSECTION] Saved per-method matrix → {mat_out}")
-                print(f"[INTERSECTION] Saved ALL-METHODS intersection → {inter_out}")
+                logger.info(f"[INTERSECTION] Saved per-method matrix → {mat_out}")
+                logger.info(
+                    f"[INTERSECTION] Saved ALL-METHODS intersection → {inter_out}"
+                )
                 with pd.option_context(
                     "display.max_colwidth", 120, "display.width", 180
                 ):
