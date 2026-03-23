@@ -575,14 +575,22 @@ VIRE is released as open-source software. The two newly contributed datasets are
 ## Citation
 
 ```bibtex
-@inproceedings{nguyen2026vire,
-  title  = {Which Works Best for Vietnamese? A Practical Study of
-            Information Retrieval Methods across Domains},
-  author = {Nguyen, Long S. T. and Quan, Tho T.},
-  booktitle = {Proceedings of the 19th Conference of the European Chapter
-               of the Association for Computational Linguistics (EACL 2026)},
-  year   = {2026},
-  url    = {https://github.com/longstnguyen/ViRE}
+@inproceedings{nguyen-quan-2026-works,
+    title = "{Which Works Best for Vietnamese? A Practical Study of Information Retrieval Methods across Domains}",
+    author = "Nguyen, Long S. T.  and
+      Quan, Tho",
+    editor = "Demberg, Vera  and
+      Inui, Kentaro  and
+      Marquez, Llu{\'i}s",
+    booktitle = "Findings of the {A}ssociation for {C}omputational {L}inguistics: {EACL} 2026",
+    month = mar,
+    year = "2026",
+    address = "Rabat, Morocco",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2026.findings-eacl.110/",
+    pages = "2098--2119",
+    ISBN = "979-8-89176-386-9",
+    abstract = "Large Language Models (LLMs) have achieved remarkable progress, yet their reliance on parametric knowledge often leads to hallucinations. Retrieval-Augmented Generation (RAG) mitigates this issue by grounding outputs in external documents, where the quality of retrieval is critical. While retrieval methods have been widely benchmarked in English, it remains unclear which approaches are most effective for Vietnamese, a language characterized by informal queries, noisy documents, and limited resources. Prior studies are restricted to clean datasets or narrow domains, leaving fragmented insights. To the best of our knowledge, we present the first comprehensive benchmark of retrieval methods for Vietnamese across multiple real-world domains. We systematically compare lexical, dense, and hybrid methods on datasets spanning education, legal, healthcare, customer support, lifestyle, and Wikipedia, and introduce two new datasets capturing authentic educational counseling and customer service interactions. Beyond reporting benchmark numbers, we distill a set of empirical insights that clarify trade-offs, highlight domain-specific challenges, and provide practical guidance for building robust Vietnamese QA systems. Together, these contributions offer the first large-scale, practice-oriented perspective on Vietnamese retrieval and inform both academic research and real-world deployment in low-resource languages. All datasets and evaluation scripts are available at \url{https://github.com/longstnguyen/ViRE}."
 }
 ```
 
