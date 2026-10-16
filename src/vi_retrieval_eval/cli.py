@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 import os
 import argparse
-import json
-import logging
 import pandas as pd
 
 # side-effect import to register embedders

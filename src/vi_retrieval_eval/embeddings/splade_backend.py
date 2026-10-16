@@ -7,7 +7,6 @@ import logging
 import numpy as np
 
 from .base import register
-from ..progress import iter_progress
 
 
 logger = logging.getLogger("vi-retrieval-eval")

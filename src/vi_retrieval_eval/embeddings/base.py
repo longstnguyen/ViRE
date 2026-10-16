@@ -1,5 +1,5 @@
 # registry + factory
-from typing import Protocol, List, Dict, Optional, Callable, TYPE_CHECKING
+from typing import Protocol, List, Dict, Callable, TYPE_CHECKING
 
 if TYPE_CHECKING:
     import numpy as np

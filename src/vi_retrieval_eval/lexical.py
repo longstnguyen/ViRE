@@ -1,5 +1,5 @@
 # src/vi_retrieval_eval/lexical.py
-from typing import List, Tuple, Optional
+from typing import List, Tuple
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
