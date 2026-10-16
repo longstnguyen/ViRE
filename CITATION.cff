@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use ViRE or its datasets, please cite the accompanying paper."
+title: "ViRE: Vietnamese Information Retrieval Evaluation Toolkit"
+type: software
+authors:
+  - family-names: Nguyen
+    given-names: Long S. T.
+  - family-names: Quan
+    given-names: Tho T.
+repository-code: "https://github.com/longstnguyen/ViRE"
+url: "https://github.com/longstnguyen/ViRE"
+preferred-citation:
+  type: conference-paper
+  title: "Which Works Best for Vietnamese? A Practical Study of Information Retrieval Methods across Domains"
+  authors:
+    - family-names: Nguyen
+      given-names: Long S. T.
+    - family-names: Quan
+      given-names: Tho T.
+  collection-title: "Findings of the Association for Computational Linguistics: EACL 2026"
+  year: 2026
+  month: 3
+  start: 2098
+  end: 2119
+  doi: "10.18653/v1/2026.findings-eacl.110"
+  url: "https://aclanthology.org/2026.findings-eacl.110/"
+  publisher:
+    name: "Association for Computational Linguistics"

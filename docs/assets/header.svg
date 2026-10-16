@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="440" viewBox="0 0 1200 440" role="img" aria-labelledby="title desc">
+<title id="title">ViRE — Vietnamese Information Retrieval Evaluation</title>
+<desc id="desc">A soft pink research toolkit cover with a round piglet holding a book beside ranked passage cards. Ten datasets, six domains, one unified CLI.</desc>
+<rect width="1200" height="440" rx="24" fill="#FFF9F7"/>
+<path d="M836 0H1176Q1200 0 1200 24V416Q1200 440 1176 440H898C831 376 817 309 847 232C878 154 803 77 836 0" fill="#FCE7ED"/>
+<ellipse cx="1034" cy="350" rx="119" ry="17" fill="#EBC7D2"/>
+<g font-family="Arial, Helvetica, sans-serif">
+<rect x="48" y="37" width="240" height="34" rx="17" fill="#F7E0E8"/>
+<text x="168" y="59" text-anchor="middle" font-size="16" font-weight="bold" letter-spacing="0.6" fill="#A25973">FINDINGS OF EACL 2026</text>
+<text x="43" y="202" font-size="133" font-weight="bold" letter-spacing="-6" fill="#B7607F">ViRE<tspan fill="#D894AA">.</tspan></text>
+<text x="50" y="249" font-size="27" fill="#48343C">Vietnamese Information Retrieval</text>
+<text x="50" y="284" font-size="27" fill="#48343C">Evaluation Toolkit</text>
+<text x="50" y="325" font-size="24" fill="#866C76">A little curiosity. A lot of relevant passages.</text>
+<g font-size="20" fill="#A25973">
+<rect x="48" y="364" width="148" height="38" rx="19" fill="#F7E0E8"/><text x="122" y="390" text-anchor="middle"><tspan font-weight="bold">10</tspan> datasets</text>
+<rect x="208" y="364" width="140" height="38" rx="19" fill="#F6E2EB"/><text x="278" y="390" text-anchor="middle"><tspan font-weight="bold">6</tspan> domains</text>
+<rect x="360" y="364" width="164" height="38" rx="19" fill="#F7E0E8"/><text x="442" y="390" text-anchor="middle"><tspan font-weight="bold">1</tspan> unified CLI</text>
+</g>
+</g>
+<!-- Ranked passage cards -->
+<g transform="translate(714 67) rotate(-7)">
+<rect x="9" y="9" width="225" height="141" rx="16" fill="#EACBD5"/>
+<rect width="225" height="141" rx="16" fill="#FFFFFF" stroke="#E6BAC9" stroke-width="2"/>
+<rect x="17" y="17" width="142" height="26" rx="12" fill="#F6E2EB"/>
+<text x="88" y="35" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#9D6884">FIND EVIDENCE</text>
+<g stroke-linecap="round" stroke-width="7"><path d="M51 64H194" stroke="#C97E99"/><path d="M51 91H176" stroke="#E1B4C4"/><path d="M51 118H188" stroke="#EFDBE2"/></g>
+<g fill="#D894AA"><circle cx="26" cy="64" r="5"/><circle cx="26" cy="91" r="5"/><circle cx="26" cy="118" r="5"/></g>
+</g>
+<!-- A round piglet holding a book -->
+<g stroke="#B9738B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<path d="M1009 151Q976 116 948 134Q927 145 930 178Q935 193 948 181L975 156Z" fill="#F3B6C9"/>
+<path d="M1059 151Q1092 116 1120 134Q1141 145 1138 178Q1133 193 1120 181L1093 156Z" fill="#F3B6C9"/>
+<path d="M979 146Q951 135 940 151L938 177Q953 167 966 153 M1089 146Q1117 135 1128 151L1130 177Q1115 167 1102 153" fill="#E99DB6" stroke="none"/>
+<path d="M1110 294C1144 308 1153 278 1136 276C1121 275 1128 295 1143 290" fill="none" stroke="#DA91AB" stroke-width="8"/>
+<ellipse cx="1034" cy="284" rx="101" ry="70" fill="#F7C6D6"/>
+<ellipse cx="1034" cy="214" rx="97" ry="80" fill="#FBD4E0"/>
+<ellipse cx="982" cy="337" rx="29" ry="17" fill="#F3B6C9"/>
+<ellipse cx="1086" cy="337" rx="29" ry="17" fill="#F3B6C9"/>
+<path d="M982 338V350 M1086 338V350" stroke="#DA91AB"/>
+<g stroke="none"><ellipse cx="978" cy="234" rx="21" ry="12" fill="#EDA0BB"/><ellipse cx="1090" cy="234" rx="21" ry="12" fill="#EDA0BB"/>
+<ellipse cx="1002" cy="210" rx="5" ry="7" fill="#654653"/><ellipse cx="1066" cy="210" rx="5" ry="7" fill="#654653"/>
+<circle cx="1003" cy="208" r="1.5" fill="#FFF9F7"/><circle cx="1067" cy="208" r="1.5" fill="#FFF9F7"/></g>
+<ellipse cx="1034" cy="234" rx="26" ry="18" fill="#EEA4BD" stroke="#D78BA6" stroke-width="2"/>
+<g fill="#B96D88" stroke="none"><ellipse cx="1025" cy="233" rx="3.5" ry="5"/><ellipse cx="1043" cy="233" rx="3.5" ry="5"/></g>
+<path d="M1027 258Q1034 264 1041 258" fill="none" stroke="#A25E76" stroke-width="2.5"/>
+<path d="M961 273Q997 263 1034 279Q1071 263 1107 273V332Q1070 321 1034 338Q998 321 961 332Z" fill="#B4C9C5" stroke="#789F9A"/>
+<path d="M1034 279V338" fill="none" stroke="#789F9A"/>
+<path d="M976 287Q995 285 1019 293 M976 299Q995 297 1019 305 M1049 293Q1071 285 1091 287 M1049 305Q1071 297 1091 299" fill="none" stroke="#F7FBF9" stroke-width="3"/>
+<ellipse cx="961" cy="294" rx="17" ry="21" transform="rotate(-20 961 294)" fill="#F7C6D6"/>
+<ellipse cx="1107" cy="294" rx="17" ry="21" transform="rotate(20 1107 294)" fill="#F7C6D6"/>
+</g>
+<g fill="#CF9DB7"><path d="M1138 83L1143 95L1155 100L1143 105L1138 117L1133 105L1121 100L1133 95Z"/><circle cx="931" cy="307" r="5"/><circle cx="1163" cy="271" r="5"/></g>
+<path d="M770 260L774 270L784 274L774 278L770 288L766 278L756 274L766 270Z" fill="#D6A0B3"/>
+<text x="1034" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#866C76"><tspan x="1034">good questions deserve</tspan><tspan x="1034" dy="25">good context.</tspan></text>
+</svg>

@@ -54,6 +54,7 @@ import math
 import os
 import re
 from collections import defaultdict
+from html import escape
 from typing import Dict, List, Optional, Tuple, Set
 
 
@@ -432,7 +433,7 @@ def build_markdown_report(
             )
         ]
         for model in dense_models:
-            rows.append((f"**Dense model: {model}**", None))
+            rows.append((f"Dense model: {model}", None))
             for method in DENSE_METHODS_ORDER:
                 if method in ds_model_methods[ds].get(model, set()):
                     vdict = best_rows.get((ds, model, method), {})
@@ -459,40 +460,52 @@ def build_markdown_report(
 
         best_mark: Dict[Tuple[str, int], str] = {}
         for mk, pairs in col_pairs.items():
-            pairs.sort(reverse=True)
-            if pairs:
-                best_mark[(mk, pairs[0][1])] = "best"
-            if len(pairs) > 1:
-                best_mark[(mk, pairs[1][1])] = "second"
+            # Rank displayed values so ties at the report's precision share a mark.
+            scale = 100 if as_pct else 1
+            displayed = [(round(v * scale, ndigits), i) for v, i in pairs]
+            distinct = sorted({v for v, _ in displayed}, reverse=True)
+            for v, i in displayed:
+                if v == distinct[0]:
+                    best_mark[(mk, i)] = "best"
+                elif len(distinct) > 1 and v == distinct[1]:
+                    best_mark[(mk, i)] = "second"
 
         # ------------------------------------------------------------------
         # Render table
         # ------------------------------------------------------------------
         header = ["Method"] + metrics_labels
         table_lines = [
-            " | ".join(header),
-            " | ".join(["---"] * len(header)),
+            "<table>",
+            "<thead><tr>" + "".join(
+                f'<th align="{"left" if j == 0 else "right"}">{escape(label)}</th>'
+                for j, label in enumerate(header)
+            ) + "</tr></thead>",
+            "<tbody>",
         ]
 
         for i, (display, vdict) in enumerate(rows):
+            label = escape(display.strip().replace(r"$\alpha$", "α"))
             if vdict is None:
-                cells = [display] + [""] * len(metrics_keys)
+                table_lines.append(
+                    f'<tr><th colspan="{len(header)}" align="left">{label}</th></tr>'
+                )
             else:
-                cells = [display]
+                cells = [f'<td align="left">{label}</td>']
                 for mk in metrics_keys:
                     v = vdict.get(mk)
                     if not is_number(v):
-                        cells.append("—")
+                        cells.append('<td align="right">—</td>')
                         continue
                     raw = fmt_val(float(v), ndigits, as_pct)
                     mark = best_mark.get((mk, i))
                     if mark == "best":
-                        raw = f"**{raw}**"
+                        raw = f"<strong>{raw}</strong>"
                     elif mark == "second":
-                        raw = f"<u>{raw}</u>"
-                    cells.append(raw)
-            table_lines.append(" | ".join(cells))
+                        raw = f"<ins>{raw}</ins>"
+                    cells.append(f'<td align="right">{raw}</td>')
+                table_lines.append("<tr>" + "".join(cells) + "</tr>")
 
+        table_lines.extend(["</tbody>", "</table>"])
         parts.append("\n".join(table_lines))
         parts.append("")
 

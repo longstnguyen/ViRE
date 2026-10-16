@@ -1,609 +1,276 @@
-# VIRE: Vietnamese Information Retrieval Evaluation Toolkit
+<p align="center">
+  <img src="docs/assets/header.svg" width="100%" alt="ViRE — Vietnamese Information Retrieval Evaluation. Ten datasets, six domains, one toolkit.">
+</p>
 
-A lightweight, extensible toolkit for benchmarking lexical, dense, sparse, late-interaction, and hybrid retrieval on Vietnamese datasets.
+<h2 align="center">Which Works Best for Vietnamese?<br>A Practical Study of Information Retrieval Methods across Domains</h2>
 
-> This repository accompanies the paper:  
-> **Which Works Best for Vietnamese? A Practical Study of Information Retrieval Methods across Domains**  
-> Long S. T. Nguyen, Tho T. Quan. Accepted at _EACL 2026_.
+<p align="center">
+  <a href="https://aclanthology.org/2026.findings-eacl.110/"><img src="https://img.shields.io/badge/Findings_of_EACL-2026-B66A87?style=flat-square&amp;labelColor=55414B" alt="Findings of EACL 2026"></a>
+  <a href="https://aclanthology.org/2026.findings-eacl.110/"><img src="https://img.shields.io/badge/Paper-ACL_Anthology-D590AA?style=flat-square&amp;labelColor=55414B" alt="Paper on ACL Anthology"></a>
+  <a href="#quickstart"><img src="https://img.shields.io/badge/Python-3.11+-B66A87?style=flat-square&amp;labelColor=55414B" alt="Quickstart with Python 3.11 or newer"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/Code-MIT-D590AA?style=flat-square&amp;labelColor=55414B" alt="Code license: MIT"></a>
+</p>
 
----
+<p align="center">
+  <a href="#overview">Overview</a> · <a href="#quickstart">Quickstart</a> · <a href="#methods">Methods</a> · <a href="#datasets">Datasets</a> · <a href="#results">Results</a> · <a href="#findings">Findings</a> · <a href="#evaluate--extend">Evaluate &amp; Extend</a> · <a href="#citation">Citation</a>
+</p>
 
-## Why VIRE?
+<p align="center">
+  <strong>Long S. T. Nguyen<sup>1,2,3</sup> · Tho T. Quan<sup>1,2</sup></strong><br><br>
+  <sup>1</sup> URA Research Group, Ho Chi Minh City University of Technology (HCMUT), Vietnam<br>
+  <sup>2</sup> Vietnam National University Ho Chi Minh City, Vietnam<br>
+  <sup>3</sup> Center for AI Research (CAIR), VinUniversity, Vietnam
+</p>
 
-Benchmarking retrieval fairly is harder than it looks — different tools use different preprocessing, sampling, and evaluation conventions, making comparisons unreliable. VIRE removes that friction by providing a single, reproducible CLI that covers the full spectrum from classical lexical methods to dense neural and hybrid approaches, all under the same data pipeline.
+## Overview
 
-- Unified CLI to benchmark BM25, TF-IDF, Dense, SPLADE, ColBERT, and hybrid retrieval with fair, reproducible settings
-- Dataset-agnostic schema — plug in any CSV/qrels following the standard specification
-- Full pipeline: normalization $\rightarrow$ indexing $\rightarrow$ evaluation $\rightarrow$ error analysis $\rightarrow$ reporting
+**ViRE** is a toolkit for evaluating Vietnamese information retrieval across domains. It brings lexical, dense, learned-sparse, late-interaction, and hybrid retrieval into one CLI, with shared data preparation, ranking metrics, and per-query error analysis.
 
----
+The accompanying study compares retrieval methods on **10 datasets across 6 domains** and introduces **EduCoQA** and **CSConDa**, drawn from educational counseling and customer-service interactions. The toolkit makes it straightforward to compare a new encoder, inspect retrieval failures, or evaluate your own question–document pairs.
 
-## Core Features
-
-VIRE covers the full retrieval benchmarking lifecycle — from corpus deduplication and normalization through indexing, scoring, and multi-metric evaluation — with support for a wide range of retrieval paradigms and embedding backends.
-
-**Diverse Retrieval Methods**
-
-- Lexical: TF-IDF, BM25
-- Dense (single-vector): OpenAI API, Gemini API, local SBERT (`--dense-backend sbert`), local LLM embedders (`--dense-backend llm`)
-- Sparse neural: SPLADE (`--method splade`)
-- Late interaction: ColBERT / ColBERTv2 (`--method colbert`)
-- Hybrid: dense/SPLADE + TF-IDF or BM25 with $\alpha$-fusion or Reciprocal Rank Fusion (RRF)
-
-**Vietnamese-aware Preprocessing**
-
-- NFKC normalization, invisible-character removal, emoji stripping, lowercase, space collapsing (`--normalize-all`)
-- Random and unique-context sampling with corpus deduplication
-
-**Evaluation and Reporting**
-
-- Precision@_k_, Recall@_k_, HitRate@_k_, MRR@_k_, MAP@_k_, nDCG@_k_, _R_-Precision, First Relevant Rank (mean, median, found rate)
-- Outputs: `metrics.json`, `ranks.json`, `errors/fail@K.csv`, cached embeddings & FAISS index
-- Markdown aggregation via `scripts/summarize_report.py`
-
-**Error Analysis**
-
-- Exports `errors/fail@K.csv` per run
-- Cross-method failure intersection with `--save-intersection`
-- Per-query diagnostics: query, gold docs, retrieved docs, scores
-
-**Embedding Backends**
-
-- OpenAI and Gemini APIs (cloud, no GPU needed)
-- Local SBERT (`sbert`): any `sentence-transformers`-compatible model
-- Local LLM embedder (`llm`): large instruction-following models (Qwen3-Embedding, BGE-Gemma2, Jina v3, etc.) with flash-attention support and OOM-safe batching
-- SPLADE sparse encoder (via `sentence-transformers` SparseEncoder)
-- ColBERT / ColBERTv2 (via `colbert-ai`)
-
-**Reusability and Extensibility**
-
-- Embedding and FAISS caching; `--force` to rebuild
-- Multi-gold qrels support
-- Plugin architecture: add a new backend with one `@register` decorator
-
----
-
-## Command-Line Interface (CLI)
-
-All functionality is exposed through a single command, `vi-retrieval-eval`. The complete reference for every flag is shown below; you can also run `vi-retrieval-eval --help` at any time to see the same output.
-
-```
-Evaluate lexical, dense, sparse, late-interaction, and hybrid retrieval for Vietnamese QA.
-
-options:
-  -h, --help            show this help message and exit
-  --csv CSV             Input dataset file (CSV/JSONL) with columns or keys:
-                        question, context (default: None)
-  --qrels QRELS         Optional qrels file (CSV/TSV/JSONL) with columns:
-                        qid/doc_id/rel (default: None)
-  --qid-col QID_COL     Qrels column for query id (default: qid)
-  --docid-col DOCID_COL
-                        Qrels column for doc id (default: doc_id)
-  --rel-col REL_COL     Qrels column for relevance (>0) (default: rel)
-  --csv-qid-col CSV_QID_COL
-                        Column name in main CSV/JSONL for qid (optional)
-                        (default: None)
-  --csv-docid-col CSV_DOCID_COL
-                        Column name in main CSV/JSONL for doc_id (optional)
-                        (default: None)
-  --output-dir OUTPUT_DIR
-                        Root folder to save results (default: outputs)
-  --method {tfidf,bm25,dense,dense+tfidf,dense+bm25,splade,splade+tfidf,splade+bm25,splade+dense,colbert}
-                        Retrieval method (default: None)
-  --fusion {none,alpha,rrf}
-                        Fusion for hybrid methods (dense+tfidf / dense+bm25 /
-                        splade+*) (default: none)
-  --alpha ALPHA         Alpha for score fusion (0..1) (default: 0.5)
-  --rrf-k RRF_K         RRF constant k (>=1) (default: 60)
-  --max-samples MAX_SAMPLES
-                        Random subset size, e.g. 1000 (default: None)
-  --sample-frac SAMPLE_FRAC
-                        Random subset fraction, e.g. 0.1 (10%) (default: None)
-  --sample-seed SAMPLE_SEED
-                        Random seed for sampling (default: 42)
-  --prefer-unique       Prefer samples with unique contexts when sampling
-                        (normalized) (default: False)
-  --unique-col UNIQUE_COL
-                        Column name used as uniqueness key for --prefer-unique
-                        (default: context)
-  --dedup-lower         Lowercase in normalization key for unique/dedup
-                        (default: False)
-  --dedup-remove-emoji  Strip emoji-like symbols in normalization key for
-                        unique/dedup (default: False)
-  --max-len MAX_LEN     Optional max token length for embedding (tokenizer-
-                        based). If set, texts are truncated right before
-                        embedding; if None, keep original. (default: None)
-  --normalize-all       Normalize ALL questions/contexts with NFKC, remove
-                        invisibles/controls, strip emoji, collapse spaces,
-                        lowercase BEFORE snapshot/dedup/eval (default: False)
-  --bm25-k1 BM25_K1     BM25 Okapi k1 (default: 1.5)
-  --bm25-b BM25_B       BM25 Okapi b (default: 0.75)
-  --dense-backend {openai,gemini,sbert,llm,colbert}
-                        Dense embedding backend (for dense / splade+dense)
-                        (default: openai)
-  --embed-model EMBED_MODEL
-                        OpenAI embedding model (default: text-embedding-3-large)
-  --gemini-model GEMINI_MODEL
-                        Gemini embedding model (default: text-embedding-004)
-  --sbert-model SBERT_MODEL
-                        Sentence-Transformers / HF local model (for sbert/llm
-                        backends) (default: sentence-transformers/all-MiniLM-L6-v2)
-  --batch-size BATCH_SIZE
-                        Embedding batch size (default: 128)
-  --index-metric {ip,l2}
-                        FAISS metric (recommend 'ip' with normalized vectors)
-                        (default: ip)
-  --splade-model SPLADE_MODEL
-                        HuggingFace checkpoint for SPLADE (sparse encoder)
-                        (default: naver/splade-v3)
-  --colbert-model COLBERT_MODEL
-                        Checkpoint ColBERT / ColBERTv2 (default: colbert-ir/colbertv2.0)
-  --force               Force rebuild embeddings and index (default: False)
-  --lower               Lowercase text before processing (kept for backward-
-                        compat; ignored if --normalize-all) (default: False)
-  --ks KS               Comma-separated k values (default: 1,3,5,10,20,50,100)
-  --show-size           Print dataset head + sizes (default: False)
-  --progress            Show progress bars (default: False)
-  --log-level {debug,info,warning,error}
-                        Logger level (default: info)
-  --log-file LOG_FILE   Optional log file path (default: None)
-  --list-backends       List available dense embedding backends and exit
-                        (default: False)
-  --dedup               Deduplicate identical contexts in the corpus before
-                        indexing (queries remain unchanged) (default: False)
-  --error-k ERROR_K     Reference K used to mark a query as FAIL
-                        (default: max(ks)). (default: None)
-  --save-intersection   After run, save the intersection of fail@K across ALL
-                        methods for this dataset. (default: False)
-  --max-errors MAX_ERRORS
-                        When printing previews, max rows to show. (default: 30)
-```
-
----
-
-## Installation
-
-VIRE requires Python 3.9+ and can be installed directly from the repository. The `[all]` extra pulls in all optional backends; you can also install only what you need.
-
-```bash
-git clone https://github.com/longstnguyen/ViRE.git
-cd vi-retrieval-eval
-pip install -e ".[all]"
-```
-
-For ColBERT support (optional, requires separate install):
-
-```bash
-pip install "colbert-ai==0.2.22" --no-deps
-```
-
-Set environment variables for API-based backends:
-
-```bash
-export OPENAI_API_KEY=...     # for --dense-backend openai
-export GEMINI_API_KEY=...     # for --dense-backend gemini
-```
-
----
+| Prepare | Retrieve | Understand |
+| :-- | :-- | :-- |
+| Vietnamese text normalization, seeded sampling, corpus deduplication | BM25, TF-IDF, dense encoders, SPLADE, ColBERT, and hybrid fusion | Ranking metrics, failure cases, cached embeddings, and Markdown reports |
 
 ## Quickstart
 
-### Single Runs
-
-The examples below cover all supported methods. The flags `--prefer-unique --dedup` are generally recommended to ensure each context appears only once in the corpus, which gives cleaner evaluation numbers.
+Use **Python 3.11+** for the dependency versions declared in this repository. The lexical example runs on CPU without API credentials or a model download.
 
 ```bash
-# BM25 baseline
+git clone https://github.com/longstnguyen/ViRE.git
+cd ViRE
+python3.11 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
+
 vi-retrieval-eval --csv data/CSConDa.csv --method bm25 \
-  --max-samples 1000 --prefer-unique --dedup --output-dir outputs
-
-# Dense – local SBERT
-vi-retrieval-eval --csv data/CSConDa.csv --method dense \
-  --dense-backend sbert --sbert-model AITeamVN/Vietnamese_Embedding_v2 \
-  --max-samples 1000 --prefer-unique --dedup \
-  --batch-size 64 --progress --output-dir outputs
-
-# Dense – large LLM embedder (e.g. Qwen3-Embedding)
-vi-retrieval-eval --csv data/CSConDa.csv --method dense \
-  --dense-backend llm --sbert-model Qwen/Qwen3-Embedding-0.6B \
-  --max-samples 1000 --prefer-unique --dedup \
-  --batch-size 16 --max-len 512 --progress --output-dir outputs
-
-# Dense – OpenAI
-vi-retrieval-eval --csv data/CSConDa.csv --method dense \
-  --dense-backend openai --embed-model text-embedding-3-large \
-  --max-samples 1000 --prefer-unique --dedup --output-dir outputs
-
-# Hybrid: Dense + BM25 (Alpha fusion)
-vi-retrieval-eval --csv data/CSConDa.csv \
-  --method dense+bm25 --fusion alpha --alpha 0.7 \
-  --dense-backend sbert --sbert-model AITeamVN/Vietnamese_Embedding_v2 \
-  --max-samples 1000 --prefer-unique --dedup --output-dir outputs
-
-# Hybrid: Dense + BM25 (RRF)
-vi-retrieval-eval --csv data/CSConDa.csv \
-  --method dense+bm25 --fusion rrf --rrf-k 60 \
-  --dense-backend sbert --sbert-model AITeamVN/Vietnamese_Embedding_v2 \
-  --max-samples 1000 --prefer-unique --dedup --output-dir outputs
-
-# SPLADE (sparse neural)
-vi-retrieval-eval --csv data/CSConDa.csv --method splade \
-  --splade-model naver/splade-v3 \
-  --max-samples 1000 --prefer-unique --dedup --output-dir outputs
-
-# SPLADE + BM25 hybrid (alpha)
-vi-retrieval-eval --csv data/CSConDa.csv \
-  --method splade+bm25 --fusion alpha --alpha 0.7 \
-  --splade-model naver/splade-v3 \
-  --max-samples 1000 --prefer-unique --dedup --output-dir outputs
-
-# ColBERT (late interaction)
-vi-retrieval-eval --csv data/CSConDa.csv --method colbert \
-  --dense-backend colbert \
-  --colbert-model colbert-ir/colbertv2.0 \
-  --max-samples 1000 --prefer-unique --dedup --output-dir outputs
+  --max-samples 100 --sample-seed 42 --prefer-unique --dedup \
+  --ks 1,10,20 --output-dir outputs/lexical
 ```
 
-### Method × Backend Reference
+<p align="center">
+  <img src="docs/assets/terminal-run.svg" width="100%" alt="Actual BM25 quickstart output on 100 CSConDa pairs: building and scoring BM25, then computing retrieval metrics.">
+  <br><sub>BM25 retrieval and evaluation on a 100-pair CSConDa sample.</sub>
+</p>
 
-Not every method needs the same set of flags. The table below shows exactly what is required for each `--method` value, alongside the supported fusion strategies.
+The terminal shows an excerpt from a real **100-pair quickstart run**. Sampling selects both the queries and their candidate contexts. Read the run's `metrics.json`, `ranks.json`, and `errors/fail@20.csv` in `outputs/lexical/CSConDa/bm25-s100-uniq-dedup/`. The failure file pairs missed queries with retrieved passages so you can inspect why a relevant document was not found.
 
-| `--method`     | Required flags                                              | Notes                                        |
-| -------------- | ----------------------------------------------------------- | -------------------------------------------- |
-| `tfidf`        | _(none)_                                                    | Pure lexical                                 |
-| `bm25`         | _(none)_                                                    | `--bm25-k1`, `--bm25-b` to tune              |
-| `dense`        | `--dense-backend`, model flag                               | Backends: `openai`, `gemini`, `sbert`, `llm` |
-| `dense+tfidf`  | `--dense-backend`, model flag, `--fusion`                   | $\alpha$ or RRF                              |
-| `dense+bm25`   | `--dense-backend`, model flag, `--fusion`                   | $\alpha$ or RRF                              |
-| `splade`       | `--splade-model`                                            | Sparse neural via SparseEncoder              |
-| `splade+tfidf` | `--splade-model`, `--fusion`                                | $\alpha$ or RRF                              |
-| `splade+bm25`  | `--splade-model`, `--fusion`                                | $\alpha$ or RRF                              |
-| `splade+dense` | `--splade-model`, `--dense-backend`, model flag, `--fusion` | Sparse + dense hybrid                        |
-| `colbert`      | `--colbert-model`, `--dense-backend colbert`                | Requires `colbert-ai` installed              |
-
-Each dense backend uses a different flag to specify the model checkpoint:
-
-- `--dense-backend openai` $\rightarrow$ `--embed-model`
-- `--dense-backend gemini` $\rightarrow$ `--gemini-model`
-- `--dense-backend sbert` or `llm` $\rightarrow$ `--sbert-model`
-
-### Batch Runs for Multiple Datasets
-
-For large-scale evaluations across multiple datasets, the pattern below is recommended. It handles the special case of ZaloLegalQA, which ships with external qrels rather than inline gold contexts.
+<details>
+<summary><strong>Compare TF-IDF on the same sample and export a report</strong></summary>
 
 ```bash
-#!/usr/bin/env bash
-set -euo pipefail
+vi-retrieval-eval --csv data/CSConDa.csv --method tfidf \
+  --max-samples 100 --sample-seed 42 --prefer-unique --dedup \
+  --ks 1,10,20 --output-dir outputs/lexical
 
-DATASETS=("CSConDa" "EduCoQA" "VlogQA_2" "ViRe4MRC_v2")
-BACKEND="sbert"
-SBERT_MODEL="AITeamVN/Vietnamese_Embedding_v2"
-BATCH=64
-MAX_SAMPLES=1000
-K_REF=20
-OUTDIR="outputs"
-
-for NAME in "${DATASETS[@]}"; do
-  echo "=== $NAME ==="
-
-  if [[ "$NAME" == "ZaloLegalQA" ]]; then
-    CSV="data/ZaloLegalQA/dataset.csv"
-    QRELS=(--qrels "data/ZaloLegalQA/all.jsonl"
-           --csv-qid-col qid --csv-docid-col doc_id
-           --qid-col query-id --docid-col corpus-id --rel-col score)
-  else
-    CSV="data/${NAME}.csv"
-    QRELS=()
-  fi
-
-  BASE_FLAGS=(--csv "$CSV" "${QRELS[@]}"
-    --dense-backend "$BACKEND" --sbert-model "$SBERT_MODEL"
-    --batch-size "$BATCH" --max-samples "$MAX_SAMPLES"
-    --prefer-unique --dedup --progress --error-k "$K_REF"
-    --output-dir "$OUTDIR")
-
-  # 1. Baselines
-  vi-retrieval-eval "${BASE_FLAGS[@]}" --method bm25
-  vi-retrieval-eval "${BASE_FLAGS[@]}" --method dense
-
-  # 2. Hybrid Alpha
-  vi-retrieval-eval "${BASE_FLAGS[@]}" --method dense+bm25 --fusion alpha --alpha 0.7
-
-  # 3. Hybrid RRF (with cross-method intersection)
-  vi-retrieval-eval "${BASE_FLAGS[@]}" --method dense+bm25 --fusion rrf --rrf-k 60 \
-    --save-intersection
-
-  echo "Done: $NAME"
-done
+python scripts/summarize_report.py --outputs-root outputs \
+  --datasets CSConDa --metrics P@1,R@10,MRR@10,nDCG@10,R@20 \
+  --percent --save outputs/report.md
 ```
 
----
+<p align="center">
+  <img src="docs/assets/terminal-report.svg" width="100%" alt="Actual report export output: one dataset, two retrieval methods, and outputs/report.md saved.">
+  <br><sub>Comparing BM25 and TF-IDF, then exporting a Markdown report.</sub>
+</p>
 
-## Reporting
+</details>
 
-After running experiments, use [`scripts/summarize_report.py`](scripts/summarize_report.py) to aggregate metrics from multiple output directories into a single Markdown table. It automatically groups runs by dense model, bolds the best value per column, and underlines the second-best.
+### Try a dense–lexical hybrid
+
+Install the optional backends, then combine a local Vietnamese encoder with BM25. Neural runs download the selected model and can use a GPU.
 
 ```bash
-python scripts/summarize_report.py \
-  --outputs-root outputs \
-  --datasets CSConDa EduCoQA ALQAC \
-  --metrics P@1,R@10,MRR@10,nDCG@10,R@20 \
-  --percent \
-  --save VIRE_Report.md
+python -m pip install -e ".[all]"
+
+vi-retrieval-eval --csv data/CSConDa.csv \
+  --method dense+bm25 --dense-backend sbert \
+  --sbert-model AITeamVN/Vietnamese_Embedding_v2 \
+  --fusion alpha --alpha 0.7 --batch-size 16 \
+  --max-samples 100 --sample-seed 42 --prefer-unique --dedup \
+  --ks 1,10,20 --output-dir outputs/vietnamese-v2
 ```
 
-**Options:**
+See the [usage guide](docs/usage.md) for API backends, local LLM embedders, SPLADE, ColBERT, multi-gold relevance judgments, and the full CLI reference.
 
-- `--outputs-root` — root directory with experimental results
-- `--datasets` — space-separated dataset names
-- `--metrics` — metric names (aliases supported: `p@1`, `r@10`, `ndcg@10`, etc.)
-- `--percent` — display as percentages
-- `--ndigits N` — decimal places (default: 4)
-- `--include REGEX` — filter method folder names by regex
+## Methods
 
-The script groups results by dense model, bolds the best value per column, and underlines the second-best.
+ViRE follows a shared workflow: **load → normalize and sample → build the corpus → retrieve and fuse → evaluate → inspect errors**. Without external relevance judgments, each question's paired context is its relevant document; optional deduplication merges identical contexts and remaps those judgments.
 
----
+| Retrieval family | `--method` | What it captures |
+| :-- | :-- | :-- |
+| Lexical | `tfidf`, `bm25` | Exact terms and vocabulary overlap |
+| Dense | `dense` | Semantic similarity with local or API embedding models |
+| Learned sparse | `splade` | Neural term expansion and sparse matching |
+| Late interaction | `colbert` | Query–document token interactions |
+| Hybrid | `dense+tfidf`, `dense+bm25`, `splade+tfidf`, `splade+bm25`, `splade+dense` | Complementary retrieval signals with score or rank fusion |
 
-## Sample Results
+**Score fusion** uses `--fusion alpha --alpha 0.7`: dense similarity receives weight α after per-query min–max normalization in dense–lexical hybrids. For `dense+bm25`, this gives 0.7 to dense similarity and 0.3 to BM25. **Rank fusion** uses `--fusion rrf --rrf-k 60` to combine reciprocal ranks.
 
-The table below shows benchmark results on the **CSConDa** dataset (customer support, 1,000-sample standardised subset, `--prefer-unique --dedup`, seed 42), comparing all dense models under both $\alpha$-fusion and RRF strategies. Full results across all 10 datasets and all tested models are in [`VIRE_Report.md`](VIRE_Report.md).
+<details>
+<summary><strong>Retrieval in a RAG system</strong></summary>
 
-### CSConDa (Customer Support)
+<p align="center">
+  <img src="docs/assets/rag.png" width="650" alt="A diagram showing a retriever selecting knowledge-base documents as context for an LLM generator.">
+  <br><sub>Retrieved passages provide evidence for answer generation; ViRE evaluates the retrieval stage.</sub>
+</p>
 
-| Method                                                                       | P@1           | R@10          | MRR@10        | nDCG@10       | R@20          |
-| ---------------------------------------------------------------------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
-| tfidf                                                                        | 15.70%        | 38.50%        | 22.49%        | 26.30%        | 47.20%        |
-| bm25                                                                         | 17.40%        | 36.80%        | 22.99%        | 26.27%        | 45.90%        |
-| colbert                                                                      | 11.20%        | 28.30%        | 15.79%        | 18.72%        | 35.00%        |
-| splade                                                                       | 9.10%         | 22.20%        | 12.65%        | 14.89%        | 27.70%        |
-| **Dense model: openai / text-embedding-3-large**                             |               |               |               |               |               |
-| dense                                                                        | 33.70%        | 56.80%        | 41.06%        | 44.84%        | 63.80%        |
-| dense + tfidf ($\alpha$)                                                     | <u>34.90%</u> | <u>60.40%</u> | 42.45%        | 46.73%        | 66.50%        |
-| dense + bm25 ($\alpha$)                                                      | **36.40%**    | 60.20%        | **43.60%**    | <u>47.55%</u> | 66.20%        |
-| dense + tfidf (RRF)                                                          | 28.80%        | 55.00%        | 36.45%        | 40.85%        | 63.80%        |
-| dense + bm25 (RRF)                                                           | 29.60%        | 54.40%        | 37.05%        | 41.18%        | 64.00%        |
-| **Dense model: AITeamVN/Vietnamese_Embedding_v2**                            |               |               |               |               |               |
-| dense                                                                        | 31.40%        | 54.00%        | 38.40%        | 42.14%        | 61.40%        |
-| dense + tfidf ($\alpha$)                                                     | 32.70%        | 57.50%        | 40.51%        | 44.59%        | 65.30%        |
-| dense + bm25 ($\alpha$)                                                      | 33.70%        | 57.90%        | 41.22%        | 45.20%        | 64.30%        |
-| dense + tfidf (RRF)                                                          | 28.10%        | 54.60%        | 35.84%        | 40.29%        | 63.90%        |
-| dense + bm25 (RRF)                                                           | 28.80%        | 54.70%        | 36.70%        | 40.99%        | 62.40%        |
-| **Dense model: bkai-foundation-models/vietnamese-bi-encoder**                |               |               |               |               |               |
-| dense                                                                        | 15.70%        | 34.90%        | 21.09%        | 24.34%        | 41.70%        |
-| dense + tfidf ($\alpha$)                                                     | 22.20%        | 46.00%        | 28.95%        | 32.96%        | 52.40%        |
-| dense + bm25 ($\alpha$)                                                      | 22.70%        | 45.70%        | 28.93%        | 32.87%        | 52.80%        |
-| dense + tfidf (RRF)                                                          | 19.10%        | 44.20%        | 26.34%        | 30.56%        | 55.00%        |
-| dense + bm25 (RRF)                                                           | 20.00%        | 44.90%        | 26.98%        | 31.19%        | 54.30%        |
-| **Dense model: dangvantuan/vietnamese-document-embedding**                   |               |               |               |               |               |
-| dense                                                                        | 28.40%        | 53.00%        | 36.12%        | 40.18%        | 59.90%        |
-| dense + tfidf ($\alpha$)                                                     | 31.10%        | 57.90%        | 39.46%        | 43.87%        | 65.50%        |
-| dense + bm25 ($\alpha$)                                                      | 32.40%        | 57.80%        | 40.05%        | 44.28%        | 64.60%        |
-| dense + tfidf (RRF)                                                          | 26.00%        | 51.80%        | 33.88%        | 38.16%        | 64.00%        |
-| dense + bm25 (RRF)                                                           | 26.70%        | 52.60%        | 34.65%        | 38.92%        | 63.70%        |
-| **Dense model: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2** |               |               |               |               |               |
-| dense                                                                        | 11.80%        | 30.00%        | 16.71%        | 19.82%        | 39.10%        |
-| dense + tfidf ($\alpha$)                                                     | 19.60%        | 45.30%        | 27.05%        | 31.38%        | 51.40%        |
-| dense + bm25 ($\alpha$)                                                      | 18.90%        | 45.40%        | 26.18%        | 30.71%        | 51.60%        |
-| dense + tfidf (RRF)                                                          | 17.70%        | 43.80%        | 25.03%        | 29.47%        | 54.30%        |
-| dense + bm25 (RRF)                                                           | 17.50%        | 43.80%        | 24.63%        | 29.15%        | 53.30%        |
-| **Dense model: intfloat/multilingual-e5-large**                              |               |               |               |               |               |
-| dense                                                                        | 27.20%        | 48.10%        | 33.78%        | 37.21%        | 55.90%        |
-| dense + tfidf ($\alpha$)                                                     | 31.90%        | 53.60%        | 38.76%        | 42.32%        | 61.70%        |
-| dense + bm25 ($\alpha$)                                                      | 32.60%        | 54.90%        | 39.46%        | 43.16%        | 60.70%        |
-| dense + tfidf (RRF)                                                          | 28.70%        | 53.40%        | 36.11%        | 40.22%        | 61.40%        |
-| dense + bm25 (RRF)                                                           | 29.00%        | 53.50%        | 36.30%        | 40.39%        | 61.30%        |
-| **Dense model: jinaai/jina-embeddings-v3**                                   |               |               |               |               |               |
-| dense                                                                        | 32.10%        | 57.40%        | 40.03%        | 44.19%        | 64.30%        |
-| dense + tfidf ($\alpha$)                                                     | 34.90%        | **61.20%**    | 42.70%        | 47.12%        | <u>66.90%</u> |
-| dense + bm25 ($\alpha$)                                                      | 35.40%        | **61.20%**    | 43.42%        | **47.68%**    | **67.60%**    |
-| dense + tfidf (RRF)                                                          | 29.30%        | 57.30%        | 37.96%        | 42.58%        | 66.10%        |
-| dense + bm25 (RRF)                                                           | 31.40%        | 56.60%        | 39.01%        | 43.20%        | 65.90%        |
-| **Dense model: BAAI/bge-m3**                                                 |               |               |               |               |               |
-| dense                                                                        | 30.80%        | 53.90%        | 37.98%        | 41.80%        | 61.00%        |
-| dense + tfidf ($\alpha$)                                                     | 33.10%        | 57.00%        | 40.67%        | 44.59%        | 63.80%        |
-| dense + bm25 ($\alpha$)                                                      | 33.90%        | 56.90%        | 40.97%        | 44.78%        | 63.90%        |
-| dense + tfidf (RRF)                                                          | 28.40%        | 54.20%        | 35.82%        | 40.17%        | 63.90%        |
-| dense + bm25 (RRF)                                                           | 28.60%        | 53.70%        | 36.24%        | 40.40%        | 62.80%        |
-| **Dense model: Snowflake/snowflake-arctic-embed-l-v2.0**                     |               |               |               |               |               |
-| dense                                                                        | 32.80%        | 56.70%        | 40.69%        | 44.56%        | 63.20%        |
-| dense + tfidf ($\alpha$)                                                     | 34.30%        | 58.80%        | 42.15%        | 46.15%        | 66.20%        |
-| dense + bm25 ($\alpha$)                                                      | <u>35.60%</u> | 59.80%        | <u>43.56%</u> | 47.46%        | 66.30%        |
-| dense + tfidf (RRF)                                                          | 30.10%        | 55.30%        | 37.85%        | 42.03%        | 65.00%        |
-| dense + bm25 (RRF)                                                           | 29.80%        | 56.40%        | 38.16%        | 42.54%        | 65.20%        |
-| **Dense model: Alibaba-NLP/gte-multilingual-base**                           |               |               |               |               |               |
-| dense                                                                        | 28.10%        | 51.60%        | 35.23%        | 39.13%        | 57.70%        |
-| dense + tfidf ($\alpha$)                                                     | 29.30%        | 55.50%        | 37.45%        | 41.78%        | 63.50%        |
-| dense + bm25 ($\alpha$)                                                      | 30.80%        | 56.80%        | 38.82%        | 43.12%        | 63.20%        |
-| dense + tfidf (RRF)                                                          | 26.70%        | 52.10%        | 34.42%        | 38.64%        | 62.10%        |
-| dense + bm25 (RRF)                                                           | 27.20%        | 52.00%        | 34.88%        | 38.98%        | 62.20%        |
-| **Dense model: BAAI/bge-multilingual-gemma2**                                |               |               |               |               |               |
-| dense                                                                        | 14.30%        | 30.50%        | 18.65%        | 21.43%        | 37.00%        |
-| dense + tfidf ($\alpha$)                                                     | 23.50%        | 43.00%        | 29.72%        | 32.91%        | 49.60%        |
-| dense + bm25 ($\alpha$)                                                      | 23.30%        | 43.30%        | 29.50%        | 32.81%        | 49.90%        |
-| dense + tfidf (RRF)                                                          | 19.10%        | 43.30%        | 25.92%        | 30.01%        | 52.20%        |
-| dense + bm25 (RRF)                                                           | 20.30%        | 43.10%        | 27.02%        | 30.84%        | 51.80%        |
-| **Dense model: google/EmbeddingGemma-300m**                                  |               |               |               |               |               |
-| dense                                                                        | 29.90%        | 54.70%        | 37.34%        | 41.49%        | 60.80%        |
-| dense + tfidf ($\alpha$)                                                     | 32.50%        | 57.80%        | 40.50%        | 44.65%        | 65.10%        |
-| dense + bm25 ($\alpha$)                                                      | 33.60%        | 58.80%        | 41.28%        | 45.45%        | 64.90%        |
-| dense + tfidf (RRF)                                                          | 28.30%        | 54.60%        | 36.23%        | 40.61%        | 63.20%        |
-| dense + bm25 (RRF)                                                           | 28.70%        | 54.50%        | 36.35%        | 40.67%        | 63.30%        |
-| **Dense model: Alibaba-NLP/gte-Qwen2-1.5B-instruct**                         |               |               |               |               |               |
-| dense                                                                        | 6.70%         | 16.50%        | 9.33%         | 11.01%        | 21.20%        |
-| dense + tfidf ($\alpha$)                                                     | 17.40%        | 35.80%        | 22.82%        | 25.90%        | 42.20%        |
-| dense + bm25 ($\alpha$)                                                      | 16.40%        | 34.70%        | 21.68%        | 24.76%        | 41.00%        |
-| dense + tfidf (RRF)                                                          | 11.90%        | 32.10%        | 17.29%        | 20.76%        | 44.50%        |
-| dense + bm25 (RRF)                                                           | 12.00%        | 32.00%        | 17.29%        | 20.72%        | 43.80%        |
-| **Dense model: Qwen/Qwen3-Embedding-0.6B**                                   |               |               |               |               |               |
-| dense                                                                        | 24.80%        | 49.40%        | 32.27%        | 36.34%        | 56.60%        |
-| dense + tfidf ($\alpha$)                                                     | 29.10%        | 56.40%        | 37.31%        | 41.85%        | 63.10%        |
-| dense + bm25 ($\alpha$)                                                      | 30.10%        | 55.70%        | 38.11%        | 42.33%        | 62.40%        |
-| dense + tfidf (RRF)                                                          | 24.60%        | 53.20%        | 33.14%        | 37.91%        | 62.20%        |
-| dense + bm25 (RRF)                                                           | 26.70%        | 53.10%        | 34.41%        | 38.85%        | 62.30%        |
-
----
+</details>
 
 ## Datasets
 
-VIRE covers six Vietnamese domains, spanning both formal and informal language, technical and general content. Two datasets — EduCoQA and CSConDa — are newly proposed in this work; the rest are established public benchmarks.
+The benchmark covers **six domains**. The study uses a sampling cap of **1,000 question–context pairs per dataset**, retaining all pairs for smaller datasets. Use `--max-samples` to select a subset from the available files.
 
-**Education** — EduCoQA (proposed), ViRHE4QA [1]
+| Domain | Datasets | Retrieval setting |
+| :-- | :-- | :-- |
+| Education | [EduCoQA](data/EduCoQA.csv), [ViRHE4QA](data/ViRHE4QA_v2.csv) [1] | Student counseling and institutional regulations |
+| Customer support | [CSConDa](data/CSConDa.csv) | Conversational service requests |
+| Legal | [ALQAC](data/ALQAC.csv), [ZaloLegalQA](data/ZaloLegalQA/) | Legal questions and statutory passages |
+| Healthcare | [ViNewsQA](data/ViNewsQA.csv) [2], [ViMedAQA](data/ViMedAQA_v2.csv) [3] | Health news and medical questions |
+| Lifestyle & reviews | [VlogQA](data/VlogQA_2.csv) [4], [ViRe4MRC](data/ViRe4MRC_v2.csv) [5] | Spoken narratives and customer reviews |
+| Open knowledge | [UIT-ViQuAD 2.0](data/UIT-ViQuAD2.csv) [6] | Encyclopedic question answering |
 
-**Customer Support** — CSConDa (proposed)
+### Two datasets from real conversations
 
-**Legal** — [ALQAC](https://alqac.github.io), [Zalo Legal Text Retrieval](https://challenge.zalo.ai/portal/legal-text-retrieval)
+EduCoQA and CSConDa capture the language of everyday requests. Their frequent terms illustrate the different topics and vocabulary that retrieval systems encounter in each domain.
 
-**Healthcare** — ViNewsQA [2], ViMedAQA [3]
+**EduCoQA · educational counseling**
 
-**Lifestyle & Reviews** — VlogQA [4], ViRe4MRC [5]
+Student questions about admissions and university life.
 
-**Cross-domain Open Knowledge** — UIT-ViQuAD 2.0 [6]
+<p align="center">
+  <img src="docs/assets/educoqa.png" width="760" alt="EduCoQA word cloud showing frequent educational counseling topics.">
+  <br><sub>EduCoQA: frequent topics in educational counseling.</sub>
+</p>
 
-> 1,000-sample standardized subsets are in `data/`.
+**CSConDa · customer support**
 
----
+Service conversations with varied wording and intent.
 
-## Data Format
+<p align="center">
+  <img src="docs/assets/csconda.png" width="760" alt="CSConDa word cloud showing frequent customer-service topics.">
+  <br><sub>CSConDa: frequent topics in customer-service conversations.</sub>
+</p>
 
-Each dataset is expected as a CSV file with at least `question` and `context` columns. For multi-gold scenarios — where a single query has more than one relevant document — an optional qrels file can be provided separately.
+These datasets bring abbreviations, informal phrasing, and mismatches between conversational questions and formal answers into retrieval evaluation.
 
-```
-qid,doc_id,question,context
-q1,d12,"How to apply for admission?","Application procedures and requirements..."
-q2,d15,"What are the graduation requirements?","Students must complete all required courses..."
-```
+## Results
 
-Optional multi-gold qrels:
+**MRR@10 across the ten datasets**, reported on a **0–100 scale**. “Best dense” and “Best hybrid” select the highest recorded MRR@10 in each family for each dataset; the winning backbone may differ by row. **Bold** marks the best value within a row, and <ins>underlining</ins> marks the second distinct value, including ties.
 
-```
-qid,doc_id,rel
-q1,d12,1
-q1,d87,1
-```
+| Dataset | Domain | BM25 | Best dense | Best hybrid |
+| :-- | :-- | --: | --: | --: |
+| [EduCoQA](VIRE_Report.md#educoqa) | Education | 23.09 | <ins>34.22</ins> | **35.24** |
+| [ViRHE4QA](VIRE_Report.md#virhe4qa_v2) | Education | <ins>76.05</ins> | 72.04 | **81.42** |
+| [CSConDa](VIRE_Report.md#csconda) | Customer support | 22.99 | <ins>41.06</ins> | **43.60** |
+| [ALQAC](VIRE_Report.md#alqac) | Legal | 92.20 | <ins>94.14</ins> | **96.66** |
+| [ZaloLegalQA](VIRE_Report.md#zalolegalqa) | Legal | 79.39 | <ins>91.04</ins> | **91.67** |
+| [ViNewsQA](VIRE_Report.md#vinewsqa) | Healthcare | <ins>66.13</ins> | 64.91 | **74.96** |
+| [ViMedAQA](VIRE_Report.md#vimedaqa_v2) | Healthcare | 71.36 | <ins>87.94</ins> | **88.82** |
+| [VlogQA](VIRE_Report.md#vlogqa_2) | Lifestyle & reviews | 23.90 | <ins>32.49</ins> | **39.53** |
+| [ViRe4MRC](VIRE_Report.md#vire4mrc_v2) | Lifestyle & reviews | 10.25 | <ins>17.25</ins> | **18.21** |
+| [UIT-ViQuAD 2.0](VIRE_Report.md#uit-viquad2) | Open knowledge | 78.09 | <ins>89.29</ins> | **93.62** |
 
----
+The [complete results](VIRE_Report.md) provide every recorded configuration with **P@1, R@10, MRR@10, nDCG@10, and R@20**. See the [paper](https://aclanthology.org/2026.findings-eacl.110/) for the experimental protocol and domain-level analysis.
 
-## Outputs
+## Findings
 
-Each run writes its results to a self-describing directory under `--output-dir`. Results are organised by model, then dataset, then a method tag that encodes all run parameters — so different experimental configurations never overwrite each other.
+The cross-domain results reveal how retrieval choices interact with Vietnamese text. The following findings connect the benchmark comparisons with practical decisions about encoders, fusion, and evaluation data.
 
-```
-outputs/<model>/<dataset>/<method-tag>/
-├── metrics.json
-├── ranks.json
-├── errors/
-│   └── fail@K.csv
-├── index.faiss
-├── doc_embeddings.npy
-└── query_embeddings.npy
-```
+- **Hybrid retrieval is the strongest overall starting point in this study.** Combining lexical and semantic evidence improves the best recorded MRR@10 over standalone dense retrieval across all **10 datasets**. BM25-based linear fusion is particularly effective across domains.
+- **Calibrate the lexical–semantic balance.** The full-corpus UIT-ViQuAD experiment peaks around **α = 0.6–0.8**; the main benchmark uses **α = 0.7**. Exact terms and semantic similarity both contribute to ranking quality.
+- **Language specialization and domain robustness are different strengths.** Vietnamese-specialized encoders perform strongly on formal institutional text, while multilingual encoders such as `multilingual-e5-large` and `bge-m3` offer strong performance across domains.
+- **Parameter count does not determine retrieval quality.** The study finds substantial variation among LLM-derived embedders; larger models do not consistently outperform smaller encoders across these domains.
+- **Conversational retrieval remains the harder test.** The best recorded MRR@10 is **96.66** on ALQAC, compared with **35.24** on EduCoQA and **43.60** on CSConDa. Abbreviations, register mismatches, and ambiguous intent make realistic user queries valuable evaluation targets.
 
-Example path:
-`outputs/Alibaba-NLP_gte-multilingual-base/CSConDa/dense-s1000-uniq-dedup-sbert-gte-multilingual-base`
+<p align="center">
+  <img src="docs/assets/fusion-alpha.png" width="100%" alt="Effect of varying alpha for BM25 plus multilingual-e5-large on full-corpus UIT-ViQuAD. Metrics peak near alpha 0.7.">
+  <br><sub>Lexical–semantic balance on full-corpus UIT-ViQuAD with BM25 + multilingual-e5-large.</sub>
+</p>
 
----
+## Evaluate & Extend
 
-## Code Structure
+Use the same evaluation workflow with your own data, then customize the retriever or metrics as needed. Start with the input schema below and use the configuration table to keep comparisons consistent.
 
-The source code lives entirely under `src/vi_retrieval_eval/`. Each module has a single, well-defined responsibility, and embedding backends are isolated so they can be added or swapped without touching the core evaluation logic.
+### Bring your own data
 
-```
-src/vi_retrieval_eval/
-├── cli.py              # CLI and argument parsing
-├── runner.py           # Evaluation orchestrator
-├── metrics.py          # P@k, R@k, MRR, nDCG, MAP, etc.
-├── lexical.py          # TF-IDF and BM25
-├── dense_index.py      # FAISS indexing and dense retrieval
-├── fusion.py           # Alpha and RRF fusion
-├── embeddings/
-│   ├── base.py         #   Registry (@register decorator, get_embedder)
-│   ├── openai_embed.py #   OpenAI API
-│   ├── gemini_embed.py #   Gemini API
-│   ├── sbert_embed.py  #   Local SBERT models
-│   ├── llm_embed.py    #   Large LLM embedders (Qwen3, BGE-Gemma2, Jina v3…)
-│   ├── splade_backend.py  # SPLADE sparse encoder
-│   └── colbert_backend.py # ColBERT late-interaction
-├── qrels.py            # Relevance judgment handling
-├── io_utils.py         # CSV / JSON / JSONL I/O
-├── sampling.py         # Dataset sampling
-├── dedup.py            # Corpus deduplication
-├── textnorm.py         # Vietnamese text normalization
-├── tokenization.py     # Tokenization utilities
-├── stats.py            # Dataset statistics
-├── progress.py         # Progress bar utilities
-└── logging_utils.py    # Logging configuration
+Create a UTF-8 CSV with `question` and `context` columns. Each row pairs a query with its relevant passage; all retained contexts form the candidate corpus.
+
+```csv
+question,context
+"Hồ sơ nhập học gồm những gì?","Hồ sơ nhập học gồm giấy báo trúng tuyển và giấy tờ cá nhân."
+"Khi nào được đổi sản phẩm?","Khách hàng có thể yêu cầu đổi sản phẩm trong bảy ngày."
 ```
 
----
+```bash
+vi-retrieval-eval --csv your_dataset.csv --method bm25 \
+  --normalize-all --dedup --output-dir outputs/your-baseline
+```
 
-## Reproducibility
+For multiple relevant passages per query, use a separate `qid,doc_id,rel` file and explicit ID-column flags; see [multi-gold evaluation](docs/usage.md#multiple-relevant-documents).
 
-All results reported in the paper can be reproduced exactly using [`scripts/eval_full.sh`](scripts/eval_full.sh). The toolkit is designed to minimise sources of non-determinism at every stage of the pipeline.
+### Configure an evaluation
 
-- Fixed random seeds for sampling and tie-breaking
-- Stable mergesort for consistent ranking
-- Dependency pinning via `pyproject.toml`
-- Cached embeddings and FAISS indices for efficient reruns
-- Deterministic text normalization
+Choose the data preparation, retrieval settings, and ranking cutoffs for your experiment. Keep the sample and preprocessing fixed when comparing methods.
 
-> **Note on long-document datasets:** for datasets with very long contexts (e.g. ZaloLegalQA), pass `--max-len 256` to truncate inputs at the token level before embedding, avoiding OOD inputs and OOM errors. This is applied automatically in `eval_full.sh`.
+| Setting | Flags | Purpose |
+| :-- | :-- | :-- |
+| Sampling | `--max-samples`, `--sample-frac`, `--sample-seed`, `--prefer-unique` | Control the sampled query–context pairs |
+| Text preparation | `--normalize-all`, `--dedup` | Normalize Vietnamese text and merge identical contexts |
+| Model and batching | `--dense-backend`, `--sbert-model`, `--batch-size`, `--max-len` | Select a backend and control embedding inputs |
+| Retrieval | `--bm25-k1`, `--bm25-b`, `--fusion`, `--alpha`, `--rrf-k` | Configure lexical scoring and fusion |
+| Analysis | `--ks`, `--error-k`, `--save-intersection` | Choose metric cutoffs and compare retrieval failures |
+| Output and cache | `--output-dir`, `--force` | Separate experiments and rebuild cached embeddings/indexes |
 
----
+Use distinct `--output-dir` values for separate experiment configurations. For report aggregation, follow `outputs/<model-or-group>/<dataset>/<method-tag>/`, as in the quickstart.
 
-## Extending VIRE
+The [batch evaluation script](scripts/eval_full.sh) lists the study's datasets, backbones, and retrieval combinations. Review its model list and resource settings before launching the full suite; the [usage guide](docs/usage.md#batch-evaluation) explains the workflow.
 
-VIRE uses a lightweight plugin architecture throughout, so extending any part of the system requires minimal boilerplate. The most common extension points are listed below.
+### Extend the toolkit
 
-- **New retriever:** add under `embeddings/`, decorate with `@register("your_name")`
-- **New dataset:** convert to CSV/qrels schema or add a loader in `io_utils.py`
-- **New fusion:** implement in `fusion.py`, expose via `--fusion your_method`
-- **New metrics:** add to `metrics.py` following the existing pattern
+The source separates embedding backends, retrieval, fusion, and evaluation. The table below identifies where to implement each extension and how to expose it through the CLI.
 
----
-
-## License
-
-VIRE is released as open-source software. The two newly contributed datasets are available for non-commercial research use.
-
-- **Code:** MIT
-- **New datasets (EduCoQA, CSConDa):** CC BY-NC 4.0
-- **Third-party datasets:** original licenses apply
-
----
+| Add or change | Start here | Connect it to the pipeline |
+| :-- | :-- | :-- |
+| Embedding backend | [`embeddings/base.py`](src/vi_retrieval_eval/embeddings/base.py) and [`embeddings/`](src/vi_retrieval_eval/embeddings/) | Implement `embed`, register the backend, import it in `embeddings/__init__.py`, and expose its CLI configuration |
+| Retrieval algorithm | [`runner.py`](src/vi_retrieval_eval/runner.py), [`lexical.py`](src/vi_retrieval_eval/lexical.py), [`dense_index.py`](src/vi_retrieval_eval/dense_index.py) | Add the method branch and CLI choice |
+| Fusion rule | [`fusion.py`](src/vi_retrieval_eval/fusion.py) | Connect the rule in `runner.py` and `--fusion` choices |
+| Metric | [`metrics.py`](src/vi_retrieval_eval/metrics.py) | Add the per-query calculation and aggregate output; expose its name in reporting |
+| Input format | [`io_utils.py`](src/vi_retrieval_eval/io_utils.py), [`qrels.py`](src/vi_retrieval_eval/qrels.py) | Map source data into questions, contexts, and relevance judgments |
 
 ## Citation
 
+If you use ViRE or its datasets, please cite the [paper](https://aclanthology.org/2026.findings-eacl.110/).
+
 ```bibtex
 @inproceedings{nguyen-quan-2026-works,
-    title = "{Which Works Best for Vietnamese? A Practical Study of Information Retrieval Methods across Domains}",
-    author = "Nguyen, Long S. T.  and
-      Quan, Tho",
-    editor = "Demberg, Vera  and
-      Inui, Kentaro  and
-      Marquez, Llu{\'i}s",
-    booktitle = "Findings of the {A}ssociation for {C}omputational {L}inguistics: {EACL} 2026",
-    month = mar,
-    year = "2026",
-    address = "Rabat, Morocco",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2026.findings-eacl.110/",
-    pages = "2098--2119",
-    ISBN = "979-8-89176-386-9",
-    abstract = "Large Language Models (LLMs) have achieved remarkable progress, yet their reliance on parametric knowledge often leads to hallucinations. Retrieval-Augmented Generation (RAG) mitigates this issue by grounding outputs in external documents, where the quality of retrieval is critical. While retrieval methods have been widely benchmarked in English, it remains unclear which approaches are most effective for Vietnamese, a language characterized by informal queries, noisy documents, and limited resources. Prior studies are restricted to clean datasets or narrow domains, leaving fragmented insights. To the best of our knowledge, we present the first comprehensive benchmark of retrieval methods for Vietnamese across multiple real-world domains. We systematically compare lexical, dense, and hybrid methods on datasets spanning education, legal, healthcare, customer support, lifestyle, and Wikipedia, and introduce two new datasets capturing authentic educational counseling and customer service interactions. Beyond reporting benchmark numbers, we distill a set of empirical insights that clarify trade-offs, highlight domain-specific challenges, and provide practical guidance for building robust Vietnamese QA systems. Together, these contributions offer the first large-scale, practice-oriented perspective on Vietnamese retrieval and inform both academic research and real-world deployment in low-resource languages. All datasets and evaluation scripts are available at \url{https://github.com/longstnguyen/ViRE}."
+	title        = {{Which Works Best for Vietnamese? A Practical Study of Information Retrieval Methods across Domains}},
+	author       = {Nguyen, Long S. T. and Quan, Tho T.},
+	year         = 2026,
+	month        = mar,
+	booktitle    = {Findings of the Association for Computational Linguistics: EACL 2026},
+	publisher    = {Association for Computational Linguistics},
+	address      = {Rabat, Morocco},
+	pages        = {2098--2119},
+	doi          = {10.18653/v1/2026.findings-eacl.110},
+	isbn         = {979-8-89176-386-9},
+	url          = {https://aclanthology.org/2026.findings-eacl.110/},
 }
 ```
 
+## License
+
+ViRE's source code is released under the [MIT License](LICENSE). The EduCoQA and CSConDa datasets are available under [Creative Commons Attribution–NonCommercial 4.0 International](https://creativecommons.org/licenses/by-nc/4.0/). Third-party datasets retain their original licenses and terms of use.
+
 ## References
 
-[1] T. P. P. Do et al., "R2GQA: retriever-reader-generator question answering system to support students understanding legal regulations in higher education", _Artificial Intelligence and Law_, May 2025.
+[1] Tinh Pham Phuc Do, Ngoc Dinh Duy Cao, Khanh Quoc Tran, and Kiet Van Nguyen, “[R2GQA: retriever-reader-generator question answering system to support students understanding legal regulations in higher education](https://doi.org/10.1007/s10506-025-09457-7)”, _Artificial Intelligence and Law_, May 2025.
 
-[2] K. Van Nguyen et al., "New Vietnamese Corpus for Machine Reading Comprehension of Health News Articles", _ACM TALIP_, vol. 21, no. 5, Sep. 2022.
+[2] Kiet Van Nguyen, Tin Van Huynh, Duc-Vu Nguyen, Anh Gia-Tuan Nguyen, and Ngan Luu-Thuy Nguyen, “[New Vietnamese Corpus for Machine Reading Comprehension of Health News Articles](https://doi.org/10.1145/3527631)”, _ACM Transactions on Asian and Low-Resource Language Information Processing_, volume 21, number 5, article 105, September 2022.
 
-[3] M.-N. Tran et al., "ViMedAQA: A Vietnamese Medical Abstractive Question-Answering Dataset", in _ACL 2024 Student Research Workshop_, Bangkok, 2024.
+[3] Minh-Nam Tran, Phu-Vinh Nguyen, Long Nguyen, and Dien Dinh, “[ViMedAQA: A Vietnamese Medical Abstractive Question-Answering Dataset and Findings of Large Language Model](https://aclanthology.org/2024.acl-srw.31/)”, in _Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 4: Student Research Workshop)_, Bangkok, Thailand, pages 252–260, August 2024.
 
-[4] T. Ngo et al., "VlogQA: Task, Dataset, and Baseline Models for Vietnamese Spoken-Based Machine Reading Comprehension", in _EACL 2024_, Malta, 2024.
+[4] Thinh Ngo, Khoa Dang, Son Luu, Kiet Nguyen, and Ngan Nguyen, “[VlogQA: Task, Dataset, and Baseline Models for Vietnamese Spoken-Based Machine Reading Comprehension](https://aclanthology.org/2024.eacl-long.79/)”, in _Proceedings of the 18th Conference of the European Chapter of the Association for Computational Linguistics (Volume 1: Long Papers)_, St. Julian's, Malta, pages 1310–1324, March 2024.
 
-[5] T. P. P. Do et al., "Machine Reading Comprehension for Vietnamese Customer Reviews", in _PACLIC 37_, Hong Kong, 2023.
+[5] Tinh Pham Phuc Do, Ngoc Dinh Duy Cao, Nhan Thanh Nguyen, Tin Van Huynh, and Kiet Van Nguyen, “[Machine Reading Comprehension for Vietnamese Customer Reviews: Task, Corpus and Baseline Models](https://aclanthology.org/2023.paclic-1.3/)”, in _Proceedings of the 37th Pacific Asia Conference on Language, Information and Computation_, Hong Kong, China, pages 24–35, December 2023.
 
-[6] K. Van Nguyen et al., "A Vietnamese Dataset for Evaluating Machine Reading Comprehension", in _COLING 2020_, Barcelona, 2020.
+[6] Kiet Van Nguyen, Duc-Vu Nguyen, Anh Gia-Tuan Nguyen, and Ngan Luu-Thuy Nguyen, “[A Vietnamese Dataset for Evaluating Machine Reading Comprehension](https://aclanthology.org/2020.coling-main.233/)”, in _Proceedings of the 28th International Conference on Computational Linguistics_, Barcelona, Spain (Online), pages 2595–2605, December 2020.
