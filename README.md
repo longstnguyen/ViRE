@@ -54,7 +54,7 @@ vi-retrieval-eval --csv data/CSConDa.csv --method bm25 \
 ```
 
 <p align="center">
-  <img src="docs/assets/terminal-run.svg" width="100%" alt="Actual BM25 quickstart output on 100 CSConDa pairs: building and scoring BM25, then computing retrieval metrics.">
+  <img src="docs/assets/terminal-run.svg" width="100%" alt="BM25 quickstart output on 100 CSConDa pairs: building and scoring BM25, then computing retrieval metrics.">
   <br><sub>BM25 retrieval and evaluation on a 100-pair CSConDa sample.</sub>
 </p>
 
@@ -74,7 +74,7 @@ python scripts/summarize_report.py --outputs-root outputs \
 ```
 
 <p align="center">
-  <img src="docs/assets/terminal-report.svg" width="100%" alt="Actual report export output: one dataset, two retrieval methods, and outputs/report.md saved.">
+  <img src="docs/assets/terminal-report.svg" width="100%" alt="Report export output: one dataset, two retrieval methods, and outputs/report.md saved.">
   <br><sub>Comparing BM25 and TF-IDF, then exporting a Markdown report.</sub>
 </p>
 
@@ -238,7 +238,8 @@ If you use ViRE or its datasets, please cite the [paper](https://aclanthology.or
 
 ```bibtex
 @inproceedings{nguyen-quan-2026-works,
-	title        = {{Which Works Best for Vietnamese? A Practical Study of Information Retrieval Methods across Domains}},
+	title        = {{Which Works Best for Vietnamese?
+	                 A Practical Study of Information Retrieval Methods across Domains}},
 	author       = {Nguyen, Long S. T. and Quan, Tho T.},
 	year         = 2026,
 	month        = mar,

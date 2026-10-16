@@ -29,7 +29,7 @@ outputs/Alibaba-NLP_gte-Qwen2-1_5B-instruct/ALQAC/dense+tfidf-alpha0.70-s1000-..
 
 We canonicalize method from RUN_FOLDER name ONLY, ignoring configs (alpha value, s*, uniq, dedup, llm, etc.).
 
-Canonical methods (current):
+Canonical methods:
 - tfidf
 - bm25
 - splade
@@ -41,7 +41,7 @@ Canonical methods (current):
 - dense+bm25-rrf
 - unknown
 
-NEW in this version:
+Report scanning:
 - Skip non-run folders like statistics/ and errors_summary/ (and other dot/garbage dirs).
 - Detect duplicates per (dataset, model, canonical_method).
 - Print unknown folders.

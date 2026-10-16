@@ -185,136 +185,26 @@ The report groups runs by dataset, model, and method. Use separate top-level out
 
 ## CLI reference
 
-Run `vi-retrieval-eval --help` for all available options.
+Use these option groups to configure a run. The command help lists accepted values and defaults for every flag.
 
-<details>
-<summary><strong>Complete command reference</strong></summary>
-
-```text
-usage: vi-retrieval-eval [-h] --csv CSV [--qrels QRELS] [--qid-col QID_COL]
-                         [--docid-col DOCID_COL] [--rel-col REL_COL]
-                         [--csv-qid-col CSV_QID_COL]
-                         [--csv-docid-col CSV_DOCID_COL]
-                         [--output-dir OUTPUT_DIR] --method
-                         {tfidf,bm25,dense,dense+tfidf,dense+bm25,splade,splade+tfidf,splade+bm25,splade+dense,colbert}
-                         [--fusion {none,alpha,rrf}] [--alpha ALPHA]
-                         [--rrf-k RRF_K] [--max-samples MAX_SAMPLES]
-                         [--sample-frac SAMPLE_FRAC]
-                         [--sample-seed SAMPLE_SEED] [--prefer-unique]
-                         [--unique-col UNIQUE_COL] [--dedup-lower]
-                         [--dedup-remove-emoji] [--max-len MAX_LEN]
-                         [--normalize-all] [--bm25-k1 BM25_K1]
-                         [--bm25-b BM25_B]
-                         [--dense-backend {openai,gemini,sbert,llm,colbert}]
-                         [--embed-model EMBED_MODEL]
-                         [--gemini-model GEMINI_MODEL]
-                         [--sbert-model SBERT_MODEL] [--batch-size BATCH_SIZE]
-                         [--index-metric {ip,l2}]
-                         [--splade-model SPLADE_MODEL]
-                         [--colbert-model COLBERT_MODEL] [--force] [--lower]
-                         [--ks KS] [--show-size] [--progress]
-                         [--log-level {debug,info,warning,error}]
-                         [--log-file LOG_FILE] [--list-backends] [--dedup]
-                         [--error-k ERROR_K] [--save-intersection]
-                         [--max-errors MAX_ERRORS]
-
-Evaluate lexical, dense, sparse, late-interaction, and hybrid retrieval for
-Vietnamese QA.
-
-options:
-  -h, --help            show this help message and exit
-  --csv CSV             Input dataset file (CSV/JSONL) with columns or keys:
-                        question, context (default: None)
-  --qrels QRELS         Optional qrels file (CSV/TSV/JSONL) with columns:
-                        qid/doc_id/rel (default: None)
-  --qid-col QID_COL     Qrels column for query id (default: qid)
-  --docid-col DOCID_COL
-                        Qrels column for doc id (default: doc_id)
-  --rel-col REL_COL     Qrels column for relevance (>0) (default: rel)
-  --csv-qid-col CSV_QID_COL
-                        Column name in main CSV/JSONL for qid (optional)
-                        (default: None)
-  --csv-docid-col CSV_DOCID_COL
-                        Column name in main CSV/JSONL for doc_id (optional)
-                        (default: None)
-  --output-dir OUTPUT_DIR
-                        Root folder to save results (default: outputs)
-  --method {tfidf,bm25,dense,dense+tfidf,dense+bm25,splade,splade+tfidf,splade+bm25,splade+dense,colbert}
-                        Retrieval method (default: None)
-  --fusion {none,alpha,rrf}
-                        Fusion for hybrid methods (dense+tfidf / dense+bm25 /
-                        splade+*) (default: none)
-  --alpha ALPHA         Alpha for score fusion (0..1) (default: 0.5)
-  --rrf-k RRF_K         RRF constant k (>=1) (default: 60)
-  --max-samples MAX_SAMPLES
-                        Random subset size, e.g. 1000 (default: None)
-  --sample-frac SAMPLE_FRAC
-                        Random subset fraction, e.g. 0.1 (10%) (default: None)
-  --sample-seed SAMPLE_SEED
-                        Random seed for sampling (default: 42)
-  --prefer-unique       Prefer samples with unique contexts when sampling
-                        (normalized) (default: False)
-  --unique-col UNIQUE_COL
-                        Column name used as uniqueness key for --prefer-unique
-                        (default: context)
-  --dedup-lower         Lowercase in normalization key for unique/dedup
-                        (default: False)
-  --dedup-remove-emoji  Strip emoji-like symbols in normalization key for
-                        unique/dedup (default: False)
-  --max-len MAX_LEN     Optional max token length for embedding (tokenizer-
-                        based). If set, texts are truncated right before
-                        embedding; if None, keep original. (default: None)
-  --normalize-all       Normalize ALL questions/contexts with NFKC, remove
-                        invisibles/controls, strip emoji, collapse spaces,
-                        lowercase BEFORE snapshot/dedup/eval (default: False)
-  --bm25-k1 BM25_K1     BM25 Okapi k1 (default: 1.5)
-  --bm25-b BM25_B       BM25 Okapi b (default: 0.75)
-  --dense-backend {openai,gemini,sbert,llm,colbert}
-                        Dense embedding backend (for dense / splade+dense)
-                        (default: openai)
-  --embed-model EMBED_MODEL
-                        OpenAI embedding model (default: text-
-                        embedding-3-large)
-  --gemini-model GEMINI_MODEL
-                        Gemini embedding model (default: text-embedding-004)
-  --sbert-model SBERT_MODEL
-                        Sentence-Transformers / HF local model (for sbert/llm
-                        backends) (default: sentence-transformers/all-
-                        MiniLM-L6-v2)
-  --batch-size BATCH_SIZE
-                        Embedding batch size (default: 128)
-  --index-metric {ip,l2}
-                        FAISS metric (recommend 'ip' with normalized vectors)
-                        (default: ip)
-  --splade-model SPLADE_MODEL
-                        HuggingFace checkpoint for SPLADE (sparse encoder)
-                        (default: naver/splade-v3)
-  --colbert-model COLBERT_MODEL
-                        Checkpoint ColBERT / ColBERTv2 (default: colbert-
-                        ir/colbertv2.0)
-  --force               Force rebuild embeddings and index (default: False)
-  --lower               Lowercase text before processing (kept for backward-
-                        compat; ignored if --normalize-all) (default: False)
-  --ks KS               Comma-separated k values (default: 1,3,5,10,20,50,100)
-  --show-size           Print dataset head + sizes (default: False)
-  --progress            Show progress bars (default: False)
-  --log-level {debug,info,warning,error}
-                        Logger level (if runner uses logging_utils) (default:
-                        info)
-  --log-file LOG_FILE   Optional log file path (default: None)
-  --list-backends       List available dense embedding backends and exit
-                        (default: False)
-  --dedup               Deduplicate identical contexts in the corpus before
-                        indexing (queries remain unchanged) (default: False)
-  --error-k ERROR_K     Reference K used to mark a query as FAIL (default:
-                        max(ks)). (default: None)
-  --save-intersection   After run, save the intersection of fail@K across ALL
-                        methods for this dataset. (default: False)
-  --max-errors MAX_ERRORS
-                        When printing previews, max rows to show. (default:
-                        30)
+```bash
+vi-retrieval-eval --help
+python scripts/summarize_report.py --help
 ```
 
-</details>
+| Option group | Flags | Purpose |
+| :-- | :-- | :-- |
+| Input | `--csv`, `--qrels` | Load question–context pairs and optional relevance judgments |
+| Document and query IDs | `--csv-qid-col`, `--csv-docid-col`, `--qid-col`, `--docid-col`, `--rel-col` | Map input and qrels fields |
+| Sampling | `--max-samples`, `--sample-frac`, `--sample-seed`, `--prefer-unique`, `--unique-col` | Select the evaluation sample |
+| Text preparation | `--normalize-all`, `--dedup`, `--dedup-lower`, `--dedup-remove-emoji` | Normalize text and merge duplicate contexts |
+| Retrieval | `--method`, `--bm25-k1`, `--bm25-b`, `--index-metric` | Select and configure the retriever |
+| Embedding backend | `--dense-backend`, `--sbert-model`, `--embed-model`, `--gemini-model`, `--list-backends` | Choose a local encoder or API provider |
+| Sparse and late interaction | `--splade-model`, `--colbert-model` | Select the model checkpoint |
+| Embedding inputs | `--batch-size`, `--max-len` | Control batching and token truncation |
+| Fusion | `--fusion`, `--alpha`, `--rrf-k` | Combine retrieval scores or ranks |
+| Evaluation | `--ks`, `--error-k`, `--save-intersection`, `--max-errors` | Set ranking cutoffs and inspect failures |
+| Output and cache | `--output-dir`, `--force` | Choose the result directory and rebuild cached artifacts |
+| Logging | `--progress`, `--show-size`, `--log-level`, `--log-file` | Inspect run progress and input statistics |
 
 [← Back to the toolkit](../README.md) · [Explore benchmark results →](../VIRE_Report.md)
