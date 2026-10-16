@@ -28,9 +28,14 @@
 
 The accompanying study compares retrieval methods on **10 datasets across 6 domains** and introduces **EduCoQA** and **CSConDa**, drawn from educational counseling and customer-service interactions. The toolkit makes it straightforward to compare a new encoder, inspect retrieval failures, or evaluate your own question–document pairs.
 
-| Prepare | Retrieve | Understand |
+Choose a starting point for your task:
+
+| I want to… | Start here | Output |
 | :-- | :-- | :-- |
-| Vietnamese text normalization, seeded sampling, corpus deduplication | BM25, TF-IDF, dense encoders, SPLADE, ColBERT, and hybrid fusion | Ranking metrics, failure cases, cached embeddings, and Markdown reports |
+| Run a first evaluation | [CPU quickstart](#quickstart) | Ranking metrics and missed-query examples |
+| Compare retrieval methods | [Benchmark results](#results) · [Full report](VIRE_Report.md) | Scores grouped by dataset and backbone |
+| Evaluate my own data | [Input format](#bring-your-own-data) · [Usage guide](docs/usage.md) | An evaluation on your question–passage pairs |
+| Add a model or method | [Extension guide](#extend-the-toolkit) | A retriever connected to the shared evaluation pipeline |
 
 ## Quickstart
 
@@ -53,7 +58,7 @@ vi-retrieval-eval --csv data/CSConDa.csv --method bm25 \
   <br><sub>BM25 retrieval and evaluation on a 100-pair CSConDa sample.</sub>
 </p>
 
-The terminal shows an excerpt from a real **100-pair quickstart run**. Sampling selects both the queries and their candidate contexts. Read the run's `metrics.json`, `ranks.json`, and `errors/fail@20.csv` in `outputs/lexical/CSConDa/bm25-s100-uniq-dedup/`. The failure file pairs missed queries with retrieved passages so you can inspect why a relevant document was not found.
+Read `metrics.json`, `ranks.json`, and `errors/fail@20.csv` in `outputs/lexical/CSConDa/bm25-s100-uniq-dedup/`. The failure file pairs missed queries with retrieved passages for error analysis. This example samples both the queries and their candidate contexts.
 
 <details>
 <summary><strong>Compare TF-IDF on the same sample and export a report</strong></summary>
@@ -94,7 +99,7 @@ See the [usage guide](docs/usage.md) for API backends, local LLM embedders, SPLA
 
 ## Methods
 
-ViRE follows a shared workflow: **load → normalize and sample → build the corpus → retrieve and fuse → evaluate → inspect errors**. Without external relevance judgments, each question's paired context is its relevant document; optional deduplication merges identical contexts and remaps those judgments.
+ViRE follows a shared workflow: **load → normalize and sample → build the corpus → retrieve and fuse → evaluate → inspect errors**. Each retrieval family uses the same input data and evaluation interface.
 
 | Retrieval family | `--method` | What it captures |
 | :-- | :-- | :-- |
@@ -131,27 +136,17 @@ The benchmark covers **six domains**. The study uses a sampling cap of **1,000 q
 
 ### Two datasets from real conversations
 
-EduCoQA and CSConDa capture the language of everyday requests. Their frequent terms illustrate the different topics and vocabulary that retrieval systems encounter in each domain.
-
-**EduCoQA · educational counseling**
-
-Student questions about admissions and university life.
+EduCoQA captures student questions about admissions and university life; CSConDa contains customer-service conversations. Their frequent terms illustrate the vocabulary of these two domains.
 
 <p align="center">
-  <img src="docs/assets/educoqa.png" width="760" alt="EduCoQA word cloud showing frequent educational counseling topics.">
+  <img src="docs/assets/educoqa.png" width="600" alt="EduCoQA word cloud showing frequent educational counseling topics.">
   <br><sub>EduCoQA: frequent topics in educational counseling.</sub>
 </p>
 
-**CSConDa · customer support**
-
-Service conversations with varied wording and intent.
-
 <p align="center">
-  <img src="docs/assets/csconda.png" width="760" alt="CSConDa word cloud showing frequent customer-service topics.">
+  <img src="docs/assets/csconda.png" width="600" alt="CSConDa word cloud showing frequent customer-service topics.">
   <br><sub>CSConDa: frequent topics in customer-service conversations.</sub>
 </p>
-
-These datasets bring abbreviations, informal phrasing, and mismatches between conversational questions and formal answers into retrieval evaluation.
 
 ## Results
 
@@ -174,7 +169,7 @@ The [complete results](VIRE_Report.md) provide every recorded configuration with
 
 ## Findings
 
-The cross-domain results reveal how retrieval choices interact with Vietnamese text. The following findings connect the benchmark comparisons with practical decisions about encoders, fusion, and evaluation data.
+The benchmark comparisons suggest five practical lessons for choosing encoders, tuning fusion, and evaluating Vietnamese retrieval.
 
 - **Hybrid retrieval is the strongest overall starting point in this study.** Combining lexical and semantic evidence improves the best recorded MRR@10 over standalone dense retrieval across all **10 datasets**. BM25-based linear fusion is particularly effective across domains.
 - **Calibrate the lexical–semantic balance.** The full-corpus UIT-ViQuAD experiment peaks around **α = 0.6–0.8**; the main benchmark uses **α = 0.7**. Exact terms and semantic similarity both contribute to ranking quality.
@@ -183,7 +178,7 @@ The cross-domain results reveal how retrieval choices interact with Vietnamese t
 - **Conversational retrieval remains the harder test.** The best recorded MRR@10 is **96.66** on ALQAC, compared with **35.24** on EduCoQA and **43.60** on CSConDa. Abbreviations, register mismatches, and ambiguous intent make realistic user queries valuable evaluation targets.
 
 <p align="center">
-  <img src="docs/assets/fusion-alpha.png" width="100%" alt="Effect of varying alpha for BM25 plus multilingual-e5-large on full-corpus UIT-ViQuAD. Metrics peak near alpha 0.7.">
+  <img src="docs/assets/fusion-alpha.png" width="600" alt="Effect of varying alpha for BM25 plus multilingual-e5-large on full-corpus UIT-ViQuAD. Metrics peak near alpha 0.7.">
   <br><sub>Lexical–semantic balance on full-corpus UIT-ViQuAD with BM25 + multilingual-e5-large.</sub>
 </p>
 
