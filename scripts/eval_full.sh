@@ -3,8 +3,7 @@
 # eval_full.sh  —  Full reproduction script (EACL 2026)
 #
 # Reproduces all results from:
-#   "Which Works Best for Vietnamese? A Practical Study of Information
-#   Retrieval Methods across Domains"
+#   "Which Works Best for Vietnamese? A Practical Study of Information Retrieval Methods across Domains"
 #
 # Part 1: Lexical / sparse baselines  (TF-IDF, BM25, SPLADE, ColBERT)
 # Part 2: Dense models × 5 methods   (dense, +tfidf-α, +tfidf-rrf,
