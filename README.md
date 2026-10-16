@@ -134,6 +134,15 @@ The benchmark covers **six domains**. The study uses a sampling cap of **1,000 q
 | Lifestyle & reviews | [VlogQA](data/VlogQA_2.csv) [4], [ViRe4MRC](data/ViRe4MRC_v2.csv) [5] | Spoken narratives and customer reviews |
 | Open knowledge | [UIT-ViQuAD 2.0](data/UIT-ViQuAD2.csv) [6] | Encyclopedic question answering |
 
+### Bonus datasets from our related work
+
+We also share **ViHERMES** and **VixSTORY**, two datasets introduced in our related papers, alongside the ten-dataset ViRE benchmark. If you use either dataset, please cite its corresponding paper; full citations and BibTeX are available in each dataset folder.
+
+| Dataset | Focus | Citation |
+| :-- | :-- | :-- |
+| [ViHERMES](data/ViHERMES/) [7] | Multihop question answering over Vietnamese healthcare regulations | [Cite ViHERMES](data/ViHERMES/README.md#citation) |
+| [VixSTORY](data/VixSTORY/) [8] | Structured multihop reasoning for cross-institution university admission advising | [Cite VixSTORY](data/VixSTORY/README.md#citation) |
+
 ### Two datasets from real conversations
 
 EduCoQA captures student questions about admissions and university life; CSConDa contains customer-service conversations. Their frequent terms illustrate the vocabulary of these two domains.
@@ -234,7 +243,7 @@ The source separates embedding backends, retrieval, fusion, and evaluation. The 
 
 ## Citation
 
-If you use ViRE or its datasets, please cite the [paper](https://aclanthology.org/2026.findings-eacl.110/).
+If you use the ViRE toolkit or the EduCoQA and CSConDa datasets, please cite our [ViRE paper](https://aclanthology.org/2026.findings-eacl.110/). If you use our bonus datasets, please cite the corresponding [ViHERMES](data/ViHERMES/README.md#citation) or [VixSTORY](data/VixSTORY/README.md#citation) paper.
 
 ```bibtex
 @inproceedings{nguyen-quan-2026-works,
@@ -270,3 +279,7 @@ ViRE's source code is released under the [MIT License](LICENSE). The EduCoQA and
 [5] Tinh Pham Phuc Do, Ngoc Dinh Duy Cao, Nhan Thanh Nguyen, Tin Van Huynh, and Kiet Van Nguyen, “[Machine Reading Comprehension for Vietnamese Customer Reviews: Task, Corpus and Baseline Models](https://aclanthology.org/2023.paclic-1.3/)”, in _Proceedings of the 37th Pacific Asia Conference on Language, Information and Computation_, Hong Kong, China, pages 24–35, December 2023.
 
 [6] Kiet Van Nguyen, Duc-Vu Nguyen, Anh Gia-Tuan Nguyen, and Ngan Luu-Thuy Nguyen, “[A Vietnamese Dataset for Evaluating Machine Reading Comprehension](https://aclanthology.org/2020.coling-main.233/)”, in _Proceedings of the 28th International Conference on Computational Linguistics_, Barcelona, Spain (Online), pages 2595–2605, December 2020.
+
+[7] Long S. T. Nguyen, Quan M. Bui, Tin T. Ngo, Quynh T. N. Vo, Dung N. H. Le, and Tho T. Quan, “[ViHERMES: A Graph-Grounded Multihop Question Answering Benchmark and System for Vietnamese Healthcare Regulations](https://doi.org/10.1007/978-981-92-0071-9_22)”, in _Intelligent Information and Database Systems_, Springer Nature Singapore, pages 321–336, 2026.
+
+[8] Long S. T. Nguyen, Tin T. Ngo, Dung N. H. Le, Quynh T. N. Vo, Dung H. Nguyen, Khang N. Le, and Tho T. Quan, “[A Benchmark for Structured Multihop Reasoning in Cross-Institution University Admission Advisory Question Answering](https://doi.org/10.1007/978-981-92-2014-4_19)”, in _Trends and Applications in Knowledge Discovery and Data Mining_, Springer Nature Singapore, pages 235–247, 2027.
