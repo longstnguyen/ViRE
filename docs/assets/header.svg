@@ -4,12 +4,13 @@
 <rect width="1200" height="440" rx="24" fill="#FFF9F7"/>
 <path d="M836 0H1176Q1200 0 1200 24V416Q1200 440 1176 440H898C831 376 817 309 847 232C878 154 803 77 836 0" fill="#FCE7ED"/>
 <ellipse cx="1034" cy="350" rx="119" ry="17" fill="#EBC7D2"/>
+<!-- Type scale: wordmark 128; descriptor 28; tagline 24; labels/caption 20; decorative card 16. -->
 <g font-family="Arial, Helvetica, sans-serif">
-<rect x="48" y="37" width="240" height="34" rx="17" fill="#F7E0E8"/>
-<text x="168" y="59" text-anchor="middle" font-size="16" font-weight="bold" letter-spacing="0.6" fill="#A25973">FINDINGS OF EACL 2026</text>
-<text x="43" y="202" font-size="133" font-weight="bold" letter-spacing="-6" fill="#B7607F">ViRE<tspan fill="#D894AA">.</tspan></text>
-<text x="50" y="249" font-size="27" fill="#48343C">Vietnamese Information Retrieval</text>
-<text x="50" y="284" font-size="27" fill="#48343C">Evaluation Toolkit</text>
+<rect x="48" y="37" width="300" height="34" rx="17" fill="#F7E0E8"/>
+<text x="198" y="60" text-anchor="middle" font-size="20" font-weight="bold" letter-spacing="0.6" fill="#A25973">FINDINGS OF EACL 2026</text>
+<text x="43" y="202" font-size="128" font-weight="bold" letter-spacing="-6" fill="#B7607F">ViRE<tspan fill="#D894AA">.</tspan></text>
+<text x="50" y="249" font-size="28" fill="#48343C">Vietnamese Information Retrieval</text>
+<text x="50" y="284" font-size="28" fill="#48343C">Evaluation Toolkit</text>
 <text x="50" y="325" font-size="24" fill="#866C76">A little curiosity. A lot of relevant passages.</text>
 <g font-size="20" fill="#A25973">
 <rect x="48" y="364" width="148" height="38" rx="19" fill="#F7E0E8"/><text x="122" y="390" text-anchor="middle"><tspan font-weight="bold">10</tspan> datasets</text>
@@ -22,7 +23,7 @@
 <rect x="9" y="9" width="225" height="141" rx="16" fill="#EACBD5"/>
 <rect width="225" height="141" rx="16" fill="#FFFFFF" stroke="#E6BAC9" stroke-width="2"/>
 <rect x="17" y="17" width="142" height="26" rx="12" fill="#F6E2EB"/>
-<text x="88" y="35" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#9D6884">FIND EVIDENCE</text>
+<text x="88" y="35" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#9D6884">FIND EVIDENCE</text>
 <g stroke-linecap="round" stroke-width="7"><path d="M51 64H194" stroke="#C97E99"/><path d="M51 91H176" stroke="#E1B4C4"/><path d="M51 118H188" stroke="#EFDBE2"/></g>
 <g fill="#D894AA"><circle cx="26" cy="64" r="5"/><circle cx="26" cy="91" r="5"/><circle cx="26" cy="118" r="5"/></g>
 </g>
@@ -51,5 +52,5 @@
 </g>
 <g fill="#CF9DB7"><path d="M1138 83L1143 95L1155 100L1143 105L1138 117L1133 105L1121 100L1133 95Z"/><circle cx="931" cy="307" r="5"/><circle cx="1163" cy="271" r="5"/></g>
 <path d="M770 260L774 270L784 274L774 278L770 288L766 278L756 274L766 270Z" fill="#D6A0B3"/>
-<text x="1034" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#866C76"><tspan x="1034">good questions deserve</tspan><tspan x="1034" dy="25">good context.</tspan></text>
+<text x="1034" y="390" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#866C76"><tspan x="1034">good questions deserve</tspan><tspan x="1034" dy="25">good context.</tspan></text>
 </svg>

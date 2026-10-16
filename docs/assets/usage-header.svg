@@ -2,6 +2,6 @@
 <title id="title">ViRE · Usage Guide</title><desc id="desc">Models, data, evaluation, and reusable recipes.</desc>
 <rect width="1200" height="164" rx="20" fill="#FFF9F7"/><path d="M927 0H1180Q1200 0 1200 20V144Q1200 164 1180 164H1000Q883 84 927 0" fill="#FCE7ED"/>
 <rect x="32" y="32" width="100" height="100" rx="25" fill="#F7E0E8"/>
-<text x="82" y="93" text-anchor="middle" font-family="Arial, sans-serif" font-size="31" font-weight="bold" fill="#B7607F">ViRE</text>
-<g font-family="Arial, sans-serif"><text x="158" y="47" font-size="12" letter-spacing="2" font-weight="bold" fill="#A25973">USAGE GUIDE</text><text x="158" y="91" font-size="32" fill="#48343C">Make it your benchmark.</text><text x="158" y="125" font-size="17" fill="#866C76">Models, data, evaluation, and reusable recipes.</text></g>
+<text x="82" y="93" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="bold" fill="#B7607F">ViRE</text>
+<g font-family="Arial, Helvetica, sans-serif"><text x="158" y="47" font-size="20" letter-spacing="1.2" font-weight="bold" fill="#A25973">USAGE GUIDE</text><text x="158" y="91" font-size="32" fill="#48343C">Make it your benchmark.</text><text x="158" y="125" font-size="24" fill="#866C76">Models, data, evaluation, and reusable recipes.</text></g>
 <g fill="#D894AA"><circle cx="1054" cy="57" r="7"/><circle cx="1115" cy="103" r="12"/><path d="M1108 39L1112 49L1122 53L1112 57L1108 67L1104 57L1094 53L1104 49Z"/></g></svg>
