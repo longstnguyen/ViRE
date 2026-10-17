@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <strong>Long S. T. Nguyen<sup>1,2,3</sup> · Tho T. Quan<sup>1,2</sup></strong><br><br>
+  Long S. T. Nguyen<sup>1,2,3</sup> · Tho T. Quan<sup>1,2</sup><br><br>
   <sup>1</sup> URA Research Group, Ho Chi Minh City University of Technology (HCMUT), Vietnam<br>
   <sup>2</sup> Vietnam National University Ho Chi Minh City, Vietnam<br>
   <sup>3</sup> Center for AI Research (CAIR), VinUniversity, Vietnam
