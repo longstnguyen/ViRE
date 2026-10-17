@@ -29,12 +29,13 @@
 </g>
 <!-- A round piglet holding a book -->
 <g stroke="#B9738B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-<path d="M1009 151Q976 116 948 134Q927 145 930 178Q935 193 948 181L975 156Z" fill="#F3B6C9"/>
-<path d="M1059 151Q1092 116 1120 134Q1141 145 1138 178Q1133 193 1120 181L1093 156Z" fill="#F3B6C9"/>
-<path d="M979 146Q951 135 940 151L938 177Q953 167 966 153 M1089 146Q1117 135 1128 151L1130 177Q1115 167 1102 153" fill="#E99DB6" stroke="none"/>
 <path d="M1110 294C1144 308 1153 278 1136 276C1121 275 1128 295 1143 290" fill="none" stroke="#DA91AB" stroke-width="8"/>
 <ellipse cx="1034" cy="284" rx="101" ry="70" fill="#F7C6D6"/>
 <ellipse cx="1034" cy="214" rx="97" ry="80" fill="#FBD4E0"/>
+<!-- Folded ears sit in front of the head. -->
+<path d="M1009 151Q976 116 948 134Q927 145 930 178Q935 193 948 181L975 156Z" fill="#F3B6C9"/>
+<path d="M1059 151Q1092 116 1120 134Q1141 145 1138 178Q1133 193 1120 181L1093 156Z" fill="#F3B6C9"/>
+<path d="M979 146Q951 135 940 151L938 177Q953 167 966 153 M1089 146Q1117 135 1128 151L1130 177Q1115 167 1102 153" fill="#E99DB6" stroke="none"/>
 <ellipse cx="982" cy="337" rx="29" ry="17" fill="#F3B6C9"/>
 <ellipse cx="1086" cy="337" rx="29" ry="17" fill="#F3B6C9"/>
 <path d="M982 338V350 M1086 338V350" stroke="#DA91AB"/>
