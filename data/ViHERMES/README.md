@@ -1,3 +1,5 @@
+<p align="center"><img src="../../docs/assets/usage-header.svg" width="100%" alt="ViRE datasets and evaluation guide"></p>
+
 # ViHERMES
 
 [↑ Back to datasets](../../README.md#datasets) · [Paper](https://doi.org/10.1007/978-981-92-0071-9_22) · [Citation](#citation)

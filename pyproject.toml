@@ -7,7 +7,7 @@ name = "vi-retrieval-eval"
 version = "0.2.0"
 description = "Vietnamese Information Retrieval Evaluation: benchmarking BM25, TF-IDF, Dense (SBERT/LLM/OpenAI/Gemini + FAISS), SPLADE, ColBERT, and hybrid fusion methods across Vietnamese QA datasets"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
   "numpy>=2.0",
   "pandas>=2.0",
